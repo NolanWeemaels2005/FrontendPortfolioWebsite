@@ -32,9 +32,9 @@ export function Footer() {
           <div className="footer-columns">
             <div>
               <h3>{t("footer.links")}</h3>
-              <a href="https://www.instagram.com/nolanweemaelsdesign/" data-cursor="soft">Instagram</a>
-              <a href="https://www.linkedin.com/in/nolan-weemaels-1780511b4/" data-cursor="soft">LinkedIn</a>
-              <a href="https://kaai.be" data-cursor="soft" onClick={openKaaiModal}>Kaai.</a>
+              <a href="https://www.instagram.com/nolanweemaelsdesign/" data-cursor="soft" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a href="https://www.linkedin.com/in/nolan-weemaels-1780511b4/" data-cursor="soft" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <a href="https://kaai.be" data-cursor="soft" target="_blank" rel="noopener noreferrer" onClick={openKaaiModal}>Kaai.</a>
             </div>
             <div>
               <h3>{t("footer.pages")}</h3>
@@ -74,12 +74,14 @@ export function Footer() {
                 data-cursor="soft"
                 aria-label={social.label}
                 key={social.label}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={openKaaiModal}
               >
                 <img src={social.icon} alt="" loading="lazy" decoding="async" />
               </a>
             ) : (
-              <a href={social.href} data-cursor="soft" aria-label={social.label} key={social.label}>
+              <a href={social.href} data-cursor="soft" aria-label={social.label} key={social.label} target="_blank" rel="noopener noreferrer">
                 <img src={social.icon} alt="" loading="lazy" decoding="async" />
               </a>
             )

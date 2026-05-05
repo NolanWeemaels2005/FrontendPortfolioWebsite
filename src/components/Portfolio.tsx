@@ -51,7 +51,7 @@ export function Portfolio() {
         <div className="project-grid">
           {allProjects.map((project) => (
             (() => {
-              const classSlug = projectClassSlug(project.layoutSlug || project.slug);
+              const classSlug = projectClassSlug(project.slug);
 
               return (
             <Link

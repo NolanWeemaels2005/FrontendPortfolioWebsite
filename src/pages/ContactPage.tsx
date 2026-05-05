@@ -52,11 +52,16 @@ export function ContactPage() {
               <Phone aria-hidden="true" />
               +32 472 08 58 90
             </a>
-            <a href="mailto:weemaels.nolan2005@gmail.com" data-cursor="merge">
+            <a href="mailto:info@nolandesign.be" data-cursor="merge">
               <Mail aria-hidden="true" />
-              weemaels.nolan2005@gmail.com
+              info@nolandesign.be
             </a>
-            <a href="https://www.instagram.com/nolanweemaelsdesign/" data-cursor="merge">
+            <a
+              href="https://www.instagram.com/nolanweemaelsdesign/"
+              data-cursor="merge"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Instagram aria-hidden="true" />
               @nolanweemaelsdesign
             </a>

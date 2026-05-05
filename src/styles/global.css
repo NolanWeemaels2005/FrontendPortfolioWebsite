@@ -128,21 +128,15 @@ button {
 /* Kaai Modal */
 .kaai-modal {
   --kaai-yellow: #d7df23;
-  --kaai-border: clamp(8px, 0.75vw, 11px);
-  --kaai-offset-x: clamp(22px, 2.5vw, 38px);
-  --kaai-offset-y: clamp(24px, 2.7vw, 40px);
-  --kaai-panel-pad: clamp(0.6rem, 0.95vw, 0.9rem);
+  --kaai-border: 10px;
+  --kaai-offset-x: 38px;
+  --kaai-offset-y: 42px;
   position: fixed;
   inset: 0;
   z-index: 5000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding:
-    clamp(1.5rem, 5.8vh, 4.6rem)
-    calc(clamp(1rem, 5vw, 5rem) + var(--kaai-offset-x))
-    calc(clamp(1.5rem, 5.8vh, 4.6rem) + var(--kaai-offset-y))
-    clamp(1rem, 5vw, 5rem);
+  display: grid;
+  place-items: center;
+  padding: 5vh calc(4vw + var(--kaai-offset-x)) calc(5vh + var(--kaai-offset-y)) 4vw;
   overflow: auto;
 }
 
@@ -167,39 +161,24 @@ html.kaai-modal-open .custom-cursor {
 .kaai-modal__panel {
   position: relative;
   z-index: 1;
-  width: min(78vw, 1180px, calc((78dvh - var(--kaai-offset-y)) * 1.55));
-  max-height: 78dvh;
-  aspect-ratio: 1.55;
-  min-height: 0;
+  width: min(86vw, 1760px);
+  aspect-ratio: 1.55 / 1;
   display: grid;
   grid-template-columns: 42% 58%;
-  border-radius: 0;
-  overflow: visible;
-  font-family: "Outfit", var(--font-main);
-  color: #000;
   background: var(--kaai-yellow);
   border: var(--kaai-border) solid #000;
-  transform: translateZ(0);
+  color: #000;
+  font-family: "Outfit", var(--font-main);
+  overflow: visible;
 }
 
 .kaai-modal__panel::before {
   content: "";
   position: absolute;
-  inset:
-    clamp(32px, 3.2vw, 44px)
-    calc(var(--kaai-offset-x) * -1)
-    calc(var(--kaai-offset-y) * -1)
-    clamp(20px, 2.8vw, 38px);
+  inset: 44px calc(var(--kaai-offset-x) * -1) calc(var(--kaai-offset-y) * -1) 34px;
   z-index: -1;
   background: #000;
-  clip-path: polygon(
-    0 0,
-    calc(100% - clamp(22px, 2.2vw, 30px)) 0,
-    100% clamp(32px, 2.9vw, 42px),
-    100% 100%,
-    clamp(30px, 3.1vw, 42px) 100%,
-    0 calc(100% - clamp(32px, 2.9vw, 42px))
-  );
+  clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 50px, 100% 100%, 50px 100%, 0 calc(100% - 44px));
   pointer-events: none;
 }
 
@@ -208,9 +187,9 @@ html.kaai-modal-open .custom-cursor {
   position: absolute;
   top: calc(var(--kaai-border) * -1);
   right: calc(var(--kaai-border) * -1);
-  width: clamp(34px, 2.7vw, 46px);
-  height: clamp(34px, 2.7vw, 46px);
-  z-index: 6;
+  width: 48px;
+  height: 48px;
+  z-index: 7;
   background: #000;
   clip-path: polygon(0 0, 100% 0, 100% 100%);
   pointer-events: none;
@@ -218,164 +197,139 @@ html.kaai-modal-open .custom-cursor {
 
 .kaai-modal__close {
   position: absolute;
-  top: calc(var(--kaai-border) + var(--kaai-panel-pad) + clamp(0.5rem, 0.85vw, 0.75rem));
-  right: calc(var(--kaai-border) + var(--kaai-panel-pad) + clamp(0.5rem, 0.85vw, 0.75rem));
+  top: 28px;
+  right: 28px;
   z-index: 8;
-  min-width: clamp(96px, 8vw, 122px);
-  height: clamp(36px, 3vw, 46px);
+  width: 138px;
+  height: 54px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(0.55rem, 0.9vw, 0.85rem);
-  padding: 0 clamp(0.85rem, 1.3vw, 1.25rem);
-  border: 0;
-  border-radius: 0;
+  gap: 14px;
   background: var(--kaai-yellow);
   color: #000;
   font-family: "Outfit", var(--font-main);
-  font-size: clamp(0.95rem, 1.25vw, 1.2rem);
+  font-size: 1.28rem;
   font-weight: 800;
   line-height: 1;
 }
 
 .kaai-modal__close span:first-child {
-  font-size: 1.65em;
+  font-size: 1.7em;
   line-height: 0.7;
 }
 
-.kaai-modal__close:hover {
-  background: #ecf42d;
-  color: #000;
-}
-
 .kaai-modal__left {
-  background: var(--kaai-yellow);
-  height: 100%;
   min-width: 0;
-  padding:
-    clamp(2.1rem, 3.4vw, 3.45rem)
-    clamp(2rem, 3.35vw, 3.3rem)
-    clamp(1.6rem, 2.9vw, 2.8rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: clamp(0.7rem, 1vw, 1rem);
-  overflow: visible;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  padding: 7.9% 8.6% 8.1%;
+  overflow: hidden;
+  background: var(--kaai-yellow);
 }
 
 .kaai-modal__logo {
-  width: clamp(150px, 14vw, 230px);
+  width: min(45%, 300px);
   height: auto;
-  margin-bottom: clamp(1.6rem, 3.2vw, 3.2rem);
 }
 
 .kaai-modal__headline {
-  font-size: clamp(1.75rem, 2.55vw, 3rem);
+  align-self: end;
+  max-width: 20ch;
+  margin: 0 0 1.4rem;
+  font-size: clamp(2.1rem, 2.58vw, 3.45rem);
   font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: 0;
+  line-height: 1.04;
 }
 
 .kaai-modal__copy {
-  font-size: clamp(0.85rem, 1vw, 1.04rem);
+  max-width: 43ch;
+  font-size: clamp(0.95rem, 1vw, 1.24rem);
   font-weight: 600;
-  line-height: 1.15;
-  max-width: 40ch;
+  line-height: 1.14;
 }
 
 .kaai-modal__right {
-  background: transparent;
-  color: var(--kaai-yellow);
-  position: relative;
-  height: 100%;
   min-width: 0;
-  padding: var(--kaai-panel-pad);
-  padding-left: 0;
+  height: 100%;
+  padding: 12px 12px 12px 0;
   overflow: hidden;
+  color: var(--kaai-yellow);
 }
 
 .kaai-modal__right-inner {
   height: 100%;
-  max-height: 100%;
-  min-height: 0;
-  padding:
-    clamp(3.2rem, 4.45vw, 4.25rem)
-    clamp(1.8rem, 2.9vw, 2.85rem)
-    clamp(1.25rem, 2.2vw, 2.05rem);
   display: grid;
   grid-template-rows: auto auto 1fr auto;
-  gap: clamp(0.55rem, 1.1vw, 1rem);
+  padding: 9.6% 8.8% 5.6%;
   background-color: #000;
   background-image: var(--kaai-bg);
-  background-size: clamp(24px, 1.85vw, 32px) clamp(24px, 1.85vw, 32px);
+  background-size: 32px 32px;
   background-position: top left;
   background-repeat: repeat;
   overflow: hidden;
 }
 
 .kaai-modal__right-title {
-  font-size: clamp(1.75rem, 2.45vw, 2.8rem);
+  margin: 0 0 0.42rem 1.2%;
+  font-size: clamp(2.25rem, 3vw, 4rem);
   font-weight: 800;
   line-height: 0.95;
-  margin-left: clamp(0.4rem, 1.05vw, 1rem);
 }
 
 .kaai-modal__right-sub {
-  font-size: clamp(0.82rem, 0.98vw, 1rem);
+  max-width: 36ch;
+  margin-left: 1.2%;
+  font-size: clamp(0.95rem, 1.08vw, 1.3rem);
   font-weight: 600;
   line-height: 1.05;
   color: rgba(215, 223, 35, 0.95);
-  max-width: 34ch;
-  margin-left: clamp(0.4rem, 1.05vw, 1rem);
 }
 
 .kaai-modal__services {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(0.8rem, 1.45vw, 1.45rem) clamp(1rem, 1.8vw, 1.8rem);
   align-content: center;
   justify-items: center;
-  padding: clamp(0.55rem, 1.25vw, 1.15rem) 0 clamp(0.15rem, 0.55vw, 0.45rem);
+  gap: 7.5% 8%;
+  padding: 3.5% 0 4%;
 }
 
 .kaai-modal__service {
-  text-align: center;
   display: grid;
   justify-items: center;
-  align-content: start;
-  gap: clamp(0.55rem, 1vw, 0.8rem);
+  gap: 11px;
+  text-align: center;
   font-weight: 800;
-  text-transform: none;
 }
 
 .kaai-modal__service img {
-  width: clamp(38px, 3.25vw, 54px);
-  height: clamp(38px, 3.25vw, 54px);
-  filter: none;
+  width: clamp(48px, 4vw, 76px);
+  height: clamp(48px, 4vw, 76px);
 }
 
 .kaai-modal__service span {
-  font-size: clamp(0.72rem, 0.9vw, 0.88rem);
-  line-height: 1.05;
+  font-size: clamp(0.86rem, 1vw, 1.14rem);
+  line-height: 1.02;
 }
 
 .kaai-modal__cta {
-  margin: 0 clamp(1.25rem, 2.8vw, 2.8rem) clamp(0.4rem, 0.9vw, 0.8rem);
-  background: var(--kaai-yellow);
-  color: #000;
-  min-height: clamp(42px, 3.15vw, 52px);
+  min-height: clamp(56px, 4vw, 76px);
+  margin: 0 10.5% 0 2.6%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 clamp(1.1rem, 1.8vw, 1.6rem);
-  font-size: clamp(0.92rem, 1.2vw, 1.2rem);
+  padding: 0 34px;
+  background: var(--kaai-yellow);
+  color: #000;
+  font-size: clamp(1.18rem, 1.55vw, 2rem);
   font-weight: 800;
-  overflow: hidden;
 }
 
 .kaai-modal__cta img {
-  width: clamp(34px, 3.1vw, 46px);
-  height: clamp(34px, 3.1vw, 46px);
+  width: clamp(46px, 3.6vw, 68px);
+  height: clamp(46px, 3.6vw, 68px);
   filter: brightness(0);
 }
 
@@ -384,18 +338,14 @@ html.kaai-modal-open .custom-cursor {
     --kaai-border: 7px;
     --kaai-offset-x: 16px;
     --kaai-offset-y: 16px;
-    --kaai-panel-pad: 0.75rem;
-    align-items: flex-start;
+    align-items: start;
     padding: 1rem calc(1rem + var(--kaai-offset-x)) calc(1rem + var(--kaai-offset-y)) 1rem;
   }
 
   .kaai-modal__panel {
-    grid-template-columns: 1fr;
     width: min(520px, calc(100vw - 2rem - var(--kaai-offset-x)));
     aspect-ratio: auto;
-    min-height: 0;
-    max-height: none;
-    overflow: visible;
+    grid-template-columns: 1fr;
   }
 
   .kaai-modal__panel::before {
@@ -408,20 +358,20 @@ html.kaai-modal-open .custom-cursor {
   }
 
   .kaai-modal__close {
-    top: calc(var(--kaai-border) + var(--kaai-panel-pad) + 0.55rem);
-    right: calc(var(--kaai-border) + var(--kaai-panel-pad) + 0.55rem);
-    min-width: 96px;
-    height: 38px;
+    top: 1.2rem;
+    right: 1.2rem;
+    width: 108px;
+    height: 40px;
     font-size: 1rem;
   }
 
   .kaai-modal__left {
-    padding: 3rem 1.6rem 2rem;
+    padding: 3.2rem 1.6rem 2rem;
+    grid-template-rows: auto 2rem auto auto;
   }
 
   .kaai-modal__logo {
     width: clamp(150px, 48vw, 220px);
-    margin-bottom: 2.4rem;
   }
 
   .kaai-modal__headline {
@@ -432,27 +382,23 @@ html.kaai-modal-open .custom-cursor {
     font-size: 1rem;
   }
 
-  .kaai-modal__services {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.5rem 1rem;
-  }
-
   .kaai-modal__right {
-    padding: 0 var(--kaai-panel-pad) var(--kaai-panel-pad);
+    padding: 0 0.75rem 0.75rem;
   }
 
   .kaai-modal__right-inner {
-    padding: 4.6rem 1.2rem 1.2rem;
-    gap: 0.85rem;
+    padding: 4.8rem 1.2rem 1.2rem;
+    background-size: 28px 28px;
   }
 
-  .kaai-modal__right-title,
-  .kaai-modal__right-sub {
-    margin-left: 0;
+  .kaai-modal__services {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 1rem;
+    padding: 2rem 0;
   }
 
   .kaai-modal__cta {
-    margin-inline: 0;
+    margin: 0;
     font-size: 1.05rem;
   }
 }
@@ -1543,6 +1489,8 @@ video {
   --glare-x: 50%;
   --glare-y: 50%;
   --glare-opacity: 0;
+  --project-logo-width: 70%;
+  --project-logo-height: 82px;
   min-width: 0;
   width: 100%;
   transform-style: preserve-3d;
@@ -1581,22 +1529,80 @@ video {
 }
 
 .project-card__logo {
-  max-width: min(70%, 280px);
-  max-height: 72px;
+  width: var(--project-logo-width);
+  max-width: 360px;
+  max-height: var(--project-logo-height);
   object-fit: contain;
   position: relative;
   z-index: 2;
+  justify-self: center;
+  align-self: center;
 }
 
 .project-card--backend .project-card__logo {
-  max-width: min(82%, 320px);
-  max-height: 112px;
+  width: var(--project-logo-width);
+  max-height: var(--project-logo-height);
   filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.28));
 }
 
 .project-card--backend.project-card--nieuwland .project-card__logo {
-  transform: scale(1.32);
+  transform: none;
   transform-origin: center;
+}
+
+.project-card--fc-eisbar {
+  --project-logo-width: 32%;
+  --project-logo-height: 120px;
+}
+
+.project-card--la-maison-des-3-garcons {
+  --project-logo-width: 68%;
+  --project-logo-height: 118px;
+}
+
+.project-card--poutrel {
+  --project-logo-width: 66%;
+  --project-logo-height: 110px;
+}
+
+.project-card--shift-festival {
+  --project-logo-width: 50%;
+  --project-logo-height: 118px;
+}
+
+.project-card--ferraaawri {
+  --project-logo-width: 52%;
+  --project-logo-height: 116px;
+}
+
+.project-card--boit-bobby {
+  --project-logo-width: 62%;
+  --project-logo-height: 118px;
+}
+
+.project-card--nieuwland {
+  --project-logo-width: 43%;
+  --project-logo-height: 96px;
+}
+
+.project-card--kaai {
+  --project-logo-width: 62%;
+  --project-logo-height: 124px;
+}
+
+.project-card--city-to-ocean {
+  --project-logo-width: 66%;
+  --project-logo-height: 124px;
+}
+
+.project-card--ring-tv {
+  --project-logo-width: 68%;
+  --project-logo-height: 126px;
+}
+
+.project-card--mentalite {
+  --project-logo-width: 62%;
+  --project-logo-height: 118px;
 }
 
 .project-card__label {
