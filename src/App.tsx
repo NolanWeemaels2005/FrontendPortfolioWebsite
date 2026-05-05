@@ -11,6 +11,7 @@ const ProjectDetailPage = lazy(() => import("./pages/ProjectDetailPage").then((m
 const AboutPage = lazy(() => import("./pages/AboutPage").then((module) => ({ default: module.AboutPage })));
 const ContactPage = lazy(() => import("./pages/ContactPage").then((module) => ({ default: module.ContactPage })));
 const AdminPage = lazy(() => import("./pages/AdminPage").then((module) => ({ default: module.AdminPage })));
+const LegalPage = lazy(() => import("./pages/LegalPage").then((module) => ({ default: module.LegalPage })));
 
 function ScrollToTop() {
   const { hash, pathname } = useLocation();
@@ -61,6 +62,9 @@ export function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/beheer" element={<AdminPage />} />
+            <Route path="/cookiebeleid" element={<LegalPage type="cookies" />} />
+            <Route path="/juridische-voorwaarden" element={<LegalPage type="terms" />} />
+            <Route path="/privacybeleid" element={<LegalPage type="privacy" />} />
           </Routes>
         </Suspense>
       </main>

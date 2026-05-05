@@ -128,16 +128,15 @@ button {
 /* Kaai Modal */
 .kaai-modal {
   --kaai-yellow: #d7df23;
-  --kaai-border: 10px;
-  --kaai-offset-x: 38px;
-  --kaai-offset-y: 42px;
+  --kaai-border: clamp(8px, 0.6vw, 11px);
   position: fixed;
   inset: 0;
   z-index: 5000;
   display: grid;
   place-items: center;
-  padding: 5vh calc(4vw + var(--kaai-offset-x)) calc(5vh + var(--kaai-offset-y)) 4vw;
+  padding: 5vh 4vw;
   overflow: auto;
+  box-sizing: border-box;
 }
 
 .kaai-modal__backdrop {
@@ -161,129 +160,120 @@ html.kaai-modal-open .custom-cursor {
 .kaai-modal__panel {
   position: relative;
   z-index: 1;
-  width: min(86vw, 1760px);
-  aspect-ratio: 1.55 / 1;
+  width: min(78vw, 1250px);
+  max-height: 78vh;
+  aspect-ratio: 1.62 / 1;
   display: grid;
   grid-template-columns: 42% 58%;
   background: var(--kaai-yellow);
   border: var(--kaai-border) solid #000;
   color: #000;
   font-family: "Outfit", var(--font-main);
-  overflow: visible;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-.kaai-modal__panel::before {
-  content: "";
-  position: absolute;
-  inset: 44px calc(var(--kaai-offset-x) * -1) calc(var(--kaai-offset-y) * -1) 34px;
-  z-index: -1;
-  background: #000;
-  clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 50px, 100% 100%, 50px 100%, 0 calc(100% - 44px));
-  pointer-events: none;
-}
-
+.kaai-modal__panel::before,
 .kaai-modal__panel::after {
-  content: "";
-  position: absolute;
-  top: calc(var(--kaai-border) * -1);
-  right: calc(var(--kaai-border) * -1);
-  width: 48px;
-  height: 48px;
-  z-index: 7;
-  background: #000;
-  clip-path: polygon(0 0, 100% 0, 100% 100%);
-  pointer-events: none;
+  display: none;
 }
 
 .kaai-modal__close {
   position: absolute;
-  top: 28px;
-  right: 28px;
+  top: clamp(22px, 2.2vw, 34px);
+  right: clamp(22px, 2.2vw, 34px);
   z-index: 8;
-  width: 138px;
-  height: 54px;
+  width: clamp(116px, 8.3vw, 150px);
+  height: clamp(42px, 3.2vw, 58px);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: clamp(10px, 0.75vw, 15px);
   background: var(--kaai-yellow);
   color: #000;
   font-family: "Outfit", var(--font-main);
-  font-size: 1.28rem;
+  font-size: clamp(0.95rem, 1.06vw, 1.25rem);
   font-weight: 800;
   line-height: 1;
+  border: 0;
+  border-radius: 0;
 }
 
 .kaai-modal__close span:first-child {
-  font-size: 1.7em;
+  font-size: 1.55em;
   line-height: 0.7;
 }
 
 .kaai-modal__left {
   min-width: 0;
   height: 100%;
-  display: grid;
-  grid-template-rows: auto 1fr auto auto;
-  padding: 7.9% 8.6% 8.1%;
+  display: flex;
+  flex-direction: column;
+  padding: 10.5% 8.1% 9.2%;
   overflow: hidden;
   background: var(--kaai-yellow);
+  box-sizing: border-box;
 }
 
 .kaai-modal__logo {
-  width: min(45%, 300px);
+  width: min(42%, 230px);
   height: auto;
+  flex: 0 0 auto;
 }
 
 .kaai-modal__headline {
-  align-self: end;
-  max-width: 20ch;
-  margin: 0 0 1.4rem;
-  font-size: clamp(2.1rem, 2.58vw, 3.45rem);
+  max-width: 16ch;
+  margin: clamp(4.1rem, 9vh, 7.4rem) 0 clamp(0.82rem, 1.05vw, 1.25rem);
+  font-size: clamp(1.72rem, 2.2vw, 2.78rem);
   font-weight: 800;
-  line-height: 1.04;
+  line-height: 1.03;
+  letter-spacing: 0;
 }
 
 .kaai-modal__copy {
-  max-width: 43ch;
-  font-size: clamp(0.95rem, 1vw, 1.24rem);
-  font-weight: 600;
-  line-height: 1.14;
+  max-width: 39ch;
+  margin: 0;
+  font-size: clamp(0.8rem, 0.84vw, 1rem);
+  font-weight: 700;
+  line-height: 1.17;
 }
 
 .kaai-modal__right {
   min-width: 0;
   height: 100%;
-  padding: 12px 12px 12px 0;
+  padding: clamp(9px, 0.72vw, 12px) clamp(9px, 0.72vw, 12px) clamp(9px, 0.72vw, 12px) 0;
   overflow: hidden;
   color: var(--kaai-yellow);
+  box-sizing: border-box;
 }
 
 .kaai-modal__right-inner {
   height: 100%;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
-  padding: 9.6% 8.8% 5.6%;
+  padding: 10.5% 7.7% 4.7% 8.9%;
   background-color: #000;
   background-image: var(--kaai-bg);
-  background-size: 32px 32px;
+  background-size: clamp(26px, 1.65vw, 34px) auto;
   background-position: top left;
   background-repeat: repeat;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .kaai-modal__right-title {
-  margin: 0 0 0.42rem 1.2%;
-  font-size: clamp(2.25rem, 3vw, 4rem);
+  margin: 0 0 0.42rem;
+  font-size: clamp(1.78rem, 2.25vw, 2.9rem);
   font-weight: 800;
   line-height: 0.95;
 }
 
 .kaai-modal__right-sub {
-  max-width: 36ch;
-  margin-left: 1.2%;
-  font-size: clamp(0.95rem, 1.08vw, 1.3rem);
-  font-weight: 600;
-  line-height: 1.05;
+  max-width: 37ch;
+  margin: 0;
+  font-size: clamp(0.76rem, 0.84vw, 1rem);
+  font-weight: 700;
+  line-height: 1.06;
   color: rgba(215, 223, 35, 0.95);
 }
 
@@ -292,44 +282,47 @@ html.kaai-modal-open .custom-cursor {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-content: center;
   justify-items: center;
-  gap: 7.5% 8%;
-  padding: 3.5% 0 4%;
+  gap: 7.2% 8%;
+  padding: 5.2% 0 4.6%;
 }
 
 .kaai-modal__service {
   display: grid;
   justify-items: center;
-  gap: 11px;
+  gap: clamp(9px, 0.8vw, 14px);
   text-align: center;
   font-weight: 800;
 }
 
 .kaai-modal__service img {
-  width: clamp(48px, 4vw, 76px);
-  height: clamp(48px, 4vw, 76px);
+  width: clamp(40px, 3vw, 58px);
+  height: clamp(40px, 3vw, 58px);
 }
 
 .kaai-modal__service span {
-  font-size: clamp(0.86rem, 1vw, 1.14rem);
+  font-size: clamp(0.72rem, 0.78vw, 0.92rem);
   line-height: 1.02;
 }
 
 .kaai-modal__cta {
-  min-height: clamp(56px, 4vw, 76px);
-  margin: 0 10.5% 0 2.6%;
+  min-height: clamp(46px, 3.2vw, 60px);
+  width: min(80%, 560px);
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 34px;
+  padding: 0 clamp(26px, 2.25vw, 45px);
   background: var(--kaai-yellow);
   color: #000;
-  font-size: clamp(1.18rem, 1.55vw, 2rem);
+  font-size: clamp(0.92rem, 1.12vw, 1.38rem);
   font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
 }
 
 .kaai-modal__cta img {
-  width: clamp(46px, 3.6vw, 68px);
-  height: clamp(46px, 3.6vw, 68px);
+  width: clamp(34px, 2.45vw, 46px);
+  height: clamp(34px, 2.45vw, 46px);
   filter: brightness(0);
 }
 
@@ -2144,6 +2137,80 @@ video {
   opacity: 0.72;
 }
 
+.legal-page {
+  min-height: 100vh;
+  background: var(--white);
+  color: var(--black);
+  padding: calc(8rem + env(safe-area-inset-top)) 0 7rem;
+}
+
+.legal-page__inner {
+  max-width: 920px;
+}
+
+.legal-page__eyebrow {
+  width: fit-content;
+  border-radius: 999px;
+  background: var(--orange);
+  color: var(--black);
+  padding: 0.55rem 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.legal-page h1 {
+  margin-top: 1.6rem;
+  color: var(--purple);
+  font-size: clamp(3rem, 7vw, 6.6rem);
+  font-weight: 800;
+  line-height: 0.92;
+}
+
+.legal-page__intro {
+  max-width: 760px;
+  margin-top: 1.4rem;
+  color: var(--purple);
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.legal-page__updated {
+  margin-top: 1rem;
+  color: rgba(0, 0, 0, 0.56);
+  font-weight: 700;
+}
+
+.legal-page__sections {
+  margin-top: 3rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.legal-page__section {
+  border-radius: 18px;
+  background: var(--black);
+  color: var(--white);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.legal-page__section h2 {
+  color: var(--orange);
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  line-height: 1;
+}
+
+.legal-page__section p {
+  margin-top: 0.85rem;
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.legal-page__cta {
+  margin-top: 2rem;
+}
+
 .contact-form textarea {
   min-height: 138px;
   resize: vertical;
@@ -2466,8 +2533,10 @@ video {
   gap: clamp(1.4rem, 5vw, 4.8rem);
 }
 
-.legal-links span {
+.legal-links a {
+  display: inline-block;
   font-size: 1rem;
+  transition: color 0.25s ease, transform 0.25s var(--ease);
 }
 
 .footer-socials a {

@@ -61,9 +61,9 @@ export function Footer() {
 
       <div className="footer-bottom">
         <div className="legal-links">
-          <span>{t("footer.cookies")}</span>
-          <span>{t("footer.legal")}</span>
-          <span>{t("footer.privacy")}</span>
+          <Link to="/cookiebeleid" data-cursor="soft">{t("footer.cookies")}</Link>
+          <Link to="/juridische-voorwaarden" data-cursor="soft">{t("footer.legal")}</Link>
+          <Link to="/privacybeleid" data-cursor="soft">{t("footer.privacy")}</Link>
         </div>
 
         <div className="footer-socials">
