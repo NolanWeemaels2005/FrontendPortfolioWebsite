@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getCombinedProjects, projectQueryKeys } from "../data/projectQueries";
 import { apiUrl, readApiError } from "../utils/api";
 import { clearAdminToken, getAdminToken, setAdminToken } from "../utils/adminAuth";
@@ -31,6 +31,7 @@ type EditableProject = {
 export function AdminPage() {
   const queryClient = useQueryClient();
   const location = useLocation();
+  const navigate = useNavigate();
   const editSlug = new URLSearchParams(location.search).get("project");
   const [token, setTokenState] = useState(() => getAdminToken());
   const [editingProject, setEditingProject] = useState<EditableProject | null>(null);
@@ -145,6 +146,64 @@ export function AdminPage() {
     }
   }
 
+  function invalidateProjectData(slug?: string) {
+    queryClient.invalidateQueries({ queryKey: projectQueryKeys.all });
+    queryClient.invalidateQueries({ queryKey: projectQueryKeys.featured });
+    queryClient.invalidateQueries({ queryKey: projectQueryKeys.combined });
+    queryClient.invalidateQueries({ queryKey: projectQueryKeys.detail(slug || editSlug || undefined) });
+  }
+
+  function handleCloseEdit() {
+    setEditingProject(null);
+    setProject({ title: "", text: "", heroSvg: null, images: [] });
+    setError("");
+    setStatus("Bewerken geannuleerd.");
+    navigate("/beheer", { replace: true });
+  }
+
+  async function handleDeleteProject() {
+    if (!token) {
+      setError("Je bent niet ingelogd.");
+      return;
+    }
+
+    if (!editingProject?._id) {
+      setError("Dit project staat niet als backend-project klaar om te verwijderen.");
+      return;
+    }
+
+    const confirmed = window.confirm(`Project "${editingProject.title}" definitief verwijderen?`);
+    if (!confirmed) return;
+
+    setSubmitting(true);
+    setError("");
+    setStatus("");
+
+    try {
+      const response = await fetch(`${apiUrl}/projects/${editingProject._id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(await readApiError(response));
+      }
+
+      const deletedSlug = editingProject.slug;
+      setEditingProject(null);
+      setProject({ title: "", text: "", heroSvg: null, images: [] });
+      invalidateProjectData(deletedSlug);
+      setStatus("Project is verwijderd.");
+      navigate("/beheer", { replace: true });
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Project verwijderen mislukt.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   async function handleCreateProject(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitting(true);
@@ -183,10 +242,7 @@ export function AdminPage() {
       setStatus(editingProject ? "Project is bijgewerkt." : "Project is toegevoegd.");
       setProject({ title: "", text: "", heroSvg: null, images: [] });
       setEditingProject(null);
-      queryClient.invalidateQueries({ queryKey: projectQueryKeys.all });
-      queryClient.invalidateQueries({ queryKey: projectQueryKeys.featured });
-      queryClient.invalidateQueries({ queryKey: projectQueryKeys.combined });
-      queryClient.invalidateQueries({ queryKey: projectQueryKeys.detail(editingProject?.slug || editSlug || undefined) });
+      invalidateProjectData(editingProject?.slug);
       event.currentTarget.reset();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Project toevoegen mislukt.");
@@ -423,9 +479,21 @@ export function AdminPage() {
               </span>
             </label>
 
-            <button type="submit" className="btn btn--primary" disabled={submitting}>
-              {submitting ? "Opslaan..." : editingProject ? "Project bijwerken" : "Project toevoegen"}
-            </button>
+            <div className="admin-form__actions">
+              {editingProject ? (
+                <>
+                  <button type="button" className="admin-action admin-action--ghost" onClick={handleCloseEdit} disabled={submitting}>
+                    Close
+                  </button>
+                  <button type="button" className="admin-action admin-action--danger" onClick={handleDeleteProject} disabled={submitting || !editingProject._id}>
+                    Verwijder project
+                  </button>
+                </>
+              ) : null}
+              <button type="submit" className="btn btn--primary" disabled={submitting}>
+                {submitting ? "Opslaan..." : editingProject ? "Project bijwerken" : "Project toevoegen"}
+              </button>
+            </div>
           </form>
         )}
       </div>

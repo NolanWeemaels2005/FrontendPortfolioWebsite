@@ -2303,6 +2303,36 @@ video {
   border: 0;
 }
 
+.admin-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+}
+
+.admin-action {
+  min-height: 48px;
+  border-radius: 999px;
+  padding: 0.72rem 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.admin-action--ghost {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--white);
+}
+
+.admin-action--danger {
+  background: #ff2f2f;
+  color: var(--white);
+}
+
+.admin-action:disabled {
+  opacity: 0.55;
+}
+
 .admin-toolbar {
   display: flex;
   align-items: center;

@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect, useLayoutEffect } from "react";
 import { CustomCursor } from "./components/CustomCursor";
 import { Footer } from "./components/Footer";
 import { Navigation } from "./components/Navigation";
+import { Seo } from "./components/Seo";
 
 const HomePage = lazy(() => import("./pages/HomePage").then((module) => ({ default: module.HomePage })));
 const PortfolioPage = lazy(() => import("./pages/PortfolioPage").then((module) => ({ default: module.PortfolioPage })));
@@ -48,6 +49,7 @@ export function App() {
   return (
     <>
       <CustomCursor />
+      <Seo />
       <ScrollToTop />
       <Navigation />
       <main className="page-shell" key={location.pathname}>
