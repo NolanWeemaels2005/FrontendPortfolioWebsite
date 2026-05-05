@@ -322,7 +322,7 @@ export function AdminPage() {
         <div className="admin-heading">
           <p className="eyebrow">Beheer</p>
           <h1>{editingProject ? "Project bewerken" : "Projecten toevoegen"}</h1>
-          <p>API: {apiUrl}</p>
+          
         </div>
 
         {status ? <p className="admin-message admin-message--success">{status}</p> : null}
