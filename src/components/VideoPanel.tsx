@@ -10,7 +10,7 @@ export function VideoPanel({ variant = "light" }: VideoPanelProps) {
   const { t } = useLanguage();
 
   return (
-    <div className={`video-panel video-panel--${variant}`} data-cursor="merge">
+    <div className={`video-panel video-panel--${variant}`}>
       <img src={assetPath("assets/design-pages/newDesignPortfolioFinal [Recovered]-04.png")} alt="" />
       <button type="button" className="video-play" aria-label={t("video.play")} data-cursor="merge">
         <Play aria-hidden="true" fill="currentColor" strokeWidth={0} />

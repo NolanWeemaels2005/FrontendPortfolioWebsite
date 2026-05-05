@@ -43,6 +43,9 @@ export function Footer() {
                   {t(item.labelKey)}
                 </Link>
               ))}
+              <Link to="/beheer" data-cursor="soft">
+                Beheer
+              </Link>
             </div>
           </div>
         </div>

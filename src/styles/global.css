@@ -515,14 +515,14 @@ video {
   left: 0;
   z-index: 7000;
   border: 0;
-  background: rgba(245, 245, 245, 0.24);
+  background: rgba(255, 255, 255, 0.86);
   opacity: 0;
   pointer-events: none;
-  mix-blend-mode: normal;
+  mix-blend-mode: difference;
   backdrop-filter: none;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
-    0 8px 28px rgba(0, 0, 0, 0.08);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.62),
+    0 8px 28px rgba(0, 0, 0, 0.16);
   transition:
     width 0.26s var(--ease),
     height 0.26s var(--ease),
@@ -537,21 +537,21 @@ video {
 }
 
 .custom-cursor.is-active {
-  background: rgba(238, 238, 238, 0.28);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .custom-cursor[data-variant="soft"] {
-  background: rgba(245, 245, 245, 0.12);
+  background: rgba(255, 255, 255, 0.28);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
-    0 10px 34px rgba(0, 0, 0, 0.06);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.58),
+    0 10px 34px rgba(0, 0, 0, 0.12);
 }
 
 .custom-cursor[data-variant="merge"] {
-  background: rgba(245, 245, 245, 0.16);
+  background: rgba(255, 255, 255, 0.34);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
-    0 14px 38px rgba(0, 0, 0, 0.07);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.62),
+    0 14px 38px rgba(0, 0, 0, 0.16);
 }
 
 @keyframes gradientFloat {
@@ -747,7 +747,7 @@ video {
 .menu-btn:hover,
 .nav-talk:hover,
 .btn:hover {
-  transform: translateY(-2px);
+  transform: none;
 }
 
 .overlay {
@@ -1359,6 +1359,12 @@ video {
   object-fit: contain;
 }
 
+.logo-rail__item--nieuwland img {
+  max-height: 86px;
+  transform: scale(1.22);
+  transform-origin: center;
+}
+
 @keyframes logoRail {
   to {
     transform: translateX(-50%);
@@ -1527,6 +1533,7 @@ video {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 3.1rem 1rem;
+  align-items: start;
 }
 
 .project-card {
@@ -1537,13 +1544,17 @@ video {
   --glare-y: 50%;
   --glare-opacity: 0;
   min-width: 0;
+  width: 100%;
   transform-style: preserve-3d;
 }
 
 .project-card__logo-wrap {
   position: relative;
   overflow: hidden;
-  min-height: 168px;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 16 / 7;
   border-radius: 16px;
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   clip-path: inset(0 round 16px);
@@ -1569,9 +1580,23 @@ video {
   box-shadow: 0 18px 32px rgba(0, 0, 0, 0.18);
 }
 
-.project-card__logo-wrap img {
+.project-card__logo {
+  max-width: min(70%, 280px);
   max-height: 72px;
   object-fit: contain;
+  position: relative;
+  z-index: 2;
+}
+
+.project-card--backend .project-card__logo {
+  max-width: min(82%, 320px);
+  max-height: 112px;
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.28));
+}
+
+.project-card--backend.project-card--nieuwland .project-card__logo {
+  transform: scale(1.32);
+  transform-origin: center;
 }
 
 .project-card__label {
@@ -1600,6 +1625,17 @@ video {
 .project-detail__hero {
   display: grid;
   gap: 3rem;
+}
+
+.project-detail__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.project-detail__edit {
+  min-width: 120px;
 }
 
 .back-link {
@@ -1636,36 +1672,33 @@ video {
   margin-top: 4.5rem;
   overflow: hidden;
   border-radius: 22px;
-  background: var(--accent);
+  background: var(--black);
   isolation: isolate;
-}
-
-.project-detail__showcase > img:first-child {
-  width: 100%;
-  height: 100%;
-  min-height: inherit;
-  object-fit: cover;
-  filter: saturate(0.85);
 }
 
 .project-detail__wash {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: var(--accent);
-  opacity: 0.55;
-  mix-blend-mode: multiply;
+  display: none;
 }
 
 .project-detail__logo {
   position: absolute;
   z-index: 2;
   inset: 50% auto auto 50%;
-  width: min(42%, 420px);
-  max-height: 180px;
+  width: min(42%, 420px) !important;
+  max-height: 180px !important;
   object-fit: contain;
   transform: translate(-50%, -50%);
   filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.22));
+}
+
+.project-detail__showcase--backend .project-detail__logo {
+  width: min(62%, 620px) !important;
+  max-height: 280px !important;
+  transform: translate(-50%, -50%) scale(1.22);
+  transform-origin: center;
 }
 
 .project-detail__content {
@@ -1682,6 +1715,126 @@ video {
   color: rgba(255, 255, 255, 0.72);
   font-size: 1.35rem;
   line-height: 1.4;
+}
+
+.project-detail__gallery {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.project-detail__gallery-button {
+  width: 100%;
+  border: 0;
+  padding: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--black);
+  cursor: pointer;
+}
+
+.project-detail__gallery-button img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s var(--ease), opacity 0.3s ease;
+}
+
+.project-detail__gallery-button:hover img {
+  transform: scale(1.04);
+  opacity: 0.9;
+}
+
+.project-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(4.5rem, 7vh, 6rem) clamp(5.2rem, 9vw, 8rem) clamp(2rem, 4vh, 3rem);
+  isolation: isolate;
+}
+
+.project-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.92);
+  cursor: pointer;
+}
+
+.project-lightbox__figure {
+  position: relative;
+  z-index: 1;
+  width: 70vw;
+  height: 70vh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+}
+
+.project-lightbox__figure img {
+  width: auto;
+  height: auto;
+  max-width: min(70vw, 1040px) !important;
+  max-height: 70vh !important;
+  object-fit: contain;
+  border-radius: 18px;
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
+}
+
+.project-lightbox__close,
+.project-lightbox__nav {
+  position: fixed;
+  z-index: 2;
+  border: 0;
+  display: grid;
+  place-items: center;
+  color: var(--black);
+  background: var(--white);
+  backdrop-filter: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.project-lightbox__close:hover,
+.project-lightbox__nav:hover {
+  transform: scale(1.06);
+  background: var(--orange);
+}
+
+.project-lightbox__close {
+  top: max(1rem, calc(15vh - 12px));
+  right: max(1rem, calc(15vw - 12px));
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+}
+
+.project-lightbox__nav {
+  top: 50%;
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+}
+
+.project-lightbox__nav--prev {
+  left: max(1rem, calc(15vw - 74px));
+  transform: translateY(-50%);
+}
+
+.project-lightbox__nav--next {
+  right: max(1rem, calc(15vw - 74px));
+  transform: translateY(-50%);
+}
+
+.project-lightbox__nav--prev:hover,
+.project-lightbox__nav--next:hover {
+  transform: translateY(-50%) scale(1.06);
 }
 
 .home-video {
@@ -2066,6 +2219,135 @@ video {
   width: 40px;
   height: 40px;
   flex: 0 0 auto;
+}
+
+.admin-page {
+  min-height: 100dvh;
+  padding: 9rem 0 7rem;
+}
+
+.admin-shell {
+  max-width: 860px;
+}
+
+.admin-heading {
+  text-align: center;
+}
+
+.admin-heading h1 {
+  margin-top: 0.65rem;
+  color: var(--orange);
+  font-size: clamp(3rem, 7vw, 5.8rem);
+  font-weight: 800;
+  line-height: 0.92;
+}
+
+.admin-heading p:not(.eyebrow) {
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 700;
+}
+
+.admin-panel {
+  margin-top: 2.6rem;
+  border-radius: 18px;
+  background: var(--purple);
+  color: var(--white);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.admin-form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.admin-form label {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.admin-form input,
+.admin-form textarea {
+  width: 100%;
+  border: 0;
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--black);
+  padding: 0.9rem 1rem;
+  outline: 0;
+}
+
+.admin-form textarea {
+  min-height: 150px;
+  resize: vertical;
+  border-radius: 24px;
+}
+
+.admin-form input[type="file"] {
+  cursor: pointer;
+}
+
+.admin-form label span {
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-transform: none;
+}
+
+.admin-form .btn {
+  justify-self: center;
+  border: 0;
+}
+
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-toolbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.admin-toolbar button,
+.admin-toolbar__actions button {
+  min-height: 38px;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--white);
+  font-weight: 800;
+}
+
+.admin-toolbar button:disabled,
+.admin-toolbar__actions button:disabled {
+  opacity: 0.6;
+}
+
+.admin-message {
+  margin: 1.5rem auto 0;
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.admin-message--success {
+  background: rgba(255, 152, 13, 0.2);
+  color: var(--orange);
+}
+
+.admin-message--error {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--white);
 }
 
 .site-footer {
@@ -2497,6 +2779,36 @@ video {
 
   .project-detail__logo {
     width: 64%;
+    max-height: 130px;
+  }
+
+  .project-detail__gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .project-lightbox {
+    padding: 4.2rem 3.9rem 4.7rem;
+  }
+
+  .project-lightbox__figure {
+    width: 100%;
+    height: 70vh;
+  }
+
+  .project-lightbox__figure img {
+    border-radius: 12px;
+  }
+
+  .project-lightbox__close {
+    width: 48px;
+    height: 48px;
+  }
+
+  .project-lightbox__nav {
+    width: 48px;
+    height: 48px;
+    top: auto;
+    bottom: max(1.1rem, env(safe-area-inset-bottom));
   }
 
   .footer-columns,

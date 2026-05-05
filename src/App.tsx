@@ -9,6 +9,7 @@ const PortfolioPage = lazy(() => import("./pages/PortfolioPage").then((module) =
 const ProjectDetailPage = lazy(() => import("./pages/ProjectDetailPage").then((module) => ({ default: module.ProjectDetailPage })));
 const AboutPage = lazy(() => import("./pages/AboutPage").then((module) => ({ default: module.AboutPage })));
 const ContactPage = lazy(() => import("./pages/ContactPage").then((module) => ({ default: module.ContactPage })));
+const AdminPage = lazy(() => import("./pages/AdminPage").then((module) => ({ default: module.AdminPage })));
 
 function ScrollToTop() {
   const { hash, pathname } = useLocation();
@@ -57,6 +58,7 @@ export function App() {
             <Route path="/portfolio/:slug" element={<ProjectDetailPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/beheer" element={<AdminPage />} />
           </Routes>
         </Suspense>
       </main>

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const defaultSize = 22;
+const defaultSize = 26;
 
 export function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
@@ -17,7 +17,7 @@ export function CustomCursor() {
     if (!cursor || !finePointer.matches) return;
     const cursorElement = cursor;
 
-    const interactiveSelector = "a, button, [data-cursor]";
+    const interactiveSelector = "a, button, input, textarea, select";
     const buttonLikeSelector = "button, .btn, .menu-btn, .nav-talk, .video-play, .contact-form button";
     let frame: number | null = null;
     let nextStyle = "";
@@ -63,19 +63,17 @@ export function CustomCursor() {
       const interactive = target?.closest(interactiveSelector) as HTMLElement | null;
 
       if (interactive) {
-        const mode = interactive.dataset.cursor === "soft" || !interactive.matches(buttonLikeSelector) ? "soft" : "merge";
+        const mode = interactive.dataset.cursor === "merge" && interactive.matches(buttonLikeSelector) ? "merge" : "soft";
 
         if (mode === "soft") {
           clearActiveCache();
-          applyCursor(event.clientX, event.clientY, 46, 46, 999, true, "soft");
+          applyCursor(event.clientX, event.clientY, 58, 58, 999, true, "soft");
           return;
         }
 
-        if (activeElement !== interactive || !activeRect) {
-          activeElement = interactive;
-          activeRect = interactive.getBoundingClientRect();
-          activeRadius = Number.parseFloat(getComputedStyle(interactive).borderRadius) || 999;
-        }
+        activeElement = interactive;
+        activeRect = interactive.getBoundingClientRect();
+        activeRadius = Number.parseFloat(getComputedStyle(interactive).borderRadius) || 999;
 
         applyCursor(
           activeRect.left + activeRect.width / 2,

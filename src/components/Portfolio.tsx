@@ -5,10 +5,14 @@ import { useAllProjectsQuery, useFeaturedProjectsQuery } from "../data/projectQu
 import { useTilt } from "../hooks/useTilt";
 import { useLanguage } from "../i18n/LanguageContext";
 
+function projectClassSlug(slug: string) {
+  return slug.replace(/[^a-z0-9-]/gi, "");
+}
+
 export function Portfolio() {
   const { t } = useLanguage();
   const { data: featuredProjects } = useFeaturedProjectsQuery();
-  const { data: allProjects } = useAllProjectsQuery();
+  const { data: allProjects = [] } = useAllProjectsQuery();
   const featuredTilt = useTilt({ max: 7, scale: 1.018 });
   const projectTilt = useTilt({ max: 9, scale: 1.02 });
 
@@ -19,9 +23,13 @@ export function Portfolio() {
 
         <div className="featured-grid">
           {featuredProjects.map((project) => (
+            (() => {
+              const classSlug = projectClassSlug(project.layoutSlug || project.slug);
+
+              return (
             <Link
               to={`/portfolio/${project.slug}`}
-              className={`featured-card featured-card--${project.slug}`}
+              className={`featured-card featured-card--${classSlug}`}
               data-cursor="soft"
               data-reveal
               id={project.slug}
@@ -33,6 +41,8 @@ export function Portfolio() {
               <span className="featured-card__wash" />
               <img className="featured-card__logo" src={project.logo} alt={project.titleKey ? t(project.titleKey) : project.title} />
             </Link>
+              );
+            })()
           ))}
         </div>
 
@@ -40,22 +50,34 @@ export function Portfolio() {
 
         <div className="project-grid">
           {allProjects.map((project) => (
+            (() => {
+              const classSlug = projectClassSlug(project.layoutSlug || project.slug);
+
+              return (
             <Link
               to={`/portfolio/${project.slug}`}
-              className="project-card"
+              className={`project-card project-card--${classSlug} ${project.source === "backend" ? "project-card--backend" : ""}`}
               data-cursor="soft"
               data-reveal
               key={project.slug}
               {...projectTilt}
             >
               <span className="project-card__logo-wrap" data-cursor-surface>
-                <img src={project.logo} alt={project.titleKey ? t(project.titleKey) : project.title} />
+                <img
+                  className="project-card__logo"
+                  src={project.logo}
+                  alt={project.titleKey ? t(project.titleKey) : project.title}
+                  loading="lazy"
+                  decoding="async"
+                />
               </span>
               <span className="project-card__label">
                 {project.titleKey ? t(project.titleKey) : project.title}
                 <ArrowRight aria-hidden="true" size={24} strokeWidth={3} />
               </span>
             </Link>
+              );
+            })()
           ))}
         </div>
       </div>

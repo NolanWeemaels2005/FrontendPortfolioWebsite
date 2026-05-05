@@ -1,5 +1,5 @@
 import { Menu } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { navItems } from "../data/nav";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -8,7 +8,13 @@ import { assetPath } from "../utils/asset";
 export function Navigation() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const { language, setLanguage, t } = useLanguage();
+
+  function closeMenu() {
+    setOpen(false);
+    window.requestAnimationFrame(() => menuButtonRef.current?.focus());
+  }
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -26,7 +32,7 @@ export function Navigation() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") closeMenu();
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
@@ -36,6 +42,7 @@ export function Navigation() {
     <>
       <header className={`nav ${open ? "open" : ""} ${scrolled ? "scrolled" : ""}`} id="nav">
         <button
+          ref={menuButtonRef}
           className="menu-btn"
           data-cursor="merge"
           type="button"
@@ -61,7 +68,7 @@ export function Navigation() {
         </Link>
       </header>
 
-      <div className={`overlay ${open ? "open" : ""}`} aria-hidden={!open}>
+      <div className={`overlay ${open ? "open" : ""}`} inert={!open}>
         <div className="overlay-inner">
           <nav className="menu-links" aria-label={t("nav.mainNavigation")}>
             {navItems.map((item) => (
@@ -70,7 +77,7 @@ export function Navigation() {
                 className={({ isActive }) => (isActive ? "is-active" : "")}
                 data-cursor="merge"
                 key={item.href}
-                onClick={() => setOpen(false)}
+                onClick={closeMenu}
                 end={item.href === "/"}
               >
                 <span className="divider" />
