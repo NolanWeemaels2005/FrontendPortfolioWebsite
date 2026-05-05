@@ -136,11 +136,14 @@ button {
   place-items: center;
   padding: 5vh 4vw;
   overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
   box-sizing: border-box;
 }
 
 .kaai-modal__backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(33, 33, 33, 0.68);
 }
@@ -329,16 +332,20 @@ html.kaai-modal-open .custom-cursor {
 @media (max-width: 860px) {
   .kaai-modal {
     --kaai-border: 7px;
-    --kaai-offset-x: 16px;
-    --kaai-offset-y: 16px;
     align-items: start;
-    padding: 1rem calc(1rem + var(--kaai-offset-x)) calc(1rem + var(--kaai-offset-y)) 1rem;
+    place-items: start center;
+    min-height: 100dvh;
+    padding: calc(1rem + env(safe-area-inset-top)) 1rem calc(1rem + env(safe-area-inset-bottom));
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .kaai-modal__panel {
-    width: min(520px, calc(100vw - 2rem - var(--kaai-offset-x)));
+    width: min(520px, calc(100vw - 2rem));
+    max-height: none;
     aspect-ratio: auto;
     grid-template-columns: 1fr;
+    overflow: visible;
   }
 
   .kaai-modal__panel::before {
@@ -360,7 +367,8 @@ html.kaai-modal-open .custom-cursor {
 
   .kaai-modal__left {
     padding: 3.2rem 1.6rem 2rem;
-    grid-template-rows: auto 2rem auto auto;
+    height: auto;
+    overflow: visible;
   }
 
   .kaai-modal__logo {
@@ -377,11 +385,17 @@ html.kaai-modal-open .custom-cursor {
 
   .kaai-modal__right {
     padding: 0 0.75rem 0.75rem;
+    height: auto;
+    overflow: visible;
   }
 
   .kaai-modal__right-inner {
+    height: auto;
+    display: flex;
+    flex-direction: column;
     padding: 4.8rem 1.2rem 1.2rem;
     background-size: 28px 28px;
+    overflow: visible;
   }
 
   .kaai-modal__services {
