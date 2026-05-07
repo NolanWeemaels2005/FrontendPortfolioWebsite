@@ -1552,8 +1552,8 @@ video {
   filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.28));
 }
 
-.project-card--backend.project-card--nieuwland .project-card__logo {
-  transform: none;
+.project-card--nieuwland .project-card__logo {
+  transform: translateY(-17%);
   transform-origin: center;
 }
 
@@ -1588,8 +1588,8 @@ video {
 }
 
 .project-card--nieuwland {
-  --project-logo-width: 43%;
-  --project-logo-height: 96px;
+  --project-logo-width: 82%;
+  --project-logo-height: 150px;
 }
 
 .project-card--kaai {
@@ -1603,8 +1603,8 @@ video {
 }
 
 .project-card--ring-tv {
-  --project-logo-width: 68%;
-  --project-logo-height: 126px;
+  --project-logo-width: 58%;
+  --project-logo-height: 112px;
 }
 
 .project-card--mentalite {
@@ -2874,7 +2874,7 @@ video {
   .nav-logo {
     top: 1rem;
     left: auto;
-    right: 0.95rem;
+    right: 1rem;
     min-height: 46px;
     display: inline-flex;
     align-items: center;
@@ -2890,7 +2890,7 @@ video {
   }
 
   .nav-logo img.nav-logo__word {
-    width: clamp(96px, 28vw, 132px);
+    width: clamp(86px, 24vw, 108px);
   }
 
   .nav-talk {
@@ -2932,7 +2932,7 @@ video {
 
   .hero-copy {
     top: 46svh;
-    width: min(90vw, 420px);
+    width: min(calc(100vw - 2rem), 420px);
   }
 
   .scroll-indicator {
@@ -2993,7 +2993,7 @@ video {
   }
 
   .hero-title {
-    font-size: 3.45rem;
+    font-size: clamp(2.95rem, 12.4vw, 3.25rem);
   }
 
   .hero-script {
@@ -3004,6 +3004,19 @@ video {
   .about,
   .contact-page {
     padding-block: 4.5rem;
+  }
+
+  .hero-actions,
+  .inline-cta div {
+    width: min(100%, 340px);
+    margin-inline: auto;
+    gap: 0.85rem;
+  }
+
+  .hero-actions .btn,
+  .inline-cta .btn {
+    min-width: 0;
+    flex: 1 1 0;
   }
 
   .featured-grid {

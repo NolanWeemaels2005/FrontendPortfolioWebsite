@@ -95,18 +95,18 @@ export const featuredProjects: Project[] = [
 ];
 
 export const allProjects: Project[] = [
-  { title: "Basisschool Nieuwland", titleKey: "project.nieuwland.title", slug: "nieuwland", logo: `${logoPath}nieuwlandWhite.svg`, color: "#000" },
+  { title: "FC EISBÄR", slug: "fc-eisbar", layoutSlug: "happy-dancers", logo: "https://res.cloudinary.com/dw4wq5atx/image/upload/v1777838483/portfolio/client-logos/wifatbn8yxwfugw1vkpg.svg", color: "#000" },
+  { title: "Studio By Cas", titleKey: "project.studio-by-cas.title", slug: "studio-by-cas", logo: `${logoPath}studioByCasWhite.svg`, color: "#000" },
+  { title: "Kaai", titleKey: "project.kaai.title", slug: "kaai", logo: `${logoPath}kaaiWhite.svg`, color: "#000" },
+  { title: "Mentalite Sportswear", titleKey: "project.mentalite.title", slug: "mentalite", logo: `${logoPath}MentaliteWhite.svg`, color: "#000" },
+  { title: "Ring TV", titleKey: "project.ring-tv.title", slug: "ring-tv", logo: `${logoPath}RingtvWhite.svg`, color: "#000" },
+  { title: "Erasmus Hogeschool", titleKey: "project.erasmus.title", slug: "erasmus", logo: `${logoPath}ehbWhite.svg`, color: "#000" },
+  { title: "Shift Festival 2026", titleKey: "project.shift-festival.title", slug: "shift-festival", logo: `${logoPath}ShiftWhite.svg`, color: "#000" },
   { title: "Boit Bobby", titleKey: "project.boit-bobby.title", slug: "boit-bobby", logo: `${logoPath}BoitBobbyWhite.svg`, color: "#000" },
   { title: "City to Ocean", titleKey: "project.city-to-ocean.title", slug: "city-to-ocean", logo: `${logoPath}ctoWhite.svg`, color: "#000" },
   { title: "Ferraaawri", titleKey: "project.ferraaawri.title", slug: "ferraaawri", logo: `${logoPath}FerraaawriWhite.svg`, color: "#000" },
-  { title: "Happy Dancers", titleKey: "project.happy-dancers.title", slug: "happy-dancers", logo: `${logoPath}HappyDancersWhite.svg`, color: "#000" },
-  { title: "Kaai", titleKey: "project.kaai.title", slug: "kaai", logo: `${logoPath}kaaiWhite.svg`, color: "#000" },
   { title: "La Maison des 3 Garcons", titleKey: "project.la-maison-des-3-garcons.title", slug: "la-maison-des-3-garcons", logo: `${logoPath}LMD3GWhite.svg`, color: "#000" },
+  { title: "Basisschool Nieuwland", titleKey: "project.nieuwland.title", slug: "nieuwland", logo: `${logoPath}nieuwlandWhite.svg`, color: "#000" },
+  { title: "Happy Dancers", titleKey: "project.happy-dancers.title", slug: "happy-dancers", logo: `${logoPath}HappyDancersWhite.svg`, color: "#000" },
   { title: "Poutrel", titleKey: "project.poutrel.title", slug: "poutrel", logo: `${logoPath}PoutrelWhite.svg`, color: "#000" },
-  { title: "Ring TV", titleKey: "project.ring-tv.title", slug: "ring-tv", logo: `${logoPath}RingtvWhite.svg`, color: "#000" },
-  { title: "Senk", titleKey: "project.senk.title", slug: "senk", logo: `${logoPath}SenkWhite.svg`, color: "#000" },
-  { title: "Shift Festival 2026", titleKey: "project.shift-festival.title", slug: "shift-festival", logo: `${logoPath}ShiftWhite.svg`, color: "#000" },
-  { title: "Erasmus Hogeschool", titleKey: "project.erasmus.title", slug: "erasmus", logo: `${logoPath}ehbWhite.svg`, color: "#000" },
-  { title: "Studio By Cas", titleKey: "project.studio-by-cas.title", slug: "studio-by-cas", logo: `${logoPath}studioByCasWhite.svg`, color: "#000" },
-  { title: "Mentalite Sportswear", titleKey: "project.mentalite.title", slug: "mentalite", logo: `${logoPath}MentaliteWhite.svg`, color: "#000" },
 ];

@@ -73,7 +73,12 @@ export function ProjectDetailPage() {
   }
 
   const projectTitle = project.titleKey ? t(project.titleKey) : project.title;
-  const projectApproach = project.source === "backend" && project.text ? project.text : t("project.defaultApproach");
+  const projectApproach =
+    project.source === "backend" && project.text
+      ? project.text
+      : project.summaryKey
+        ? t(project.summaryKey)
+        : t("project.defaultApproach");
 
   return (
     <section className="project-detail section-black">

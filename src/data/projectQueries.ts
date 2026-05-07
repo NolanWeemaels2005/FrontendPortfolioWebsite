@@ -13,7 +13,25 @@ type BackendProject = {
   images: string[];
 };
 
-const projectDataVersion = "v9";
+const projectDataVersion = "v10";
+const projectOrder = [
+  "find your light",
+  "fc eisbar",
+  "videjo",
+  "studio by cas",
+  "kaai",
+  "mentalite sportswear",
+  "ring tv",
+  "erasmus hogeschool",
+  "shift festival 2026",
+  "boit bobby",
+  "city to ocean",
+  "ferraaawri",
+  "la maison des 3 garcons",
+  "basisschool nieuwland",
+  "happy dancers",
+  "poutrel",
+];
 
 export const projectQueryKeys = {
   all: ["projects", projectDataVersion, "all"] as const,
@@ -36,7 +54,43 @@ function normalizeTitle(title: string) {
     .replace(/[\u0300-\u036f]/g, "")
     .trim()
     .toLowerCase()
-    .replace(/\btrois\b/g, "3");
+    .replace(/\btrois\b/g, "3")
+    .replace(/[._]/g, "")
+    .replace(/\s+/g, " ");
+}
+
+function projectOrderIndex(project: Project) {
+  const normalizedSlug = normalizeTitle(project.slug.replace(/-/g, " "));
+  const normalizedTitle = normalizeTitle(project.title);
+  const index = projectOrder.findIndex(
+    (item) =>
+      normalizedSlug === item ||
+      normalizedTitle === item ||
+      normalizedSlug.startsWith(`${item} `) ||
+      normalizedTitle.startsWith(`${item} `),
+  );
+
+  return index === -1 ? Number.POSITIVE_INFINITY : index;
+}
+
+function sortProjects(projects: Project[]) {
+  return [...projects].sort((projectA, projectB) => {
+    const orderA = projectOrderIndex(projectA);
+    const orderB = projectOrderIndex(projectB);
+    const isUnknownBackendA = projectA.source === "backend" && !Number.isFinite(orderA);
+    const isUnknownBackendB = projectB.source === "backend" && !Number.isFinite(orderB);
+
+    if (isUnknownBackendA && !isUnknownBackendB) return -1;
+    if (!isUnknownBackendA && isUnknownBackendB) return 1;
+
+    if (orderA !== orderB) return orderA - orderB;
+    if (Number.isFinite(orderA)) return 0;
+
+    if (projectA.source === "backend" && projectB.source !== "backend") return -1;
+    if (projectA.source !== "backend" && projectB.source === "backend") return 1;
+
+    return 0;
+  });
 }
 
 function findLocalProject(project: Pick<Project, "slug" | "title">) {
@@ -74,6 +128,8 @@ function mapBackendProject(project: BackendProject): Project {
     cover,
     color: localProject?.color || "#000",
     featured: localProject?.featured,
+    titleKey: localProject?.titleKey,
+    summaryKey: localProject?.summaryKey,
     summary: project.text,
     text: project.text,
     heroImage: project.heroImage,
@@ -87,10 +143,10 @@ function mergeBackendProjects(backendProjects: Project[], localProjects: Project
   const backendSlugs = new Set(backendProjects.map((project) => project.slug));
   const backendTitles = new Set(backendProjects.map((project) => normalizeTitle(project.title)));
 
-  return [
+  return sortProjects([
     ...backendProjects,
     ...localProjects.filter((project) => !backendSlugs.has(project.slug) && !backendTitles.has(normalizeTitle(project.title))),
-  ];
+  ]);
 }
 
 async function fetchBackendProjects() {
@@ -117,10 +173,10 @@ async function fetchBackendProject(slug: string) {
 }
 
 export function getCombinedProjects() {
-  return [
+  return sortProjects([
     ...featuredProjects,
     ...allProjects.filter((project) => !featuredProjects.some((item) => item.slug === project.slug)),
-  ];
+  ]);
 }
 
 export function useFeaturedProjectsQuery() {
@@ -143,7 +199,7 @@ export function useAllProjectsQuery() {
       const backendProjects = await fetchBackendProjects();
       return mergeBackendProjects(backendProjects, allProjects);
     },
-    initialData: allProjects,
+    initialData: sortProjects(allProjects),
     ...queryOptions,
   });
 }
