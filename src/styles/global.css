@@ -2814,6 +2814,10 @@ video {
   text-transform: uppercase;
 }
 
+.footer-cta {
+  padding-top: calc(160px * 0.31 + 3.2rem);
+}
+
 .footer-cta strong {
   display: block;
   margin: 0.4rem 0 2rem;
@@ -3455,6 +3459,10 @@ video {
   .footer-columns {
     grid-template-columns: 1fr;
     gap: 2.4rem;
+  }
+
+  .footer-cta {
+    padding-top: 0;
   }
 
   .footer-top,
