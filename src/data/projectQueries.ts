@@ -8,6 +8,17 @@ type BackendProject = {
   title: string;
   slug: string;
   text: string;
+  textNl?: string;
+  textFr?: string;
+  textEn?: string;
+  summaryNl?: string;
+  summaryFr?: string;
+  summaryEn?: string;
+  translations?: {
+    nl?: { text?: string; summary?: string };
+    fr?: { text?: string; summary?: string };
+    en?: { text?: string; summary?: string };
+  };
   heroImage: string;
   clientLogoSvg?: string | null;
   images: string[];
@@ -131,7 +142,17 @@ function mapBackendProject(project: BackendProject): Project {
     titleKey: localProject?.titleKey,
     summaryKey: localProject?.summaryKey,
     summary: project.text,
+    summaryTranslations: {
+      nl: project.summaryNl || project.translations?.nl?.summary,
+      fr: project.summaryFr || project.translations?.fr?.summary,
+      en: project.summaryEn || project.translations?.en?.summary,
+    },
     text: project.text,
+    textTranslations: {
+      nl: project.textNl || project.translations?.nl?.text,
+      fr: project.textFr || project.translations?.fr?.text,
+      en: project.textEn || project.translations?.en?.text,
+    },
     heroImage: project.heroImage,
     clientLogoSvg: project.clientLogoSvg || null,
     images: project.images,

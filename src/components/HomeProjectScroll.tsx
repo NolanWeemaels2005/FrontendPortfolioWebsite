@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useFeaturedProjectsQuery } from "../data/projectQueries";
-import { useTilt } from "../hooks/useTilt";
 import { useLanguage } from "../i18n/LanguageContext";
 import type { Project } from "../types/project";
 
@@ -13,7 +13,6 @@ type ScrollProjectCardProps = {
 };
 
 function ScrollProjectCard({ project, index, setCardRef }: ScrollProjectCardProps) {
-  const tilt = useTilt({ max: 7, scale: 1.015 });
   const { t } = useLanguage();
   const projectTitle = project.titleKey ? t(project.titleKey) : project.title;
 
@@ -28,7 +27,6 @@ function ScrollProjectCard({ project, index, setCardRef }: ScrollProjectCardProp
         "--abs-offset": Math.min(index, 3),
         "--z": 20 - Math.round(index * 2),
       } as CSSProperties}
-      {...tilt}
     >
       <span className="scroll-project-card__surface">
         {project.cover ? (
@@ -43,85 +41,96 @@ function ScrollProjectCard({ project, index, setCardRef }: ScrollProjectCardProp
 
 export function HomeProjectScroll() {
   const { data: featuredProjects } = useFeaturedProjectsQuery();
-  const sectionRef = useRef<HTMLElement>(null);
-  const frameRef = useRef<number | null>(null);
   const cardRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   function setCardRef(index: number, element: HTMLAnchorElement | null) {
     cardRefs.current[index] = element;
   }
 
-  useEffect(() => {
-    const mobileMedia = window.matchMedia("(max-width: 640px), (pointer: coarse)");
+  const updateCards = useCallback((active: number) => {
+    const projectCount = Math.max(featuredProjects.length, 1);
 
-    function updateCards(progress: number) {
-      const active = progress * (featuredProjects.length - 1);
+    cardRefs.current.forEach((card, index) => {
+      if (!card) return;
 
-      cardRefs.current.forEach((card, index) => {
-        if (!card) return;
+      let offset = index - active;
+      if (offset > projectCount / 2) offset -= projectCount;
+      if (offset < -projectCount / 2) offset += projectCount;
 
-        const offset = index - active;
-        const absOffset = Math.abs(offset);
-        const clamped = Math.min(absOffset, 3);
+      const absOffset = Math.abs(offset);
+      const clamped = Math.min(absOffset, 3);
 
-        card.style.setProperty("--offset", offset.toFixed(4));
-        card.style.setProperty("--abs-offset", clamped.toFixed(4));
-        card.style.setProperty("--z", String(20 - Math.round(absOffset * 2)));
-        card.style.setProperty("--intro-delay", `${Math.min(index * 70, 360)}ms`);
-      });
-    }
-
-    function measureProgress() {
-      frameRef.current = null;
-      const section = sectionRef.current;
-      if (!section) return;
-
-      const rect = section.getBoundingClientRect();
-      const scrollable = Math.max(section.offsetHeight - window.innerHeight, 1);
-      const nextProgress = Math.min(Math.max(-rect.top / scrollable, 0), 1);
-      updateCards(nextProgress);
-    }
-
-    function requestProgressUpdate() {
-      if (frameRef.current !== null) return;
-      frameRef.current = window.requestAnimationFrame(measureProgress);
-    }
-
-    if (mobileMedia.matches) {
-      sectionRef.current?.classList.add("is-ready");
-      return;
-    }
-
-    measureProgress();
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        sectionRef.current?.classList.add("is-ready");
-      });
+      card.style.setProperty("--offset", offset.toFixed(4));
+      card.style.setProperty("--abs-offset", clamped.toFixed(4));
+      card.style.setProperty("--z", String(20 - Math.round(absOffset * 2)));
+      card.style.setProperty("--intro-delay", `${Math.min(index * 70, 360)}ms`);
     });
-    window.addEventListener("scroll", requestProgressUpdate, { passive: true });
-    window.addEventListener("resize", requestProgressUpdate);
-
-    return () => {
-      if (frameRef.current !== null) {
-        window.cancelAnimationFrame(frameRef.current);
-      }
-      window.removeEventListener("scroll", requestProgressUpdate);
-      window.removeEventListener("resize", requestProgressUpdate);
-    };
   }, [featuredProjects.length]);
+
+  const goToProject = useCallback((nextIndex: number) => {
+    const projectCount = Math.max(featuredProjects.length, 1);
+    setActiveIndex(((nextIndex % projectCount) + projectCount) % projectCount);
+  }, [featuredProjects.length]);
+
+  function goToRelativeProject(direction: -1 | 1) {
+    goToProject(activeIndex + direction);
+  }
+
+  useEffect(() => {
+    updateCards(activeIndex);
+    window.requestAnimationFrame(() => {
+      document.getElementById("home-project-strip")?.classList.add("is-ready");
+    });
+  }, [activeIndex, updateCards]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setActiveIndex((current) => (current + 1) % Math.max(featuredProjects.length, 1));
+    }, 3600);
+
+    return () => window.clearTimeout(timer);
+  }, [activeIndex, featuredProjects.length]);
 
   return (
     <section
       className="home-project-scroll"
       id="home-project-strip"
-      ref={sectionRef}
       style={{ "--project-count": featuredProjects.length } as CSSProperties}
     >
       <div className="home-project-scroll__sticky">
         <div className="home-project-scroll__stage">
           {featuredProjects.map((project, index) => (
-            <ScrollProjectCard project={project} index={index} setCardRef={setCardRef} key={project.slug} />
+            <ScrollProjectCard
+              project={project}
+              index={index}
+              setCardRef={setCardRef}
+              key={project.slug}
+            />
           ))}
+        </div>
+        <div className="home-project-scroll__controls" aria-label="Projectcarousel bedienen">
+          <button
+            type="button"
+            className="home-project-scroll__button home-project-scroll__button--prev"
+            onClick={() => goToRelativeProject(-1)}
+            aria-label="Vorig project"
+            data-cursor="merge"
+          >
+            <ChevronLeft aria-hidden="true" size={28} strokeWidth={3} />
+          </button>
+          <div className="home-project-scroll__progress" aria-hidden="true">
+            <span key={activeIndex} />
+          </div>
+          <button
+            type="button"
+            className="home-project-scroll__button home-project-scroll__button--next"
+            onClick={() => goToRelativeProject(1)}
+            aria-label="Volgend project"
+            data-cursor="merge"
+          >
+            <ChevronRight aria-hidden="true" size={28} strokeWidth={3} />
+          </button>
         </div>
       </div>
     </section>

@@ -13,7 +13,7 @@ const socials = [
 ];
 
 export function Footer() {
-  const { t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const [kaaiOpen, setKaaiOpen] = useState(false);
 
   function openKaaiModal(event: MouseEvent<HTMLAnchorElement>) {
@@ -30,22 +30,35 @@ export function Footer() {
           </Link>
 
           <div className="footer-columns">
-            <div>
+            <div className="footer-column footer-column--links">
               <h3>{t("footer.links")}</h3>
               <a href="https://www.instagram.com/nolanweemaelsdesign/" data-cursor="soft" target="_blank" rel="noopener noreferrer">Instagram</a>
               <a href="https://www.linkedin.com/in/nolan-weemaels-1780511b4/" data-cursor="soft" target="_blank" rel="noopener noreferrer">LinkedIn</a>
               <a href="https://kaai.be" data-cursor="soft" target="_blank" rel="noopener noreferrer" onClick={openKaaiModal}>Kaai.</a>
             </div>
-            <div>
+            <div className="footer-column footer-column--pages">
               <h3>{t("footer.pages")}</h3>
               {navItems.map((item) => (
                 <Link to={item.href} data-cursor="soft" key={item.href}>
                   {t(item.labelKey)}
                 </Link>
               ))}
-              <Link to="/beheer" data-cursor="soft">
-                Beheer
-              </Link>
+            </div>
+            <div className="footer-language">
+              <h3>{t("nav.language")}</h3>
+              <div className="footer-language-switcher" aria-label={t("nav.language")}>
+                {(["nl", "fr", "en"] as const).map((item) => (
+                  <button
+                    type="button"
+                    data-cursor="merge"
+                    className={language === item ? "is-active" : ""}
+                    onClick={() => setLanguage(item)}
+                    key={item}
+                  >
+                    {item.toUpperCase()}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

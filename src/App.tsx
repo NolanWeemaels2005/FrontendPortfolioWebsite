@@ -1,6 +1,5 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useLayoutEffect } from "react";
-import { CustomCursor } from "./components/CustomCursor";
 import { Footer } from "./components/Footer";
 import { Navigation } from "./components/Navigation";
 import { Seo } from "./components/Seo";
@@ -24,6 +23,7 @@ function ScrollToTop() {
 
   useLayoutEffect(() => {
     if (hash) return;
+    if (pathname === "/portfolio" && window.sessionStorage.getItem("portfolio-scroll-y")) return;
 
     const scrollTop = () => {
       window.scrollTo(0, 0);
@@ -49,7 +49,6 @@ export function App() {
 
   return (
     <>
-      <CustomCursor />
       <Seo />
       <ScrollToTop />
       <Navigation />

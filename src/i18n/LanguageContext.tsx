@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
-type Language = "nl" | "fr" | "en";
+export type Language = "nl" | "fr" | "en";
 type Dictionary = Record<string, string>;
 
 const dictionaries: Record<Language, Dictionary> = {
@@ -27,7 +27,7 @@ const dictionaries: Record<Language, Dictionary> = {
     "hero.scroll": "Scroll en ontdek meer",
     "hero.contactScroll": "Scroll en neem contact op",
     "hero.scrollLabel": "Scroll naar inhoud",
-    "cta.letsTalk": "Let's talk",
+    "cta.letsTalk": "Let’s talk",
     "cta.portfolio": "Portfolio",
     "portfolio.featured": "Uitgelichte projecten",
     "portfolio.all": "Alle projecten",
@@ -199,7 +199,7 @@ const dictionaries: Record<Language, Dictionary> = {
     "hero.scroll": "Scroll and discover more",
     "hero.contactScroll": "Scroll and get in touch",
     "hero.scrollLabel": "Scroll to content",
-    "cta.letsTalk": "Let's talk",
+    "cta.letsTalk": "Let’s talk",
     "cta.portfolio": "Portfolio",
     "portfolio.featured": "Featured projects",
     "portfolio.all": "All projects",

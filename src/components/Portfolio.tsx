@@ -16,13 +16,17 @@ export function Portfolio() {
   const featuredTilt = useTilt({ max: 7, scale: 1.018 });
   const projectTilt = useTilt({ max: 9, scale: 1.02 });
 
+  function rememberPortfolioScroll() {
+    window.sessionStorage.setItem("portfolio-scroll-y", String(window.scrollY));
+  }
+
   return (
     <section className="portfolio" id="portfolio">
       <div className="section-container">
         <h2 data-reveal>{t("portfolio.featured")}</h2>
 
         <div className="featured-grid">
-          {featuredProjects.map((project) => (
+          {featuredProjects.map((project, index) => (
             (() => {
               const classSlug = projectClassSlug(project.layoutSlug || project.slug);
 
@@ -34,7 +38,8 @@ export function Portfolio() {
               data-reveal
               id={project.slug}
               key={project.slug}
-              style={{ "--accent": project.color } as CSSProperties}
+              onClick={rememberPortfolioScroll}
+              style={{ "--accent": project.color, "--featured-delay": `${Math.min(index * 80, 520)}ms` } as CSSProperties}
               {...featuredTilt}
             >
               {project.cover ? <img className="featured-card__cover" src={project.cover} alt="" /> : null}
@@ -60,6 +65,7 @@ export function Portfolio() {
               data-cursor="soft"
               data-reveal
               key={project.slug}
+              onClick={rememberPortfolioScroll}
               {...projectTilt}
             >
               <span className="project-card__logo-wrap" data-cursor-surface>

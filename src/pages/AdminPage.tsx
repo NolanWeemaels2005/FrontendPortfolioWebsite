@@ -14,6 +14,9 @@ type LoginState = {
 type ProjectFormState = {
   title: string;
   text: string;
+  textNl: string;
+  textFr: string;
+  textEn: string;
   heroSvg: File | null;
   images: File[];
 };
@@ -23,6 +26,9 @@ type EditableProject = {
   title: string;
   slug: string;
   text?: string;
+  textNl?: string;
+  textFr?: string;
+  textEn?: string;
   heroImage?: string;
   clientLogoSvg?: string | null;
   images?: string[];
@@ -39,6 +45,9 @@ export function AdminPage() {
   const [project, setProject] = useState<ProjectFormState>({
     title: "",
     text: "",
+    textNl: "",
+    textFr: "",
+    textEn: "",
     heroSvg: null,
     images: [],
   });
@@ -77,6 +86,9 @@ export function AdminPage() {
           setProject({
             title: data.title,
             text: data.text || "",
+            textNl: data.textNl || data.text || "",
+            textFr: data.textFr || "",
+            textEn: data.textEn || "",
             heroSvg: null,
             images: [],
           });
@@ -100,6 +112,9 @@ export function AdminPage() {
         setProject({
           title: localProject.title,
           text: localProject.summary || "",
+          textNl: localProject.summary || "",
+          textFr: "",
+          textEn: "",
           heroSvg: null,
           images: [],
         });
@@ -155,7 +170,7 @@ export function AdminPage() {
 
   function handleCloseEdit() {
     setEditingProject(null);
-    setProject({ title: "", text: "", heroSvg: null, images: [] });
+    setProject({ title: "", text: "", textNl: "", textFr: "", textEn: "", heroSvg: null, images: [] });
     setError("");
     setStatus("Bewerken geannuleerd.");
     navigate("/beheer", { replace: true });
@@ -193,7 +208,7 @@ export function AdminPage() {
 
       const deletedSlug = editingProject.slug;
       setEditingProject(null);
-      setProject({ title: "", text: "", heroSvg: null, images: [] });
+      setProject({ title: "", text: "", textNl: "", textFr: "", textEn: "", heroSvg: null, images: [] });
       invalidateProjectData(deletedSlug);
       setStatus("Project is verwijderd.");
       navigate("/beheer", { replace: true });
@@ -240,7 +255,7 @@ export function AdminPage() {
       }
 
       setStatus(editingProject ? "Project is bijgewerkt." : "Project is toegevoegd.");
-      setProject({ title: "", text: "", heroSvg: null, images: [] });
+      setProject({ title: "", text: "", textNl: "", textFr: "", textEn: "", heroSvg: null, images: [] });
       setEditingProject(null);
       invalidateProjectData(editingProject?.slug);
       event.currentTarget.reset();
@@ -286,6 +301,9 @@ export function AdminPage() {
     const formData = new FormData();
     formData.append("title", project.title);
     formData.append("text", project.text);
+    formData.append("textNl", project.textNl || project.text);
+    formData.append("textFr", project.textFr);
+    formData.append("textEn", project.textEn);
     formData.append("heroImage", heroFile);
     formData.append("clientLogoSvg", logoFile);
     selectedImagesForUpload.forEach((image) => formData.append("images", image));
@@ -319,7 +337,7 @@ export function AdminPage() {
       const existingProjects = (await existingResponse.json()) as Array<{ slug: string }>;
       const existingSlugs = new Set(existingProjects.map((projectItem) => projectItem.slug));
       const localProjects = getCombinedProjects();
-      const fallbackCover = assetPath("assets/project-covers/coverKAAI.png");
+      const fallbackCover = assetPath("assets/project-covers/coverKAAI.jpg");
       let uploaded = 0;
       let skipped = 0;
 
@@ -444,8 +462,38 @@ export function AdminPage() {
               Tekst
               <textarea
                 value={project.text}
-                onChange={(event) => setProject((current) => ({ ...current, text: event.target.value }))}
+                onChange={(event) => {
+                  const nextText = event.target.value;
+                  setProject((current) => ({ ...current, text: nextText, textNl: current.textNl || nextText }));
+                }}
                 required
+              />
+            </label>
+
+            <label>
+              Beschrijving NL
+              <textarea
+                value={project.textNl}
+                onChange={(event) => setProject((current) => ({ ...current, textNl: event.target.value }))}
+                required
+              />
+            </label>
+
+            <label>
+              Beschrijving FR
+              <textarea
+                value={project.textFr}
+                onChange={(event) => setProject((current) => ({ ...current, textFr: event.target.value }))}
+                placeholder="Franse beschrijving"
+              />
+            </label>
+
+            <label>
+              Beschrijving EN
+              <textarea
+                value={project.textEn}
+                onChange={(event) => setProject((current) => ({ ...current, textEn: event.target.value }))}
+                placeholder="Engelse beschrijving"
               />
             </label>
 

@@ -1,5 +1,5 @@
 import { Menu } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { navItems } from "../data/nav";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -23,11 +23,19 @@ export function Navigation() {
     };
   }, [open]);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+  useLayoutEffect(() => {
+    const syncScrolled = () => {
+      const nextScrolled = (window.scrollY || document.documentElement.scrollTop) > 0;
+      setScrolled(nextScrolled);
+    };
+
+    syncScrolled();
+    window.addEventListener("scroll", syncScrolled, { passive: true });
+    window.addEventListener("resize", syncScrolled);
+    return () => {
+      window.removeEventListener("scroll", syncScrolled);
+      window.removeEventListener("resize", syncScrolled);
+    };
   }, []);
 
   useEffect(() => {
@@ -83,7 +91,6 @@ export function Navigation() {
                 <span className="divider" />
                 <span className="inner">
                   <span className="link-text">{t(item.labelKey)}</span>
-                  <span className="link-arrow">›</span>
                 </span>
               </NavLink>
             ))}

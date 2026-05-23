@@ -5,6 +5,9 @@ export default defineConfig({
   base: "/",
   plugins: [react()],
   server: {
+    host: "127.0.0.1",
+    port: 5174,
+    strictPort: true,
     proxy: {
       "/api": {
         target: "https://backendportfoliowebsite-production.up.railway.app",
@@ -12,5 +15,10 @@ export default defineConfig({
         secure: true,
       },
     },
+  },
+  preview: {
+    host: "127.0.0.1",
+    port: 4174,
+    strictPort: true,
   },
 });

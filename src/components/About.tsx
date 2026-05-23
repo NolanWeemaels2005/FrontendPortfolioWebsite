@@ -28,7 +28,7 @@ export function About() {
         </div>
 
         <div className="about-portrait" data-reveal>
-          <img src={assetPath("assets/about/nolan-portrait.png")} alt={t("about.portraitAlt")} />
+          <img src={assetPath("assets/about/nolan-portrait.jpg")} alt={t("about.portraitAlt")} />
         </div>
       </div>
 

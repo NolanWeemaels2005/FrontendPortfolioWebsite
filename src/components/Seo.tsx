@@ -7,7 +7,7 @@ const siteName = "Nolan Design";
 const defaultTitle = "Nolan Design | Grafisch ontwerper en portfolio";
 const defaultDescription =
   "Portfolio van Nolan Weemaels, grafisch ontwerper met focus op branding, visuele identiteiten, webdesign en digitale projecten.";
-const defaultImage = `${siteUrl}/assets/project-covers/coverKAAI.png`;
+const defaultImage = `${siteUrl}/assets/project-covers/coverKAAI.jpg`;
 
 function setMeta(name: string, content: string, attribute: "name" | "property" = "name") {
   let element = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${name}"]`);
@@ -75,7 +75,7 @@ function getSeo(pathname: string) {
       description: "Leer Nolan Weemaels kennen en ontdek zijn focus op branding, grafisch ontwerp en digitale vormgeving.",
       canonicalPath: "/about",
       robots: "index, follow",
-      image: `${siteUrl}/assets/about/nolan-portrait.png`,
+      image: `${siteUrl}/assets/about/nolan-portrait.jpg`,
     };
   }
 

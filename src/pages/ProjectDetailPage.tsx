@@ -2,16 +2,19 @@ import { ArrowLeft, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { useProjectQuery } from "../data/projectQueries";
+import { useCombinedProjectsQuery, useProjectQuery } from "../data/projectQueries";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../i18n/LanguageContext";
+import type { Project } from "../types/project";
 import { getAdminToken } from "../utils/adminAuth";
+import { getProjectDescription } from "../utils/projectText";
 
 export function ProjectDetailPage() {
   useScrollReveal();
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const { slug } = useParams();
   const { data: project, isLoading, isFetching } = useProjectQuery(slug);
+  const { data: combinedProjects = [] } = useCombinedProjectsQuery();
   const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(getAdminToken()));
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
   const galleryImages = project?.images || [];
@@ -73,12 +76,8 @@ export function ProjectDetailPage() {
   }
 
   const projectTitle = project.titleKey ? t(project.titleKey) : project.title;
-  const projectApproach =
-    project.source === "backend" && project.text
-      ? project.text
-      : project.summaryKey
-        ? t(project.summaryKey)
-        : t("project.defaultApproach");
+  const projectApproach = getProjectDescription(project, language, t);
+  const relatedProjects = getRelatedProjects(combinedProjects, project.slug);
 
   return (
     <section className="project-detail section-black">
@@ -134,6 +133,26 @@ export function ProjectDetailPage() {
         </div>
       ) : null}
 
+      {relatedProjects.length ? (
+        <section className="section-container related-projects" data-reveal>
+          <h2>Bekijk ook zeker deze projecten:</h2>
+          <div className="related-projects__grid">
+            {relatedProjects.map((relatedProject) => {
+              const relatedTitle = relatedProject.titleKey ? t(relatedProject.titleKey) : relatedProject.title;
+
+              return (
+                <Link to={`/portfolio/${relatedProject.slug}`} className="related-project-card" key={relatedProject.slug}>
+                  <span className="related-project-card__logo-wrap">
+                    <img src={relatedProject.logo} alt={relatedTitle} loading="lazy" decoding="async" />
+                  </span>
+                  <span>{relatedTitle}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
+
       {activeImage && typeof document !== "undefined" ? createPortal(
         <div className="project-lightbox" role="dialog" aria-modal="true" aria-label={`${projectTitle} galerij`}>
           <button
@@ -174,4 +193,24 @@ export function ProjectDetailPage() {
       ) : null}
     </section>
   );
+}
+
+function seededProjectScore(seed: string, value: string) {
+  const input = `${seed}:${value}`;
+  let hash = 0;
+
+  for (let index = 0; index < input.length; index += 1) {
+    hash = (hash * 31 + input.charCodeAt(index)) >>> 0;
+  }
+
+  return hash;
+}
+
+function getRelatedProjects(projects: Project[], currentSlug: string) {
+  return projects
+    .filter((project) => project.slug !== currentSlug && project.logo)
+    .map((project) => ({ project, score: seededProjectScore(currentSlug, project.slug) }))
+    .sort((projectA, projectB) => projectA.score - projectB.score)
+    .slice(0, 4)
+    .map(({ project }) => project);
 }
