@@ -2199,26 +2199,29 @@ video {
   color: var(--black);
 }
 
-.about-process__progress {
-  height: 6px;
-  margin-top: 1.55rem;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.42);
+.about-process__dots {
+  margin-top: 1.45rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.65rem;
 }
 
-.about-process__progress span {
-  display: block;
-  width: 100%;
-  height: 100%;
+.about-process__dots button {
+  width: 11px;
+  height: 11px;
+  padding: 0;
   border-radius: 999px;
+  background: rgba(255, 255, 255, 0.42);
+  transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+.about-process__dots button.is-active {
   background: var(--orange);
-  transform-origin: left;
-  animation: carouselProgress var(--process-duration, 14s) linear both;
+  transform: scale(1.22);
 }
 
 .about-story {
-  margin-top: 5.25rem;
+  margin-top: 6.5rem;
 }
 
 .about-story__layout {
@@ -2265,11 +2268,11 @@ video {
 }
 
 .about-focus {
-  margin-top: 5.25rem;
+  margin-top: 6.5rem;
 }
 
 .tools {
-  margin-top: 5.5rem;
+  margin-top: 6.75rem;
 }
 
 .tools-panel {

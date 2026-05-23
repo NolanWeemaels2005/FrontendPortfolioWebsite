@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useCombinedProjectsQuery } from "../data/projectQueries";
@@ -58,8 +58,6 @@ const processSlides = [
   },
 ];
 
-const processSlideDuration = 14000;
-
 export function About() {
   const { t } = useLanguage();
   const { data: projects = [] } = useCombinedProjectsQuery();
@@ -67,14 +65,6 @@ export function About() {
   const [activeProcess, setActiveProcess] = useState(0);
   const selectedFocus = focusGroups[activeFocus];
   const selectedProcess = processSlides[activeProcess];
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setActiveProcess((current) => (current + 1) % processSlides.length);
-    }, processSlideDuration);
-
-    return () => window.clearTimeout(timer);
-  }, [activeProcess]);
 
   function getProjectLogo(slug: string) {
     return projects.find((project) => project.slug === slug || project.layoutSlug === slug)?.logo;
@@ -91,12 +81,17 @@ export function About() {
             <p>{t(selectedProcess.textKey)}</p>
           </div>
         </article>
-        <div
-          className="about-process__progress"
-          style={{ "--process-duration": `${processSlideDuration}ms` } as CSSProperties}
-          aria-hidden="true"
-        >
-          <span key={activeProcess} />
+        <div className="about-process__dots" aria-label={t("about.processDots")}>
+          {processSlides.map((slide, index) => (
+            <button
+              type="button"
+              className={activeProcess === index ? "is-active" : ""}
+              onClick={() => setActiveProcess(index)}
+              aria-label={t(slide.titleKey)}
+              aria-current={activeProcess === index ? "true" : undefined}
+              key={slide.titleKey}
+            />
+          ))}
         </div>
       </div>
 
