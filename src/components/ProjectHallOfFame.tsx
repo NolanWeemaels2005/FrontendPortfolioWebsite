@@ -6,6 +6,7 @@ import { featuredProjects } from "../data/projects";
 import { useFeaturedProjectsQuery } from "../data/projectQueries";
 import { useLanguage } from "../i18n/LanguageContext";
 import type { Project } from "../types/project";
+import { responsiveImageSrcSet } from "../utils/asset";
 
 function splitColumns(projects: Project[]) {
   const columns: Project[][] = [[], [], []];
@@ -84,11 +85,27 @@ export function ProjectHallOfFame() {
                 const title = project.titleKey ? t(project.titleKey) : project.title;
 
                 return (
-                  <Link className="project-hall-card" to={`/portfolio/${project.slug}`} key={project.slug} onClick={rememberPortfolioScroll}>
+                  <Link className="project-hall-card" to={`/portfolio/${project.slug}/`} key={project.slug} onClick={rememberPortfolioScroll}>
                     <span className="project-hall-card__media" style={{ "--hall-accent": getProjectAccent(project) } as CSSProperties}>
-                      {cover ? <img className="project-hall-card__cover" src={cover} alt="" loading="lazy" decoding="async" /> : null}
+                      {cover ? (
+                        <img
+                          className="project-hall-card__cover"
+                          src={cover}
+                          srcSet={responsiveImageSrcSet(cover, 640, 1280)}
+                          sizes="(max-width: 760px) calc(100vw - 2rem), 390px"
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : null}
                       <span className="project-hall-card__shade" />
-                      <img className="project-hall-card__logo" src={project.logo} alt={title} loading="lazy" decoding="async" />
+                      <img
+                        className="project-hall-card__logo"
+                        src={project.logo}
+                        alt={title}
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </span>
                     <span className="project-hall-card__label">
                       {title}

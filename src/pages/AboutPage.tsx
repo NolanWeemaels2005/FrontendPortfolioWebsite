@@ -13,48 +13,48 @@ const storyItems = [
   {
     place: "Knokke",
     year: "2022",
-    image: "MyStoryPicture1.jpg",
+    image: "MyStoryPicture1.webp",
     descriptionKey: "about.story.item1",
   },
   {
     place: "Geraardsbergen",
     year: "2023",
-    image: "MyStoryPicture2.jpg",
+    image: "MyStoryPicture2.webp",
     descriptionKey: "about.story.item2",
   },
   {
     place: "Brussel",
     year: "2024",
-    image: "MyStoryPicture3.jpg",
+    image: "MyStoryPicture3.webp",
     descriptionKey: "about.story.item3",
   },
   {
     place: "Brussel",
     year: "2024",
-    image: "MyStoryPicture4.jpg",
+    image: "MyStoryPicture4.webp",
     descriptionKey: "about.story.item4",
   },
   {
     place: "Carcès",
     year: "2025",
-    image: "MyStoryPicture5.jpg",
+    image: "MyStoryPicture5.webp",
     descriptionKey: "about.story.item5",
   },
   {
     place: "Brussel",
     year: "2026",
-    image: "MyStoryPicture7.jpg",
+    image: "MyStoryPicture7.webp",
     descriptionKey: "about.story.item6",
   },
 ];
 
 const tools = [
-  { label: "Adobe Photoshop", icon: "NewPHOTOSHOPLogo.svg" },
-  { label: "Figma", icon: "NewFIGMALogo.svg" },
-  { label: "Adobe Illustrator", icon: "NewILLUSTRATORLogo.svg" },
-  { label: "Microsoft VS Code", icon: "NewVSCODELogo.svg" },
-  { label: "Adobe InDesign", icon: "NewINDESIGNLogo.svg" },
-  { label: "Artificial Intelligence", icon: "AIIcon.svg" },
+  { label: "Adobe Photoshop", icon: "NewPHOTOSHOPLogo.webp" },
+  { label: "Figma", icon: "NewFIGMALogo.webp" },
+  { label: "Adobe Illustrator", icon: "NewILLUSTRATORLogo.webp" },
+  { label: "Microsoft VS Code", icon: "NewVSCODELogo.webp" },
+  { label: "Adobe InDesign", icon: "NewINDESIGNLogo.webp" },
+  { label: "Artificial Intelligence", icon: "AIIcon.webp" },
 ];
 
 export function AboutPage() {
@@ -219,9 +219,9 @@ export function AboutPage() {
                     <img
                       src={assetPath(`assets/about-story/optimized/${item.image}`)}
                       alt={`${item.place}, ${item.year}`}
-                      loading={index < 3 ? "eager" : "lazy"}
+                      loading="lazy"
                       decoding="async"
-                      fetchPriority={index < 3 ? "high" : "auto"}
+                      fetchPriority="auto"
                     />
                     <div className="story-card__overlay">
                       <p>{t(item.descriptionKey)}</p>
@@ -259,7 +259,7 @@ export function AboutPage() {
             <div className="about-skills__grid">
               <img
                 className="about-skills__portrait"
-                src={assetPath("assets/about-story/optimized/MyStoryPicture7.jpg")}
+                src={assetPath("assets/about-story/optimized/MyStoryPicture7.webp")}
                 alt=""
                 loading="lazy"
                 decoding="async"
@@ -281,7 +281,7 @@ export function AboutPage() {
                   {t("about.skillsCopy")}
                 </p>
                 <p>{t("about.skillsPrompt")}</p>
-                <Link to="/contact" className="btn btn--primary about-skills__button" data-cursor="merge">
+                <Link to="/contact/" className="btn btn--primary about-skills__button" data-cursor="merge">
                   <ButtonTextStagger text={t("cta.letsTalk")} />
                 </Link>
               </div>
@@ -291,7 +291,7 @@ export function AboutPage() {
 
         <section className="about-story-cta" data-reveal>
           <h2>{t("portfolio.cta")}</h2>
-          <Link to="/contact" className="btn btn--primary" data-cursor="merge">
+          <Link to="/contact/" className="btn btn--primary" data-cursor="merge">
             <ButtonTextStagger text={t("cta.letsTalk")} />
           </Link>
         </section>

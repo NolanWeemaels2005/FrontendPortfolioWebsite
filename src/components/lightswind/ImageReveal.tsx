@@ -80,7 +80,12 @@ export default function ImageReveal({ images = [], children }: ImageRevealProps)
           return (
             <figure className={`image-reveal__frame ${activeIndex === index ? "is-active" : ""}`} key={image.href} style={frameStyle}>
               <Link to={image.href} aria-label={`Bekijk ${image.alt}`} onFocus={() => setActiveIndex(index)}>
-                <img src={image.src} alt="" loading="lazy" decoding="async" />
+                <img
+                  src={image.src}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
               </Link>
             </figure>
           );

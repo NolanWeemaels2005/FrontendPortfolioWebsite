@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { getCombinedProjects, projectQueryKeys } from "../data/projectQueries";
 import { apiUrl, readApiError } from "../utils/api";
 import { clearAdminToken, getAdminToken, setAdminToken } from "../utils/adminAuth";
@@ -337,7 +338,7 @@ export function AdminPage() {
       const existingProjects = (await existingResponse.json()) as Array<{ slug: string }>;
       const existingSlugs = new Set(existingProjects.map((projectItem) => projectItem.slug));
       const localProjects = getCombinedProjects();
-      const fallbackCover = assetPath("assets/project-covers/coverKAAI.jpg");
+      const fallbackCover = assetPath("assets/project-covers/coverKAAI.webp");
       let uploaded = 0;
       let skipped = 0;
 
@@ -425,7 +426,7 @@ export function AdminPage() {
               />
             </label>
             <button type="submit" className="btn btn--primary" disabled={submitting}>
-              {submitting ? "Bezig..." : "Inloggen"}
+              <ButtonTextStagger text={submitting ? "Bezig..." : "Inloggen"} />
             </button>
           </form>
         ) : (
@@ -434,7 +435,7 @@ export function AdminPage() {
               <strong>Ingelogd</strong>
               <div className="admin-toolbar__actions">
                 <button type="button" onClick={handleUploadLocalProjects} disabled={migrating || submitting}>
-                  {migrating ? "Uploaden..." : "Upload lokale projecten"}
+                  <ButtonTextStagger text={migrating ? "Uploaden..." : "Upload lokale projecten"} />
                 </button>
                 <button
                   type="button"
@@ -443,7 +444,7 @@ export function AdminPage() {
                     setTokenState("");
                   }}
                 >
-                  Uitloggen
+                  <ButtonTextStagger text="Uitloggen" />
                 </button>
               </div>
             </div>
@@ -531,15 +532,15 @@ export function AdminPage() {
               {editingProject ? (
                 <>
                   <button type="button" className="admin-action admin-action--ghost" onClick={handleCloseEdit} disabled={submitting}>
-                    Close
+                    <ButtonTextStagger text="Close" />
                   </button>
                   <button type="button" className="admin-action admin-action--danger" onClick={handleDeleteProject} disabled={submitting || !editingProject._id}>
-                    Verwijder project
+                    <ButtonTextStagger text="Verwijder project" />
                   </button>
                 </>
               ) : null}
               <button type="submit" className="btn btn--primary" disabled={submitting}>
-                {submitting ? "Opslaan..." : editingProject ? "Project bijwerken" : "Project toevoegen"}
+                <ButtonTextStagger text={submitting ? "Opslaan..." : editingProject ? "Project bijwerken" : "Project toevoegen"} />
               </button>
             </div>
           </form>

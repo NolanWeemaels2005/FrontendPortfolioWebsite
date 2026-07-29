@@ -20,12 +20,18 @@ export const publicPageModuleKeys: PageModuleKey[] = [
 ];
 
 export function getPageModuleKey(pathname: string): PageModuleKey | null {
-  if (pathname === "/") return "home";
-  if (pathname === "/portfolio") return "portfolio";
-  if (pathname.startsWith("/portfolio/")) return "projectDetail";
-  if (pathname === "/about") return "about";
-  if (pathname === "/contact") return "contact";
-  if (pathname === "/beheer") return "admin";
-  if (["/cookiebeleid", "/juridische-voorwaarden", "/privacybeleid"].includes(pathname)) return "legal";
+  const path = pathname === "/" ? "/" : pathname.replace(/\/+$/, "");
+  if (path === "/") return "home";
+  if (path === "/portfolio") return "portfolio";
+  if (path.startsWith("/portfolio/")) return "projectDetail";
+  if (path === "/about") return "about";
+  if (path === "/contact") return "contact";
+  if (path === "/beheer") return "admin";
+  if (["/cookiebeleid", "/juridische-voorwaarden", "/privacybeleid"].includes(path)) return "legal";
   return null;
+}
+
+export function preloadPageModule(pathname: string) {
+  const key = getPageModuleKey(pathname);
+  return key ? pageModuleLoaders[key]() : Promise.resolve();
 }

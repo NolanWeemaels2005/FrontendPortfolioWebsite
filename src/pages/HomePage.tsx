@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import ImageReveal from "../components/lightswind/ImageReveal";
 import { ProjectHallOfFame } from "../components/ProjectHallOfFame";
 import { useCombinedProjectsQuery, useLatestProjectQuery } from "../data/projectQueries";
@@ -16,7 +17,7 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-const fixedRevealProjectSlugs = ["shift-festival", "kaai", "ring-tv", "city-to-ocean", "nieuwland", "poutrel"];
+const fixedRevealProjectSlugs = ["shift-festival-2026", "kaai", "ring-tv", "city-to-ocean", "basisschool-nieuwland", "poutrel"];
 
 function getYearsActive(date: Date) {
   const anniversaryPassed = date.getMonth() > 8 || (date.getMonth() === 8 && date.getDate() >= 20);
@@ -87,7 +88,7 @@ export function HomePage() {
       .map((project) => ({
         src: project.images?.[1] || project.images?.[0] || project.cover || project.heroImage || project.logo || "",
         alt: project.title,
-        href: `/portfolio/${project.slug}`,
+        href: `/portfolio/${project.slug}/`,
       }))
       .filter((image) => Boolean(image.src));
   }, [projects]);
@@ -125,14 +126,29 @@ export function HomePage() {
         <div className="home-landing__background" aria-hidden="true" />
 
         <div className="home-landing__center">
-          <img src={assetPath("assets/logos/main-logo-white.svg")} alt="Nolan" />
+          <img src={assetPath("assets/logos/main-logo-white.webp")} alt="Nolan" width="2034" height="572" fetchPriority="high" decoding="async" />
           <h1 id="home-heading">
             <span>{t("hero.homeTitle")}</span>
             <strong>{t("hero.homeScript")}</strong>
           </h1>
+          <div className="home-landing__actions">
+            <Link to="/contact/" className="home-landing__action home-landing__action--primary" data-cursor="merge">
+              <ButtonTextStagger text={t("cta.letsTalk")} />
+            </Link>
+            <Link to="/portfolio/" className="home-landing__action home-landing__action--secondary" data-cursor="merge">
+              <ButtonTextStagger text={t("cta.portfolio")} />
+            </Link>
+          </div>
         </div>
 
         <aside className="home-landing__project" aria-label={t("home.latestProject")}>
+          {latestProject ? (
+            <Link
+              className="home-landing__project-link"
+              to={`/portfolio/${latestProject.slug}/`}
+              aria-label={`${t("home.viewProject")} ${latestProject.title}`}
+            />
+          ) : null}
           <span className="home-landing__project-brand" aria-hidden="true" />
           <span className="home-landing__project-divider" />
           <strong>{t("home.latestProject")}</strong>
@@ -186,11 +202,12 @@ export function HomePage() {
             <div className="home-overview__content">
               <div className="home-overview__profile">
                 <div className="home-overview__portrait">
-                  <img src={assetPath("assets/home-overview/head-bw.png")} alt="Nolan Weemaels" loading="lazy" decoding="async" />
-                  <img className="home-overview__signature" src={assetPath("assets/about-story/Signature.svg")} alt="" aria-hidden="true" />
+                  <img src={assetPath("assets/home-overview/head-bw.webp")} alt="Nolan Weemaels" loading="lazy" decoding="async" />
+                  <img className="home-overview__signature" src={assetPath("assets/about-story/Signature.webp")} alt="" aria-hidden="true" />
                 </div>
                 <h3>{t("home.role")}</h3>
-                <p aria-label={t("home.since")}>
+                <p>
+                  <span className="sr-only">{t("home.since")}</span>
                   <svg className="home-overview__year-lockup" viewBox="0 0 1000 190" aria-hidden="true">
                     <text x="0" y="166" textLength="1000" lengthAdjust="spacingAndGlyphs">{t("home.since")}</text>
                   </svg>
@@ -214,7 +231,7 @@ export function HomePage() {
                   <dt>{t("home.latestProject")}<span>{latestProject?.title}</span></dt>
                   <dd>
                     {latestProject?.logo ? (
-                      <Link to={`/portfolio/${latestProject.slug}`} aria-label={`${t("home.viewProject")} ${latestProject.title}`}>
+                      <Link to={`/portfolio/${latestProject.slug}/`} aria-label={`${t("home.viewProject")} ${latestProject.title}`}>
                         <img src={latestProject.logo} alt={latestProject.title} loading="lazy" decoding="async" />
                       </Link>
                     ) : null}

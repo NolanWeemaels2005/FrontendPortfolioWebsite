@@ -1,16 +1,14 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { useLanguage } from "../i18n/LanguageContext";
 import { assetPath } from "../utils/asset";
-import { getPageModuleKey, pageModuleLoaders, publicPageModuleKeys } from "../utils/pageModules";
 
 type LoaderPhase = "loading" | "logo-exit" | "revealing" | "complete";
 
-const initialLoadTimeout = 12000;
-const minimumLoaderDuration = 900;
-const logoExitDuration = 420;
-const revealDuration = 600;
+const initialLoadTimeout = 4000;
+const minimumLoaderDuration = 400;
+const logoExitDuration = 300;
+const revealDuration = 400;
 
 function wait(milliseconds: number) {
   return new Promise<void>((resolve) => window.setTimeout(resolve, milliseconds));
@@ -39,19 +37,13 @@ function waitForRouteMarkup() {
   });
 }
 
-async function waitForInitialQueries(queryClient: ReturnType<typeof useQueryClient>) {
-  const startedAt = performance.now();
-  while (queryClient.isFetching({ predicate: (query) => query.queryKey[0] !== "app-preload" }) > 0) {
-    if (performance.now() - startedAt > 5000) return;
-    await wait(60);
-  }
-}
-
 function extractBackgroundUrls(root: Element) {
   const urls = new Set<string>();
   const elements = [root, ...Array.from(root.querySelectorAll("*"))];
 
   elements.forEach((element) => {
+    const bounds = element.getBoundingClientRect();
+    if (bounds.bottom < -200 || bounds.top > window.innerHeight + 200) return;
     const backgroundImage = window.getComputedStyle(element).backgroundImage;
     const matches = backgroundImage.matchAll(/url\(["']?([^"')]+)["']?\)/g);
     for (const match of matches) {
@@ -79,12 +71,17 @@ async function waitForPageAssets() {
 
   const imageUrls = new Set<string>();
   root.querySelectorAll<HTMLImageElement>("img").forEach((image) => {
+    const bounds = image.getBoundingClientRect();
+    if (image.loading === "lazy" || bounds.bottom < -200 || bounds.top > window.innerHeight + 200) return;
     const url = image.currentSrc || image.src;
     if (url) imageUrls.add(url);
   });
   extractBackgroundUrls(root).forEach((url) => imageUrls.add(url));
 
-  const videos = Array.from(root.querySelectorAll<HTMLVideoElement>("video"));
+  const videos = Array.from(root.querySelectorAll<HTMLVideoElement>("video")).filter((video) => {
+    const bounds = video.getBoundingClientRect();
+    return bounds.bottom >= -200 && bounds.top <= window.innerHeight + 200;
+  });
   const videoPromises = videos.map(
     (video) =>
       new Promise<void>((resolve) => {
@@ -108,11 +105,9 @@ async function waitForDocumentLoad() {
   await new Promise<void>((resolve) => window.addEventListener("load", () => resolve(), { once: true }));
 }
 
-export function InitialLoader({ pathname }: { pathname: string }) {
+export function InitialLoader({ pathname: _pathname }: { pathname: string }) {
   const { t } = useLanguage();
-  const queryClient = useQueryClient();
   const [phase, setPhase] = useState<LoaderPhase>("loading");
-  const initialPathname = useRef(pathname).current;
 
   useEffect(() => {
     let cancelled = false;
@@ -123,8 +118,7 @@ export function InitialLoader({ pathname }: { pathname: string }) {
 
     const loadInitialPage = async () => {
       await waitForRouteMarkup();
-      await Promise.allSettled([waitForDocumentLoad(), document.fonts?.ready ?? Promise.resolve()]);
-      await waitForInitialQueries(queryClient);
+      await waitForDocumentLoad();
       await new Promise<void>((resolve) => window.requestAnimationFrame(() => window.requestAnimationFrame(() => resolve())));
       await waitForPageAssets();
     };
@@ -151,50 +145,7 @@ export function InitialLoader({ pathname }: { pathname: string }) {
       document.body.classList.remove("initial-loader-active");
       document.documentElement.removeAttribute("aria-busy");
     };
-  }, [queryClient]);
-
-  useEffect(() => {
-    if (phase !== "complete") return;
-
-    const currentModuleKey = getPageModuleKey(initialPathname);
-    const moduleKeys = publicPageModuleKeys.filter((key) => key !== currentModuleKey);
-    const preloadPages = () => {
-      void queryClient.prefetchQuery({
-        queryKey: ["app-preload", "all-public-pages"],
-        queryFn: async () => {
-          const results = await Promise.allSettled(
-            moduleKeys.map((key) =>
-              queryClient.fetchQuery({
-                queryKey: ["app-preload", "route", key],
-                queryFn: async () => {
-                  await pageModuleLoaders[key]();
-                  return { route: key, loadedAt: Date.now() };
-                },
-                staleTime: Number.POSITIVE_INFINITY,
-                gcTime: Number.POSITIVE_INFINITY,
-              }),
-            ),
-          );
-
-          return {
-            loadedAt: Date.now(),
-            routes: moduleKeys,
-            successfulRoutes: results.filter((result) => result.status === "fulfilled").length,
-          };
-        },
-        staleTime: Number.POSITIVE_INFINITY,
-        gcTime: Number.POSITIVE_INFINITY,
-      });
-    };
-
-    if ("requestIdleCallback" in window) {
-      const idleCallback = window.requestIdleCallback(preloadPages, { timeout: 1800 });
-      return () => window.cancelIdleCallback(idleCallback);
-    }
-
-    const timeout = globalThis.setTimeout(preloadPages, 250);
-    return () => globalThis.clearTimeout(timeout);
-  }, [initialPathname, phase, queryClient]);
+  }, []);
 
   if (phase === "complete") return null;
 

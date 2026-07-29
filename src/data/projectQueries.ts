@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { allProjects, featuredProjects } from "./projects";
 import type { Project } from "../types/project";
+import { webpImageUrl } from "../utils/asset";
 import { apiUrl } from "../utils/api";
 
 type BackendProject = {
@@ -24,8 +25,8 @@ type BackendProject = {
   images: string[];
 };
 
-const projectDataVersion = "v10";
-const fallbackLatestProjectSlug = "shift-festival";
+const projectDataVersion = "v11";
+const fallbackLatestProjectSlug = "shift-festival-2026";
 const projectOrder = [
   "find your light",
   "fc eisbar",
@@ -54,12 +55,14 @@ export const projectQueryKeys = {
 };
 
 const queryOptions = {
-  staleTime: 0,
+  staleTime: 1000 * 60 * 10,
   gcTime: 1000 * 60 * 30,
-  refetchOnMount: "always" as const,
-  refetchOnReconnect: "always" as const,
-  refetchOnWindowFocus: true,
+  refetchOnMount: false,
+  refetchOnReconnect: false,
+  refetchOnWindowFocus: false,
 };
+
+let backendProjectsRequest: Promise<Project[]> | null = null;
 
 function normalizeTitle(title: string) {
   return title
@@ -127,10 +130,12 @@ function findLocalProject(project: Pick<Project, "slug" | "title">) {
 function mapBackendProject(project: BackendProject): Project {
   const localProject = findLocalProject(project);
   const isLocalFeaturedProject = Boolean(localProject?.featured);
-  const cover = isLocalFeaturedProject ? localProject?.cover || project.heroImage : undefined;
+  const backendHeroImage = webpImageUrl(project.heroImage, 1600);
+  const backendLogo = webpImageUrl(project.clientLogoSvg, 900);
+  const cover = isLocalFeaturedProject ? localProject?.cover || backendHeroImage : undefined;
   const logo = isLocalFeaturedProject
-    ? project.clientLogoSvg || localProject?.logo || project.heroImage
-    : localProject?.logo || project.clientLogoSvg || "";
+    ? backendLogo || localProject?.logo || backendHeroImage
+    : localProject?.logo || backendLogo || "";
 
   return {
     id: project._id,
@@ -155,9 +160,9 @@ function mapBackendProject(project: BackendProject): Project {
       fr: project.textFr || project.translations?.fr?.text,
       en: project.textEn || project.translations?.en?.text,
     },
-    heroImage: project.heroImage,
-    clientLogoSvg: project.clientLogoSvg || null,
-    images: project.images,
+    heroImage: backendHeroImage,
+    clientLogoSvg: backendLogo || null,
+    images: project.images.map((image) => webpImageUrl(image, 1600)),
     source: "backend",
   };
 }
@@ -173,14 +178,24 @@ function mergeBackendProjects(backendProjects: Project[], localProjects: Project
 }
 
 async function fetchBackendProjects() {
+  if (backendProjectsRequest) return backendProjectsRequest;
+
+  backendProjectsRequest = (async () => {
+    try {
+      const response = await fetch(`${apiUrl}/projects`);
+      if (!response.ok) return [];
+      const data = await response.json();
+      const projects = Array.isArray(data) ? data : Array.isArray(data?.projects) ? data.projects : [];
+      return (projects as BackendProject[]).map(mapBackendProject);
+    } catch {
+      return [];
+    }
+  })();
+
   try {
-    const response = await fetch(`${apiUrl}/projects`, { cache: "no-store" });
-    if (!response.ok) return [];
-    const data = await response.json();
-    const projects = Array.isArray(data) ? data : Array.isArray(data?.projects) ? data.projects : [];
-    return (projects as BackendProject[]).map(mapBackendProject);
-  } catch {
-    return [];
+    return await backendProjectsRequest;
+  } finally {
+    backendProjectsRequest = null;
   }
 }
 
@@ -210,7 +225,7 @@ export function useFeaturedProjectsQuery() {
       const mergedProjects = mergeBackendProjects(backendProjects, featuredProjects);
       return mergedProjects.filter((project) => project.featured || featuredProjects.some((featuredProject) => featuredProject.slug === project.slug));
     },
-    initialData: featuredProjects,
+    placeholderData: featuredProjects,
     ...queryOptions,
   });
 }
@@ -222,7 +237,7 @@ export function useAllProjectsQuery() {
       const backendProjects = await fetchBackendProjects();
       return mergeBackendProjects(backendProjects, allProjects);
     },
-    initialData: sortProjects(allProjects),
+    placeholderData: sortProjects(allProjects),
     ...queryOptions,
   });
 }
@@ -235,7 +250,7 @@ export function useCombinedProjectsQuery() {
       const localProjects = getCombinedProjects();
       return mergeBackendProjects(backendProjects, localProjects);
     },
-    initialData: getCombinedProjects,
+    placeholderData: getCombinedProjects,
     ...queryOptions,
   });
 }
@@ -251,7 +266,7 @@ export function useLatestProjectQuery() {
       const backendProjects = await fetchBackendProjects();
       return backendProjects.find((project) => project.logo || project.clientLogoSvg) || getFallbackLatestProject();
     },
-    initialData: getFallbackLatestProject,
+    placeholderData: getFallbackLatestProject,
     ...queryOptions,
   });
 }
@@ -275,7 +290,7 @@ export function useProjectQuery(slug: string | undefined) {
 
       return backendProjectFromList || localProject;
     },
-    initialData: () => getCombinedProjects().find((project) => project.slug === slug),
+    placeholderData: () => getCombinedProjects().find((project) => project.slug === slug),
     enabled: Boolean(slug),
     ...queryOptions,
   });

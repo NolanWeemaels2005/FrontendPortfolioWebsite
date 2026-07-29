@@ -1,14 +1,12 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import seoData from "../data/seoRoutes.json";
 import { getCombinedProjects } from "../data/projectQueries";
 import { useLanguage } from "../i18n/LanguageContext";
 
-const siteUrl = "https://nolandesign.be";
-const siteName = "Nolan Design";
-const defaultTitle = "Nolan Design | Grafisch ontwerper en portfolio";
-const defaultDescription =
-  "Portfolio van Nolan Weemaels, grafisch ontwerper met focus op branding, visuele identiteiten, webdesign en digitale projecten.";
-const defaultImage = `${siteUrl}/assets/project-covers/coverKAAI.jpg`;
+type SeoRoute = (typeof seoData.routes)[number];
+
+const { site } = seoData;
 
 function setMeta(name: string, content: string, attribute: "name" | "property" = "name") {
   let element = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${name}"]`);
@@ -34,9 +32,26 @@ function setCanonical(url: string) {
   element.href = url;
 }
 
-function cleanPath(pathname: string) {
-  if (pathname === "/") return "/";
-  return pathname.replace(/\/+$/, "");
+function setSchema(schema: object) {
+  let element = document.head.querySelector<HTMLScriptElement>("#seo-schema");
+
+  if (!element) {
+    element = document.createElement("script");
+    element.id = "seo-schema";
+    element.type = "application/ld+json";
+    document.head.appendChild(element);
+  }
+
+  element.textContent = JSON.stringify(schema);
+}
+
+function normalizePath(pathname: string) {
+  return pathname === "/" ? "/" : `/${pathname.split("/").filter(Boolean).join("/")}/`;
+}
+
+function absoluteUrl(path: string) {
+  if (/^https?:\/\//.test(path)) return path;
+  return `${site.url}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
 function titleFromSlug(slug: string) {
@@ -47,73 +62,115 @@ function titleFromSlug(slug: string) {
     .join(" ");
 }
 
-function getSeo(pathname: string) {
-  const path = cleanPath(pathname);
-
-  if (path === "/beheer") {
-    return {
-      title: "Beheer | Nolan Design",
-      description: "Afgeschermde beheerpagina van Nolan Design.",
-      canonicalPath: "/beheer",
-      robots: "noindex, nofollow",
-      image: defaultImage,
-    };
-  }
-
-  if (path === "/portfolio") {
-    return {
-      title: "Portfolio | Nolan Design",
-      description: "Bekijk grafische projecten, branding, logo's, websites en visuele identiteiten van Nolan Design.",
-      canonicalPath: "/portfolio",
-      robots: "index, follow",
-      image: defaultImage,
-    };
-  }
-
-  if (path === "/about") {
-    return {
-      title: "Over Nolan | Nolan Design",
-      description: "Leer Nolan Weemaels kennen en ontdek zijn focus op branding, grafisch ontwerp en digitale vormgeving.",
-      canonicalPath: "/about",
-      robots: "index, follow",
-      image: `${siteUrl}/assets/about/nolan-portrait.jpg`,
-    };
-  }
-
-  if (path === "/contact") {
-    return {
-      title: "Contact | Nolan Design",
-      description: "Neem contact op met Nolan Design voor branding, grafisch ontwerp, websites en creatieve projecten.",
-      canonicalPath: "/contact",
-      robots: "index, follow",
-      image: defaultImage,
-    };
-  }
+function routeSeo(pathname: string): SeoRoute & { known: boolean } {
+  const path = normalizePath(pathname);
+  const configured = seoData.routes.find((route) => route.path === path);
+  if (configured) return { ...configured, known: true };
 
   if (path.startsWith("/portfolio/")) {
-    const slug = path.replace("/portfolio/", "");
+    const slug = path.replace(/^\/portfolio\//, "").replace(/\/$/, "");
     const project = getCombinedProjects().find((item) => item.slug === slug);
     const title = project?.title || titleFromSlug(slug);
-
     return {
+      path,
       title: `${title} | Nolan Design`,
-      description:
-        project?.summary ||
-        project?.text ||
-        `Bekijk het project ${title} in het portfolio van Nolan Design.`,
-      canonicalPath: `/portfolio/${slug}`,
-      robots: "index, follow",
-      image: project?.cover ? `${siteUrl}${project.cover.startsWith("/") ? project.cover : `/${project.cover}`}` : defaultImage,
+      description: project?.summary || project?.text || `Bekijk het project ${title} in het portfolio van Nolan Design.`,
+      heading: title,
+      intro: project?.summary || `Een grafisch ontwerpproject uit het portfolio van Nolan Design.`,
+      image: project?.cover || site.defaultImage,
+      imageAlt: `${title}, grafisch ontwerpproject van Nolan Design`,
+      type: "project",
+      index: Boolean(project),
+      known: Boolean(project),
     };
   }
 
   return {
-    title: defaultTitle,
-    description: defaultDescription,
-    canonicalPath: "/",
-    robots: "index, follow",
-    image: defaultImage,
+    path,
+    title: "Pagina niet gevonden | Nolan Design",
+    description: "Deze pagina bestaat niet of is verplaatst.",
+    heading: "Pagina niet gevonden",
+    intro: "Deze pagina bestaat niet of is verplaatst.",
+    type: "not-found",
+    index: false,
+    known: false,
   };
+}
+
+function schemaFor(seo: SeoRoute, canonicalUrl: string, image: string, imageWidth: number, imageHeight: number) {
+  const personId = `${site.url}/#nolan-weemaels`;
+  const websiteId = `${site.url}/#website`;
+  const pageType = seo.type === "about" ? "ProfilePage" : seo.type === "portfolio" ? "CollectionPage" : seo.type === "contact" ? "ContactPage" : "WebPage";
+  const graph: Record<string, unknown>[] = [
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      url: `${site.url}/`,
+      name: site.name,
+      inLanguage: "nl-BE",
+      publisher: { "@id": personId },
+    },
+    {
+      "@type": "Person",
+      "@id": personId,
+      name: site.owner,
+      alternateName: site.name,
+      url: `${site.url}/`,
+      image: `${site.url}/apple-touch-icon.png`,
+      jobTitle: "Grafisch ontwerper",
+      email: "mailto:info@nolandesign.be",
+      telephone: "+32472085890",
+      knowsAbout: ["Grafisch ontwerp", "Branding", "Visuele identiteit", "Webdesign", "Digital design"],
+      sameAs: [
+        "https://www.instagram.com/nolanweemaelsdesign/",
+        "https://www.linkedin.com/in/nolan-weemaels-1780511b4/",
+      ],
+    },
+    {
+      "@type": pageType,
+      "@id": `${canonicalUrl}#webpage`,
+      url: canonicalUrl,
+      name: seo.title,
+      description: seo.description,
+      isPartOf: { "@id": websiteId },
+      about: { "@id": personId },
+      primaryImageOfPage: { "@type": "ImageObject", url: image, width: imageWidth, height: imageHeight },
+      inLanguage: "nl-BE",
+      ...(seo.type === "home" || seo.type === "about" ? { mainEntity: { "@id": personId } } : {}),
+    },
+  ];
+
+  if (seo.type === "project") {
+    graph.push({
+      "@type": "CreativeWork",
+      "@id": `${canonicalUrl}#project`,
+      url: canonicalUrl,
+      name: seo.heading,
+      description: seo.intro,
+      image,
+      creator: { "@id": personId },
+      copyrightHolder: { "@id": personId },
+      inLanguage: "nl-BE",
+    });
+  }
+
+  if (seo.type === "portfolio") {
+    graph.push({
+      "@type": "ItemList",
+      "@id": `${canonicalUrl}#projects`,
+      name: "Portfolio van Nolan Design",
+      itemListElement: seoData.routes
+        .filter((route) => route.type === "project" && route.index)
+        .map((route, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: route.heading,
+          url: `${site.url}${route.path}`,
+        })),
+    });
+  }
+
+  return { "@context": "https://schema.org", "@graph": graph };
 }
 
 export function Seo() {
@@ -121,31 +178,43 @@ export function Seo() {
   const { language } = useLanguage();
 
   useEffect(() => {
-    const seo = getSeo(pathname);
-    const canonicalUrl = `${siteUrl}${seo.canonicalPath === "/" ? "" : seo.canonicalPath}`;
+    const seo = routeSeo(pathname);
+    const canonicalUrl = seo.path === "/" ? `${site.url}/` : `${site.url}${seo.path}`;
+    const image = absoluteUrl(seo.image || site.defaultImage);
+    const imageWidth = "imageWidth" in seo ? seo.imageWidth || 1280 : 1280;
+    const imageHeight = "imageHeight" in seo ? seo.imageHeight || 1280 : 1280;
+    const imageAlt = seo.imageAlt || seo.heading;
+    const robots = seo.index
+      ? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+      : "noindex, nofollow";
 
-    document.documentElement.lang = language;
+    document.documentElement.lang = language === "nl" ? "nl-BE" : language;
     document.title = seo.title;
-
     const updateTabTitle = () => {
       document.title = document.hidden ? "Hey, nu al weg?" : seo.title;
     };
-
     document.addEventListener("visibilitychange", updateTabTitle);
     setCanonical(canonicalUrl);
     setMeta("description", seo.description);
-    setMeta("robots", seo.robots);
-    setMeta("author", "Nolan Weemaels");
-    setMeta("og:site_name", siteName, "property");
-    setMeta("og:type", "website", "property");
+    setMeta("robots", robots);
+    setMeta("googlebot", robots);
+    setMeta("author", site.owner);
+    setMeta("og:site_name", site.name, "property");
+    setMeta("og:locale", site.locale, "property");
+    setMeta("og:type", seo.type === "project" ? "article" : "website", "property");
     setMeta("og:title", seo.title, "property");
     setMeta("og:description", seo.description, "property");
     setMeta("og:url", canonicalUrl, "property");
-    setMeta("og:image", seo.image, "property");
+    setMeta("og:image", image, "property");
+    setMeta("og:image:alt", imageAlt, "property");
+    setMeta("og:image:width", String(imageWidth), "property");
+    setMeta("og:image:height", String(imageHeight), "property");
     setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", seo.title);
     setMeta("twitter:description", seo.description);
-    setMeta("twitter:image", seo.image);
+    setMeta("twitter:image", image);
+    setMeta("twitter:image:alt", imageAlt);
+    setSchema(schemaFor(seo, canonicalUrl, image, imageWidth, imageHeight));
 
     return () => document.removeEventListener("visibilitychange", updateTabTitle);
   }, [language, pathname]);

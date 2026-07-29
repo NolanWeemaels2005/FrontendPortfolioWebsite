@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useLayoutEffect } from "react";
 import { Footer } from "./components/Footer";
 import { Navigation } from "./components/Navigation";
@@ -58,6 +58,21 @@ function ScrollToTop() {
   return null;
 }
 
+function NotFoundPage() {
+  return (
+    <section className="legal-page">
+      <div className="section-container legal-page__inner">
+        <p className="legal-page__eyebrow">404</p>
+        <h1>Pagina niet gevonden</h1>
+        <p className="legal-page__intro">Deze pagina bestaat niet of is verplaatst.</p>
+        <Link to="/" className="btn btn--primary legal-page__cta" data-cursor="merge">
+          Terug naar home
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 export function App() {
   const location = useLocation();
 
@@ -79,6 +94,7 @@ export function App() {
             <Route path="/cookiebeleid" element={<LegalPage type="cookies" />} />
             <Route path="/juridische-voorwaarden" element={<LegalPage type="terms" />} />
             <Route path="/privacybeleid" element={<LegalPage type="privacy" />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </main>

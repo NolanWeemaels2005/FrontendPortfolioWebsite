@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { MouseEvent } from "react";
 import { Link } from "react-router-dom";
+import { ButtonTextStagger } from "./ButtonTextStagger";
 import { navItems } from "../data/nav";
 import { useLanguage } from "../i18n/LanguageContext";
 import { KaaiModal } from "./KaaiModal";
@@ -15,16 +16,16 @@ type SocialItem = {
 };
 
 const socialLinks: SocialItem[] = [
-  { label: "Instagram", icon: assetPath("assets/icons/social/InstagramWhite.svg"), href: "https://www.instagram.com/nolanweemaelsdesign/" },
-  { label: "LinkedIn", icon: assetPath("assets/icons/social/LinkedInWhite.svg"), href: "https://www.linkedin.com/in/nolan-weemaels-1780511b4/" },
-  { label: "Kaai", icon: assetPath("assets/icons/social/kaaiIconWhite.svg"), href: "https://kaai.be", modal: true },
+  { label: "Instagram", icon: assetPath("assets/icons/social/InstagramWhite.webp"), href: "https://www.instagram.com/nolanweemaelsdesign/" },
+  { label: "LinkedIn", icon: assetPath("assets/icons/social/LinkedInWhite.webp"), href: "https://www.linkedin.com/in/nolan-weemaels-1780511b4/" },
+  { label: "Kaai", icon: assetPath("assets/icons/social/kaaiIconWhite.webp"), href: "https://kaai.be", modal: true },
 ];
 
 export function Footer() {
   const { language, setLanguage, t } = useLanguage();
   const [kaaiOpen, setKaaiOpen] = useState(false);
   const socials: SocialItem[] = [
-    { label: "WhatsApp", icon: assetPath("assets/icons/social/WhatsApp.svg"), href: createWhatsAppHref(t("whatsapp.defaultMessage")) },
+    { label: "WhatsApp", icon: assetPath("assets/icons/social/WhatsApp.webp"), href: createWhatsAppHref(t("whatsapp.defaultMessage")) },
     ...socialLinks,
   ];
 
@@ -34,7 +35,7 @@ export function Footer() {
   }
 
   function renderSocialIcon(social: SocialItem) {
-    return social.icon ? <img src={social.icon} alt="" loading="lazy" decoding="async" /> : null;
+    return social.icon ? <img src={social.icon} alt="" width="256" height="256" loading="lazy" decoding="async" /> : null;
   }
 
   return (
@@ -42,7 +43,7 @@ export function Footer() {
       <div className="footer-top">
         <div>
           <Link to="/" className="footer-logo" data-cursor="merge" aria-label={t("nav.homeLabel")}>
-            <img src={assetPath("assets/logos/main-logo-white.svg")} alt="Nolan" />
+            <img src={assetPath("assets/logos/main-logo-white.webp")} alt="Nolan" width="2034" height="572" loading="lazy" decoding="async" />
           </Link>
 
           <div className="footer-columns">
@@ -80,22 +81,22 @@ export function Footer() {
           </div>
         </div>
 
-        <section className="footer-cta" aria-labelledby="footer-cta-title">
+        <section className="footer-contact" aria-labelledby="footer-contact-title">
           <p>{t("footer.project")}</p>
-          <div className="footer-cta__title" id="footer-cta-title" role="heading" aria-level={2}>
+          <div className="footer-contact__title" id="footer-contact-title" role="heading" aria-level={2}>
             {t("cta.letsTalk")}
           </div>
-          <Link to="/contact" className="btn btn--primary" data-cursor="merge">
-            {t("cta.letsTalk")}
+          <Link to="/contact/" className="btn btn--primary" data-cursor="merge">
+            <ButtonTextStagger text={t("cta.letsTalk")} />
           </Link>
         </section>
       </div>
 
       <div className="footer-bottom">
         <div className="legal-links">
-          <Link to="/cookiebeleid" data-cursor="soft">{t("footer.cookies")}</Link>
-          <Link to="/juridische-voorwaarden" data-cursor="soft">{t("footer.legal")}</Link>
-          <Link to="/privacybeleid" data-cursor="soft">{t("footer.privacy")}</Link>
+          <Link to="/cookiebeleid/" data-cursor="soft">{t("footer.cookies")}</Link>
+          <Link to="/juridische-voorwaarden/" data-cursor="soft">{t("footer.legal")}</Link>
+          <Link to="/privacybeleid/" data-cursor="soft">{t("footer.privacy")}</Link>
         </div>
 
         <div className="footer-socials">

@@ -10,11 +10,20 @@ import type { Project } from "../types/project";
 import { getAdminToken } from "../utils/adminAuth";
 import { getProjectDescription } from "../utils/projectText";
 
+const projectSlugAliases: Record<string, string> = {
+  "la-maison-des-3-garcons": "la-maison-des-trois-garcons",
+  nieuwland: "basisschool-nieuwland",
+  "shift-festival": "shift-festival-2026",
+  erasmus: "erasmus-hogeschool",
+  mentalite: "mentalite-sportswear",
+};
+
 export function ProjectDetailPage() {
   useScrollReveal();
   const { language, t } = useLanguage();
   const { slug } = useParams();
-  const { data: project, isLoading, isFetching } = useProjectQuery(slug);
+  const canonicalSlug = slug ? projectSlugAliases[slug] || slug : slug;
+  const { data: project, isLoading, isFetching } = useProjectQuery(canonicalSlug);
   const { data: combinedProjects = [] } = useCombinedProjectsQuery();
   const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(getAdminToken()));
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
@@ -64,6 +73,10 @@ export function ProjectDetailPage() {
     };
   }, [activeImageIndex, galleryImages.length]);
 
+  if (slug && canonicalSlug !== slug) {
+    return <Navigate to={`/portfolio/${canonicalSlug}/`} replace />;
+  }
+
   if (!project && (isLoading || isFetching)) {
     return (
       <section className="project-detail section-black">
@@ -78,7 +91,7 @@ export function ProjectDetailPage() {
   }
 
   if (!project) {
-    return <Navigate to="/portfolio" replace />;
+    return <Navigate to="/portfolio/" replace />;
   }
 
   const projectTitle = project.titleKey ? t(project.titleKey) : project.title;
@@ -89,13 +102,13 @@ export function ProjectDetailPage() {
     <section className="project-detail section-black">
       <div className="section-container project-detail__hero" data-reveal>
         <div className="project-detail__topbar">
-          <Link to="/portfolio" className="back-link" data-cursor="soft">
+          <Link to="/portfolio/" className="back-link" data-cursor="soft">
             <ArrowLeft aria-hidden="true" size={22} />
             {t("project.back")}
           </Link>
           {isLoggedIn ? (
-            <Link to={`/beheer?project=${project.slug}`} className="btn btn--primary project-detail__edit" data-cursor="merge">
-              Bewerk
+            <Link to={`/beheer/?project=${project.slug}`} className="btn btn--primary project-detail__edit" data-cursor="merge">
+              <ButtonTextStagger text="Bewerk" />
             </Link>
           ) : null}
         </div>
@@ -115,7 +128,7 @@ export function ProjectDetailPage() {
           <p className="eyebrow">{t("project.approach")}</p>
           <p>{projectApproach}</p>
         </div>
-        <Link to="/contact" className="btn btn--primary" data-cursor="merge">
+        <Link to="/contact/" className="btn btn--primary" data-cursor="merge">
           <ButtonTextStagger text={t("cta.letsTalk")} />
         </Link>
       </div>
@@ -147,7 +160,7 @@ export function ProjectDetailPage() {
               const relatedTitle = relatedProject.titleKey ? t(relatedProject.titleKey) : relatedProject.title;
 
               return (
-                <Link to={`/portfolio/${relatedProject.slug}`} className="related-project-card" key={relatedProject.slug}>
+                <Link to={`/portfolio/${relatedProject.slug}/`} className="related-project-card" key={relatedProject.slug}>
                   <span className="related-project-card__logo-wrap">
                     <img src={relatedProject.logo} alt={relatedTitle} loading="lazy" decoding="async" />
                   </span>

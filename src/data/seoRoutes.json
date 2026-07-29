@@ -1,0 +1,282 @@
+{
+  "site": {
+    "url": "https://nolandesign.be",
+    "name": "Nolan Design",
+    "owner": "Nolan Weemaels",
+    "locale": "nl_BE",
+    "defaultImage": "/assets/project-covers/coverKAAI.webp",
+    "lastModified": "2026-07-29"
+  },
+  "routes": [
+    {
+      "path": "/",
+      "title": "Nolan Design | Grafisch ontwerper en portfolio",
+      "description": "Portfolio van Nolan Weemaels, grafisch ontwerper voor branding, visuele identiteiten, webdesign en digitale projecten in België.",
+      "heading": "Design dat blijft hangen",
+      "intro": "Ontdek het grafisch ontwerpportfolio van Nolan Weemaels, met branding, visuele identiteiten, webdesign en digitale projecten.",
+      "image": "/assets/project-covers/coverKAAI.webp",
+      "imageAlt": "Selectie uit het grafisch ontwerpportfolio van Nolan Design",
+      "type": "home",
+      "index": true
+    },
+    {
+      "path": "/portfolio/",
+      "title": "Grafisch ontwerp portfolio | Nolan Design",
+      "description": "Bekijk branding, logo's, visuele identiteiten, websites, campagnes en grafische projecten ontworpen door Nolan Weemaels.",
+      "heading": "Grafisch ontwerp portfolio",
+      "intro": "Een selectie branding, visuele identiteiten, webdesign, campagnes en grafische projecten van Nolan Design.",
+      "image": "/assets/project-covers/coverCTO.webp",
+      "imageAlt": "Portfolio met grafische projecten van Nolan Design",
+      "type": "portfolio",
+      "index": true
+    },
+    {
+      "path": "/about/",
+      "title": "Over Nolan Weemaels | Grafisch ontwerper",
+      "description": "Maak kennis met Nolan Weemaels, grafisch ontwerper uit België, en ontdek zijn aanpak voor branding, grafisch ontwerp en digitale vormgeving.",
+      "heading": "Over Nolan Weemaels",
+      "intro": "Ik vertaal ideeën naar duidelijke visuele oplossingen en werk van onderzoek en schets tot een sterk, bruikbaar eindresultaat.",
+      "image": "/assets/about/nolan-portrait.webp",
+      "imageAlt": "Portret van grafisch ontwerper Nolan Weemaels",
+      "imageWidth": 800,
+      "imageHeight": 1200,
+      "type": "about",
+      "index": true
+    },
+    {
+      "path": "/contact/",
+      "title": "Contacteer Nolan Design | Branding en webdesign",
+      "description": "Bespreek je project met Nolan Design. Neem contact op voor branding, grafisch ontwerp, webdesign, campagnes en digitale vormgeving.",
+      "heading": "Contacteer Nolan Design",
+      "intro": "Een branding-, grafisch ontwerp- of webdesignproject in gedachten? Vertel me wat je zoekt en ik neem zo snel mogelijk contact op.",
+      "image": "/assets/project-covers/coverKAAI.webp",
+      "imageAlt": "Grafisch ontwerp door Nolan Design",
+      "type": "contact",
+      "index": true
+    },
+    {
+      "path": "/cookiebeleid/",
+      "title": "Cookiebeleid | Nolan Design",
+      "description": "Lees welke cookies en lokale browseropslag Nolan Design gebruikt en hoe je jouw instellingen kunt beheren.",
+      "heading": "Cookiebeleid",
+      "intro": "Informatie over cookies, lokale browseropslag en externe diensten op nolandesign.be.",
+      "type": "legal",
+      "index": true
+    },
+    {
+      "path": "/juridische-voorwaarden/",
+      "title": "Juridische voorwaarden | Nolan Design",
+      "description": "Lees de gebruiksvoorwaarden, afspraken over intellectuele eigendom en aansprakelijkheid voor de website van Nolan Design.",
+      "heading": "Juridische voorwaarden",
+      "intro": "De voorwaarden voor het gebruik van nolandesign.be en het portfolio van Nolan Design.",
+      "type": "legal",
+      "index": true
+    },
+    {
+      "path": "/privacybeleid/",
+      "title": "Privacybeleid | Nolan Design",
+      "description": "Lees hoe Nolan Design persoonsgegevens verwerkt, beveiligt en bewaart wanneer je de website of het contactformulier gebruikt.",
+      "heading": "Privacybeleid",
+      "intro": "Informatie over de verwerking en bescherming van persoonsgegevens door Nolan Design.",
+      "type": "legal",
+      "index": true
+    },
+    {
+      "path": "/portfolio/city-to-ocean/",
+      "title": "City to Ocean branding | Nolan Design",
+      "description": "Bekijk de branding en visuele identiteit voor City to Ocean, een sportief project met een frisse, ocean minded uitstraling.",
+      "heading": "City to Ocean",
+      "intro": "Branding en visuele identiteit voor een sportief project met een frisse, ocean minded uitstraling.",
+      "image": "/assets/project-covers/coverCTO.webp",
+      "imageAlt": "City to Ocean branding en visuele identiteit",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/la-maison-des-trois-garcons/",
+      "aliases": ["/portfolio/la-maison-des-3-garcons/"],
+      "title": "La Maison des 3 Garçons branding | Nolan Design",
+      "description": "Ontdek het logo, de elegante visuele identiteit en het webdesign voor vakantiehuis La Maison des 3 Garçons.",
+      "heading": "La Maison des 3 Garçons",
+      "intro": "Een elegante visuele identiteit met sterke typografie en warme hospitalitybeelden.",
+      "image": "/assets/project-covers/coverLMD3G.webp",
+      "imageAlt": "Visuele identiteit van La Maison des 3 Garçons",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/poutrel/",
+      "title": "Poutrel visuele identiteit | Nolan Design",
+      "description": "Bekijk de compacte visuele stijl en herkenbare handgeschreven signatuur die Nolan Design voor Poutrel ontwikkelde.",
+      "heading": "Poutrel",
+      "intro": "Een compacte visuele stijl met een herkenbare handgeschreven signatuur.",
+      "image": "/assets/project-covers/coverPOUTREL.webp",
+      "imageAlt": "Visuele identiteit en signatuur van Poutrel",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/basisschool-nieuwland/",
+      "aliases": ["/portfolio/nieuwland/"],
+      "title": "Basisschool Nieuwland huisstijl | Nolan Design",
+      "description": "Ontdek de frisse huisstijl en heldere schoolcommunicatie die Nolan Design voor Basisschool Nieuwland uitwerkte.",
+      "heading": "Basisschool Nieuwland",
+      "intro": "Heldere schoolcommunicatie met een frisse en herkenbare beeldtaal.",
+      "image": "/assets/project-covers/coverNIEUWLAND.webp",
+      "imageAlt": "Huisstijl van Basisschool Nieuwland",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/fc-eisbar/",
+      "title": "FC EISBÄR visuele identiteit | Nolan Design",
+      "description": "Bekijk het logo en de krachtige visuele identiteit voor de Gentse zaalvoetbalclub FC EISBÄR, geïnspireerd door de stad Gent.",
+      "heading": "FC EISBÄR",
+      "intro": "Een moderne visuele identiteit voor een Gentse zaalvoetbalclub, met verwijzingen naar de rijke geschiedenis van de stad.",
+      "image": "/assets/project-covers/coverFCEISBAR.webp",
+      "imageAlt": "Logo en visuele identiteit van FC EISBÄR",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/shift-festival-2026/",
+      "aliases": ["/portfolio/shift-festival/"],
+      "title": "Shift Festival 2026 campagne | Nolan Design",
+      "description": "Ontdek de opvallende, jonge en speelse campagnevisuals die Nolan Design voor Shift Festival 2026 ontwikkelde.",
+      "heading": "Shift Festival 2026",
+      "intro": "Festivalvisuals met een speelse, opvallende en jonge uitstraling.",
+      "image": "/assets/project-covers/coverSHIFT.webp",
+      "imageAlt": "Campagnevisual voor Shift Festival 2026",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/ring-tv/",
+      "title": "Ring TV grafische vormgeving | Nolan Design",
+      "description": "Bekijk de herkenbare grafische assets en visuals die Nolan Design voor de regionale nieuwszender Ring TV maakte.",
+      "heading": "Ring TV",
+      "intro": "Grafische assets en herkenbare visuals voor regionale media.",
+      "image": "/assets/project-covers/coverRING.webp",
+      "imageAlt": "Grafische vormgeving en visuals voor Ring TV",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/kaai/",
+      "title": "Kaai branding en digital design | Nolan Design",
+      "description": "Ontdek de krachtige merkidentiteit en digitale vormgeving van Kaai, een creatieve studio voor design, foto, video en development.",
+      "heading": "Kaai",
+      "intro": "Een krachtige merkuitwerking met een uitgesproken digitaal karakter.",
+      "image": "/assets/project-covers/coverKAAI.webp",
+      "imageAlt": "Branding en digitale merkidentiteit van Kaai",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/boit-bobby/",
+      "title": "Boit Bobby grafisch ontwerp | Nolan Design",
+      "description": "Bekijk het grafisch ontwerpproject Boit Bobby in het portfolio van Nolan Weemaels.",
+      "heading": "Boit Bobby",
+      "intro": "Grafisch ontwerp en visuele uitwerking door Nolan Design.",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/ferraaawri/",
+      "title": "Ferraaawri grafisch ontwerp | Nolan Design",
+      "description": "Bekijk Ferraaawri, een expressief grafisch ontwerpproject uit het portfolio van Nolan Weemaels.",
+      "heading": "Ferraaawri",
+      "intro": "Een expressief grafisch project met een eigen visuele taal.",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/happy-dancers/",
+      "title": "Happy Dancers branding | Nolan Design",
+      "description": "Ontdek het logo en de affiche voor Happy Dancers in Galmaarden, geïnspireerd door herkenbare elementen uit countrymuziek.",
+      "heading": "Happy Dancers",
+      "intro": "Een logo en affiche voor een dansvereniging, geïnspireerd door de beeldtaal van countrymuziek.",
+      "image": "/assets/project-covers/coverHAPPYDANCERS.webp",
+      "imageAlt": "Logo en affiche voor Happy Dancers",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/erasmus-hogeschool/",
+      "aliases": ["/portfolio/erasmus/"],
+      "title": "Erasmus Hogeschool affiche | Nolan Design",
+      "description": "Bekijk de affiche voor de opleiding Multimedia en Creatieve Technologie van Erasmus Hogeschool Brussel.",
+      "heading": "Erasmus Hogeschool",
+      "intro": "Afficheontwerp voor de opleiding Multimedia en Creatieve Technologie.",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/studio-by-cas/",
+      "title": "Studio By Cas branding en website | Nolan Design",
+      "description": "Ontdek de visuele identiteit en portfolio-website voor Studio By Cas, een studio voor video, foto, motion en dronebeelden.",
+      "heading": "Studio By Cas",
+      "intro": "Een heldere visuele identiteit en portfolio-website voor een veelzijdige motionstudio.",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/mentalite-sportswear/",
+      "aliases": ["/portfolio/mentalite/"],
+      "title": "Mentalité Sportswear branding | Nolan Design",
+      "description": "Bekijk de branding en grafische uitwerking voor Mentalité Sportswear in het portfolio van Nolan Design.",
+      "heading": "Mentalité Sportswear",
+      "intro": "Branding en grafische uitwerking voor een sportwearmerk met karakter.",
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/brussel-noord-basket/",
+      "title": "Brussel Noord Basket branding | Nolan Design",
+      "description": "Bekijk het logo en de visuele identiteit voor Brussel Noord Basket, geïnspireerd door basketbal en de kleuren van Schaarbeek.",
+      "heading": "Brussel Noord Basket",
+      "intro": "Een sportieve visuele identiteit waarin de letters B.N.B. samen de vorm van een basketbal creëren.",
+      "image": "https://res.cloudinary.com/dw4wq5atx/image/upload/f_webp,q_auto,w_1200,h_630,c_fill/v1785002316/portfolio/hero/f3x27ok9dtsjjy1cgicu.png",
+      "imageAlt": "Logo en visuele identiteit voor Brussel Noord Basket",
+      "imageWidth": 1200,
+      "imageHeight": 630,
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/find-your-light/",
+      "title": "Find Your Light appconcept | Nolan Design",
+      "description": "Ontdek Find Your Light, een sociaal appconcept en campagne ontworpen door Nolan Weemaels voor een fictieve schoolopdracht rond verbinding.",
+      "heading": "Find Your Light",
+      "intro": "Een online en offline concept dat mensen op een laagdrempelige manier dichter bij elkaar wil brengen.",
+      "image": "https://res.cloudinary.com/dw4wq5atx/image/upload/f_webp,q_auto,w_1200,h_630,c_fill/v1777757802/portfolio/hero/qdeemh7xua3onuked8ol.png",
+      "imageAlt": "Find Your Light appconcept en campagne",
+      "imageWidth": 1200,
+      "imageHeight": 630,
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/portfolio/videjo/",
+      "title": "VIDEJO rebranding | Nolan Design",
+      "description": "Bekijk de volledige rebranding en krachtige, toegankelijke visuele identiteit die Nolan Design voor motionstudio VIDEJO ontwikkelde.",
+      "heading": "VIDEJO",
+      "intro": "Een volledige rebranding voor een motionstudio, met een krachtige maar uitnodigende merkidentiteit.",
+      "image": "https://res.cloudinary.com/dw4wq5atx/image/upload/f_webp,q_auto,w_1200,h_630,c_fill/v1777742674/portfolio/hero/k8hjskcg6rnaccwoynfu.svg",
+      "imageAlt": "Rebranding en visuele identiteit voor VIDEJO",
+      "imageWidth": 1200,
+      "imageHeight": 630,
+      "type": "project",
+      "index": true
+    },
+    {
+      "path": "/beheer/",
+      "title": "Beheer | Nolan Design",
+      "description": "Afgeschermde beheerpagina van Nolan Design.",
+      "heading": "Beheer",
+      "intro": "Afgeschermde beheeromgeving.",
+      "type": "admin",
+      "index": false
+    }
+  ]
+}

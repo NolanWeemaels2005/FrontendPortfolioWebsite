@@ -37,10 +37,10 @@ export function Hero({
 
           {showActions ? (
             <div className="hero-actions">
-              <Link to="/contact" className="btn btn--primary" data-cursor="merge">
+              <Link to="/contact/" className="btn btn--primary" data-cursor="merge">
                 <ButtonTextStagger text={t("cta.letsTalk")} />
               </Link>
-              <Link to="/portfolio" className="btn btn--secondary" data-cursor="merge">
+              <Link to="/portfolio/" className="btn btn--secondary" data-cursor="merge">
                 <ButtonTextStagger text={t("cta.portfolio")} />
               </Link>
             </div>
@@ -48,7 +48,7 @@ export function Hero({
 
         </div>
 
-        <a href={`#${scrollTarget}`} className="scroll-indicator" data-cursor="merge" aria-label={t("hero.scrollLabel")}>
+        <a href={`#${scrollTarget}`} className="scroll-indicator" data-cursor="merge" aria-label={scrollText}>
           <span>{resolvedScrollText}</span>
           <span className="mouse-icon" aria-hidden="true" />
         </a>

@@ -2,9 +2,11 @@ import { ArrowRight } from "lucide-react";
 import type { CSSProperties } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ButtonTextStagger } from "./ButtonTextStagger";
 import { useAllProjectsQuery, useFeaturedProjectsQuery } from "../data/projectQueries";
 import { useTilt } from "../hooks/useTilt";
 import { useLanguage } from "../i18n/LanguageContext";
+import { responsiveImageSrcSet } from "../utils/asset";
 
 function projectClassSlug(slug: string) {
   return slug.replace(/[^a-z0-9-]/gi, "");
@@ -16,7 +18,7 @@ type PortfolioProps = {
 
 export function Portfolio({ variant = "default" }: PortfolioProps) {
   const { t } = useLanguage();
-  const { data: featuredProjects } = useFeaturedProjectsQuery();
+  const { data: featuredProjects = [] } = useFeaturedProjectsQuery();
   const { data: allProjects = [] } = useAllProjectsQuery();
   const [showAllMobileProjects, setShowAllMobileProjects] = useState(false);
   const featuredTilt = useTilt({ max: 7, scale: 1.018 });
@@ -48,7 +50,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
               return (
                 <div className={`featured-item featured-card--${classSlug}`} key={project.slug}>
                   <Link
-                    to={`/portfolio/${project.slug}`}
+                    to={`/portfolio/${project.slug}/`}
                     className="featured-card"
                     data-cursor="soft"
                     data-reveal
@@ -57,11 +59,27 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                     style={{ "--accent": project.color, "--featured-delay": `${Math.min(index * 80, 520)}ms` } as CSSProperties}
                     {...featuredTilt}
                   >
-                    {project.cover ? <img className="featured-card__cover" src={project.cover} alt="" /> : null}
+                    {project.cover ? (
+                      <img
+                        className="featured-card__cover"
+                        src={project.cover}
+                        srcSet={responsiveImageSrcSet(project.cover, 640, 1280)}
+                        sizes="(max-width: 760px) calc(100vw - 2rem), (max-width: 1200px) 50vw, 580px"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : null}
                     <span className="featured-card__wash" />
-                    <img className="featured-card__logo" src={project.logo} alt={projectTitle} />
+                    <img
+                      className="featured-card__logo"
+                      src={project.logo}
+                      alt={projectTitle}
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </Link>
-                  <Link className="featured-card__label" to={`/portfolio/${project.slug}`} onClick={rememberPortfolioScroll}>
+                  <Link className="featured-card__label" to={`/portfolio/${project.slug}/`} onClick={rememberPortfolioScroll}>
                     {projectTitle}
                     <ArrowRight aria-hidden="true" size={20} strokeWidth={3} />
                   </Link>
@@ -81,14 +99,14 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
             <h2 className="all-projects-title" data-reveal>{t("portfolio.all")}</h2>
           )}
 
-          <div className={`project-grid ${showAllMobileProjects ? "is-mobile-expanded" : ""}`}>
+          <div className={`project-grid ${allProjects.length % 3 === 1 ? "project-grid--remainder-1" : ""} ${showAllMobileProjects ? "is-mobile-expanded" : ""}`}>
             {allProjects.map((project) => (
               (() => {
                 const classSlug = projectClassSlug(project.layoutSlug || project.slug);
 
                 return (
               <Link
-                to={`/portfolio/${project.slug}`}
+                to={`/portfolio/${project.slug}/`}
                 className={`project-card project-card--${classSlug} ${project.source === "backend" ? "project-card--backend" : ""}`}
                 data-cursor="soft"
                 data-reveal
@@ -121,7 +139,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
               aria-expanded={showAllMobileProjects}
               onClick={() => setShowAllMobileProjects((current) => !current)}
             >
-              {showAllMobileProjects ? t("portfolio.showLess") : t("portfolio.showMore")}
+              <ButtonTextStagger text={showAllMobileProjects ? t("portfolio.showLess") : t("portfolio.showMore")} />
             </button>
           ) : null}
         </div>

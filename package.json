@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/generate-seo-files.mjs --public",
     "build": "tsc --noEmit && vite build",
-    "postbuild": "cp dist/index.html dist/404.html",
+    "postbuild": "node scripts/generate-seo-files.mjs --dist && npm run audit:seo",
+    "audit:seo": "node scripts/audit-seo.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

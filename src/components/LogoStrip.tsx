@@ -8,7 +8,7 @@ function projectClassSlug(slug: string) {
 
 export function LogoStrip() {
   const { t } = useLanguage();
-  const { data: featuredProjects } = useFeaturedProjectsQuery();
+  const { data: featuredProjects = [] } = useFeaturedProjectsQuery();
 
   return (
     <section className="logo-strip" aria-label={t("portfolio.clients")}>
@@ -17,12 +17,12 @@ export function LogoStrip() {
         <div className="logo-rail">
           {[...featuredProjects, ...featuredProjects].map((project, index) => (
             <Link
-              to={`/portfolio/${project.slug}`}
+              to={`/portfolio/${project.slug}/`}
               className={`logo-rail__item logo-rail__item--${projectClassSlug(project.layoutSlug || project.slug)}`}
               data-cursor="soft"
               key={`${project.slug}-${index}`}
             >
-              <img src={project.logo} alt={project.titleKey ? t(project.titleKey) : project.title} />
+              <img src={project.logo} alt={project.titleKey ? t(project.titleKey) : project.title} loading="lazy" decoding="async" />
             </Link>
           ))}
         </div>

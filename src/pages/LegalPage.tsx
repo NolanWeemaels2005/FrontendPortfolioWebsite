@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useLayoutEffect } from "react";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
@@ -148,6 +149,11 @@ export function LegalPage({ type }: LegalPageProps) {
   useScrollReveal();
   const content = pages[type];
 
+  useLayoutEffect(() => {
+    document.body.classList.add("legal-route");
+    return () => document.body.classList.remove("legal-route");
+  }, []);
+
   return (
     <section className="legal-page">
       <div className="section-container legal-page__inner" data-reveal>
@@ -167,7 +173,7 @@ export function LegalPage({ type }: LegalPageProps) {
           ))}
         </div>
 
-        <Link to="/contact" className="btn btn--primary legal-page__cta" data-cursor="merge">
+        <Link to="/contact/" className="btn btn--primary legal-page__cta" data-cursor="merge">
           <ButtonTextStagger text="Contact opnemen" />
         </Link>
       </div>

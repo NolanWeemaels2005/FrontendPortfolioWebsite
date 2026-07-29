@@ -5,12 +5,13 @@ import { ButtonTextStagger } from "./ButtonTextStagger";
 import { navItems } from "../data/nav";
 import { useLanguage } from "../i18n/LanguageContext";
 import { assetPath } from "../utils/asset";
+import { preloadPageModule } from "../utils/pageModules";
 
 const navPreviewItems = [
-  { href: "/", image: assetPath("assets/about/nolan-portrait.jpg"), alt: "" },
-  { href: "/portfolio", image: assetPath("assets/nav-menu/portfolio.jpg"), alt: "" },
-  { href: "/about", image: assetPath("assets/nav-menu/about.png"), alt: "" },
-  { href: "/contact", image: assetPath("assets/nav-menu/contact.png"), alt: "" },
+  { href: "/", image: assetPath("assets/about/nolan-portrait.webp"), alt: "" },
+  { href: "/portfolio/", image: assetPath("assets/nav-menu/portfolio.webp"), alt: "" },
+  { href: "/about/", image: assetPath("assets/nav-menu/about.webp"), alt: "" },
+  { href: "/contact/", image: assetPath("assets/nav-menu/contact.webp"), alt: "" },
 ];
 
 export function Navigation() {
@@ -76,12 +77,12 @@ export function Navigation() {
           <span className="menu-btn__label">{t("nav.menu")}</span>
         </button>
 
-        <Link to="/" className="nav-logo" data-cursor="merge" aria-label={t("nav.homeLabel")}>
-          <img className="nav-logo__word" src={assetPath("assets/logos/main-logo-white.svg")} alt="Nolan" />
-          <img className="nav-logo__icon" src={assetPath("assets/logos/main-icon-white.svg")} alt="Nolan" />
+        <Link to="/" className="nav-logo" data-cursor="merge" aria-label={t("nav.homeLabel")} onPointerEnter={() => void preloadPageModule("/")} onFocus={() => void preloadPageModule("/")}>
+          <img className="nav-logo__word" src={assetPath("assets/logos/main-logo-white.webp")} alt="Nolan" width="2034" height="572" decoding="async" />
+          <img className="nav-logo__icon" src={assetPath("assets/logos/main-icon-white.webp")} alt="Nolan" width="1631" height="1474" decoding="async" />
         </Link>
 
-        <Link to="/contact" className="nav-talk" data-cursor="merge">
+        <Link to="/contact/" className="nav-talk" data-cursor="merge" onPointerEnter={() => void preloadPageModule("/contact/")} onFocus={() => void preloadPageModule("/contact/")}>
           <ButtonTextStagger text={t("cta.letsTalk")} />
         </Link>
       </header>
@@ -96,8 +97,14 @@ export function Navigation() {
                 data-cursor="merge"
                 key={item.href}
                 onClick={closeMenu}
-                onFocus={() => setActivePreview(item.href)}
-                onMouseEnter={() => setActivePreview(item.href)}
+                onFocus={() => {
+                  setActivePreview(item.href);
+                  void preloadPageModule(item.href);
+                }}
+                onMouseEnter={() => {
+                  setActivePreview(item.href);
+                  void preloadPageModule(item.href);
+                }}
                 end={item.href === "/"}
               >
                 <span className="inner">
@@ -113,7 +120,7 @@ export function Navigation() {
           <div className="menu-preview-grid" aria-hidden="true">
             {navPreviewItems.map((item) => (
               <figure className={`menu-preview-card ${activePreviewHref === item.href ? "is-active" : ""}`} key={item.href}>
-                <img src={item.image} alt={item.alt} loading="eager" decoding="async" />
+                <img src={item.image} alt={item.alt} loading="lazy" decoding="async" fetchPriority="low" />
               </figure>
             ))}
           </div>
