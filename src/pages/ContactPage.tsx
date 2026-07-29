@@ -1,12 +1,14 @@
 import { useForm, ValidationError } from "@formspree/react";
-import { CircleEllipsis, Instagram, Mail, Megaphone, Monitor, Palette, Phone, Send, Share2, Shirt } from "lucide-react";
-import { useLayoutEffect, useState } from "react";
+import { BadgeCheck, CircleEllipsis, Instagram, Mail, Megaphone, Monitor, Palette, Phone, Send, Share2, Shirt } from "lucide-react";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { Hero } from "../components/Hero";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../i18n/LanguageContext";
 
 const serviceOptions = [
+  { value: "free-audit", labelKey: "contact.service.freeAudit", icon: BadgeCheck },
   { value: "branding", labelKey: "contact.service.branding", icon: Palette },
   { value: "webdesign", labelKey: "contact.service.webdesign", icon: Monitor },
   { value: "promo", labelKey: "contact.service.promo", icon: Megaphone },
@@ -19,7 +21,12 @@ export function ContactPage() {
   useScrollReveal();
   const { t } = useLanguage();
   const [state, handleSubmit] = useForm("mbdwrepv");
-  const [selectedService, setSelectedService] = useState("");
+  const [searchParams] = useSearchParams();
+  const [selectedService, setSelectedService] = useState(() => searchParams.get("service") === "free-audit" ? "free-audit" : "");
+
+  useEffect(() => {
+    if (searchParams.get("service") === "free-audit") setSelectedService("free-audit");
+  }, [searchParams]);
 
   useLayoutEffect(() => {
     document.body.classList.add("contact-route");

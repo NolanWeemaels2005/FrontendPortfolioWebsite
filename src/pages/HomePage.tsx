@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { ArrowRight, BadgeEuro, Clock3, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import ImageReveal from "../components/lightswind/ImageReveal";
@@ -67,6 +68,7 @@ function CountUpNumber({ start, value, children }: CountUpNumberProps) {
 
 export function HomePage() {
   const { t } = useLanguage();
+  const auditRef = useRef<HTMLElement>(null);
   const overviewRef = useRef<HTMLElement>(null);
   const [overviewStatsActive, setOverviewStatsActive] = useState(false);
   const { data: latestProject } = useLatestProjectQuery();
@@ -116,8 +118,8 @@ export function HomePage() {
     return () => observer.disconnect();
   }, []);
 
-  const scrollToOverview = () => {
-    overviewRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const scrollToAudit = () => {
+    auditRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
@@ -158,10 +160,62 @@ export function HomePage() {
           <small>{latestProject?.title}</small>
         </aside>
 
-        <button type="button" className="home-landing__scroll" onClick={scrollToOverview}>
+        <button type="button" className="home-landing__scroll" onClick={scrollToAudit}>
           <strong>{t("hero.scroll")}</strong>
           <span aria-hidden="true" />
         </button>
+      </section>
+
+      <section className="home-audit" aria-labelledby="home-audit-heading" ref={auditRef}>
+        <div className="home-audit__inner">
+          <div className="home-audit__content">
+            <h2 id="home-audit-heading">
+              <span>{t("home.audit.eyebrow")}</span> {t("home.audit.title")}
+            </h2>
+
+            <p className="home-audit__lead">
+              {t("home.audit.leadBefore")} <strong>{t("home.audit.value")}</strong>.
+            </p>
+            <p className="home-audit__body">{t("home.audit.body")}</p>
+            <p className="home-audit__promise">{t("home.audit.promise")}</p>
+
+            <ul className="home-audit__benefits" aria-label={t("home.audit.benefitsLabel")}>
+              <li>
+                <span><Clock3 aria-hidden="true" /></span>
+                <strong>{t("home.audit.benefitTime")}</strong>
+              </li>
+              <li>
+                <span><Lightbulb aria-hidden="true" /></span>
+                <strong>{t("home.audit.benefitAction")}</strong>
+              </li>
+              <li>
+                <span><BadgeEuro aria-hidden="true" /></span>
+                <strong>{t("home.audit.benefitValue")}</strong>
+                <small>{t("home.audit.benefitFree")}</small>
+              </li>
+            </ul>
+
+            <Link className="home-audit__cta" to="/contact/?service=free-audit" data-cursor="merge">
+              <ButtonTextStagger text={t("home.audit.cta")} />
+              <ArrowRight aria-hidden="true" size={24} strokeWidth={3} />
+            </Link>
+          </div>
+
+          <div className="home-audit__visual">
+            <img
+              src={assetPath("assets/home-audit/design-audit.webp")}
+              alt={t("home.audit.imageAlt")}
+              width="1400"
+              height="1867"
+              loading="lazy"
+              decoding="async"
+            />
+            <div className="home-audit__value" aria-label={`${t("home.audit.badge")} ${t("home.audit.value")}`}>
+              <span>{t("home.audit.badge")}</span>
+              <strong>{t("home.audit.value")}</strong>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="home-overview" aria-label={t("home.overviewAria")} ref={overviewRef}>
