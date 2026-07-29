@@ -1,15 +1,25 @@
 import { Menu } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { ButtonTextStagger } from "./ButtonTextStagger";
 import { navItems } from "../data/nav";
 import { useLanguage } from "../i18n/LanguageContext";
 import { assetPath } from "../utils/asset";
 
+const navPreviewItems = [
+  { href: "/", image: assetPath("assets/about/nolan-portrait.jpg"), alt: "" },
+  { href: "/portfolio", image: assetPath("assets/nav-menu/portfolio.jpg"), alt: "" },
+  { href: "/about", image: assetPath("assets/nav-menu/about.png"), alt: "" },
+  { href: "/contact", image: assetPath("assets/nav-menu/contact.png"), alt: "" },
+];
+
 export function Navigation() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activePreview, setActivePreview] = useState<string | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const { language, setLanguage, t } = useLanguage();
+  const activePreviewHref = activePreview;
 
   function closeMenu() {
     setOpen(false);
@@ -72,13 +82,13 @@ export function Navigation() {
         </Link>
 
         <Link to="/contact" className="nav-talk" data-cursor="merge">
-          {t("cta.letsTalk")}
+          <ButtonTextStagger text={t("cta.letsTalk")} />
         </Link>
       </header>
 
       <div className={`overlay ${open ? "open" : ""}`} inert={!open}>
         <div className="overlay-inner">
-          <nav className="menu-links" aria-label={t("nav.mainNavigation")}>
+          <nav className="menu-links" aria-label={t("nav.mainNavigation")} onMouseLeave={() => setActivePreview(null)}>
             {navItems.map((item) => (
               <NavLink
                 to={item.href}
@@ -86,15 +96,27 @@ export function Navigation() {
                 data-cursor="merge"
                 key={item.href}
                 onClick={closeMenu}
+                onFocus={() => setActivePreview(item.href)}
+                onMouseEnter={() => setActivePreview(item.href)}
                 end={item.href === "/"}
               >
-                <span className="divider" />
                 <span className="inner">
-                  <span className="link-text">{t(item.labelKey)}</span>
+                  <span className="link-text">
+                    <ButtonTextStagger text={t(item.labelKey)} staggerMs={42} durationMs={520} />
+                  </span>
                 </span>
+                <span className="divider" />
               </NavLink>
             ))}
           </nav>
+
+          <div className="menu-preview-grid" aria-hidden="true">
+            {navPreviewItems.map((item) => (
+              <figure className={`menu-preview-card ${activePreviewHref === item.href ? "is-active" : ""}`} key={item.href}>
+                <img src={item.image} alt={item.alt} loading="eager" decoding="async" />
+              </figure>
+            ))}
+          </div>
 
           <div className="overlay-footer">
             <h3>{t("nav.language")}</h3>

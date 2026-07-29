@@ -1,13 +1,18 @@
+import { useLayoutEffect } from "react";
 import { Hero } from "../components/Hero";
 import { LogoStrip } from "../components/LogoStrip";
 import { Portfolio } from "../components/Portfolio";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../i18n/LanguageContext";
-import { useLayoutEffect } from "react";
 
 export function PortfolioPage() {
   useScrollReveal();
   const { t } = useLanguage();
+
+  useLayoutEffect(() => {
+    document.body.classList.add("portfolio-route");
+    return () => document.body.classList.remove("portfolio-route");
+  }, []);
 
   useLayoutEffect(() => {
     const savedScrollY = window.sessionStorage.getItem("portfolio-scroll-y");
@@ -30,10 +35,15 @@ export function PortfolioPage() {
 
   return (
     <>
-      <Hero title={t("hero.portfolioTitle")} script={t("hero.portfolioScript")} scrollText={t("hero.scroll")} className="portfolio-hero" />
-      <div id="page-content">
+      <Hero
+        title={t("hero.portfolioTitle")}
+        script={t("hero.portfolioScript")}
+        scrollText={t("hero.scroll")}
+        className="portfolio-showcase-hero"
+      />
+      <div id="page-content" className="portfolio-showcase-content">
         <LogoStrip />
-        <Portfolio />
+        <Portfolio variant="showcase" />
       </div>
     </>
   );

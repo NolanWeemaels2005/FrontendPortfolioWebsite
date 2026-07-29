@@ -25,6 +25,7 @@ type BackendProject = {
 };
 
 const projectDataVersion = "v10";
+const fallbackLatestProjectSlug = "shift-festival";
 const projectOrder = [
   "find your light",
   "fc eisbar",
@@ -48,6 +49,7 @@ export const projectQueryKeys = {
   all: ["projects", projectDataVersion, "all"] as const,
   featured: ["projects", projectDataVersion, "featured"] as const,
   combined: ["projects", projectDataVersion, "combined"] as const,
+  latest: ["projects", projectDataVersion, "latest"] as const,
   detail: (slug: string | undefined) => ["projects", projectDataVersion, "detail", slug] as const,
 };
 
@@ -234,6 +236,22 @@ export function useCombinedProjectsQuery() {
       return mergeBackendProjects(backendProjects, localProjects);
     },
     initialData: getCombinedProjects,
+    ...queryOptions,
+  });
+}
+
+export function getFallbackLatestProject() {
+  return getCombinedProjects().find((project) => project.slug === fallbackLatestProjectSlug) || getCombinedProjects()[0];
+}
+
+export function useLatestProjectQuery() {
+  return useQuery({
+    queryKey: projectQueryKeys.latest,
+    queryFn: async () => {
+      const backendProjects = await fetchBackendProjects();
+      return backendProjects.find((project) => project.logo || project.clientLogoSvg) || getFallbackLatestProject();
+    },
+    initialData: getFallbackLatestProject,
     ...queryOptions,
   });
 }

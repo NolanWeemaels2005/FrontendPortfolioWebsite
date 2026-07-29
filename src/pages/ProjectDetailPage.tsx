@@ -1,7 +1,8 @@
 import { ArrowLeft, ChevronLeft, ChevronRight, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, Navigate, useParams } from "react-router-dom";
+import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { useCombinedProjectsQuery, useProjectQuery } from "../data/projectQueries";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -19,6 +20,11 @@ export function ProjectDetailPage() {
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
   const galleryImages = project?.images || [];
   const activeImage = activeImageIndex === null ? null : galleryImages[activeImageIndex];
+
+  useLayoutEffect(() => {
+    document.body.classList.add("project-route");
+    return () => document.body.classList.remove("project-route");
+  }, []);
 
   useEffect(() => {
     const updateLoginState = () => setIsLoggedIn(Boolean(getAdminToken()));
@@ -110,7 +116,7 @@ export function ProjectDetailPage() {
           <p>{projectApproach}</p>
         </div>
         <Link to="/contact" className="btn btn--primary" data-cursor="merge">
-          {t("cta.letsTalk")}
+          <ButtonTextStagger text={t("cta.letsTalk")} />
         </Link>
       </div>
 

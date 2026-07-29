@@ -5,8 +5,16 @@ import { navItems } from "../data/nav";
 import { useLanguage } from "../i18n/LanguageContext";
 import { KaaiModal } from "./KaaiModal";
 import { assetPath } from "../utils/asset";
+import { createWhatsAppHref } from "./WhatsAppPopup";
 
-const socials = [
+type SocialItem = {
+  label: string;
+  href: string;
+  icon?: string;
+  modal?: boolean;
+};
+
+const socialLinks: SocialItem[] = [
   { label: "Instagram", icon: assetPath("assets/icons/social/InstagramWhite.svg"), href: "https://www.instagram.com/nolanweemaelsdesign/" },
   { label: "LinkedIn", icon: assetPath("assets/icons/social/LinkedInWhite.svg"), href: "https://www.linkedin.com/in/nolan-weemaels-1780511b4/" },
   { label: "Kaai", icon: assetPath("assets/icons/social/kaaiIconWhite.svg"), href: "https://kaai.be", modal: true },
@@ -15,14 +23,22 @@ const socials = [
 export function Footer() {
   const { language, setLanguage, t } = useLanguage();
   const [kaaiOpen, setKaaiOpen] = useState(false);
+  const socials: SocialItem[] = [
+    { label: "WhatsApp", icon: assetPath("assets/icons/social/WhatsApp.svg"), href: createWhatsAppHref(t("whatsapp.defaultMessage")) },
+    ...socialLinks,
+  ];
 
   function openKaaiModal(event: MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
     setKaaiOpen(true);
   }
 
+  function renderSocialIcon(social: SocialItem) {
+    return social.icon ? <img src={social.icon} alt="" loading="lazy" decoding="async" /> : null;
+  }
+
   return (
-    <footer className="site-footer" data-reveal>
+    <footer className="site-footer" id="site-footer">
       <div className="footer-top">
         <div>
           <Link to="/" className="footer-logo" data-cursor="merge" aria-label={t("nav.homeLabel")}>
@@ -32,6 +48,7 @@ export function Footer() {
           <div className="footer-columns">
             <div className="footer-column footer-column--links">
               <h3>{t("footer.links")}</h3>
+              <a href={createWhatsAppHref(t("whatsapp.defaultMessage"))} data-cursor="soft" target="_blank" rel="noopener noreferrer">WhatsApp</a>
               <a href="https://www.instagram.com/nolanweemaelsdesign/" data-cursor="soft" target="_blank" rel="noopener noreferrer">Instagram</a>
               <a href="https://www.linkedin.com/in/nolan-weemaels-1780511b4/" data-cursor="soft" target="_blank" rel="noopener noreferrer">LinkedIn</a>
               <a href="https://kaai.be" data-cursor="soft" target="_blank" rel="noopener noreferrer" onClick={openKaaiModal}>Kaai.</a>
@@ -63,13 +80,15 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="footer-cta">
+        <section className="footer-cta" aria-labelledby="footer-cta-title">
           <p>{t("footer.project")}</p>
-          <strong>{t("cta.letsTalk")}</strong>
+          <div className="footer-cta__title" id="footer-cta-title" role="heading" aria-level={2}>
+            {t("cta.letsTalk")}
+          </div>
           <Link to="/contact" className="btn btn--primary" data-cursor="merge">
             {t("cta.letsTalk")}
           </Link>
-        </div>
+        </section>
       </div>
 
       <div className="footer-bottom">
@@ -91,11 +110,11 @@ export function Footer() {
                 rel="noopener noreferrer"
                 onClick={openKaaiModal}
               >
-                <img src={social.icon} alt="" loading="lazy" decoding="async" />
+                {renderSocialIcon(social)}
               </a>
             ) : (
               <a href={social.href} data-cursor="soft" aria-label={social.label} key={social.label} target="_blank" rel="noopener noreferrer">
-                <img src={social.icon} alt="" loading="lazy" decoding="async" />
+                {renderSocialIcon(social)}
               </a>
             )
           ))}

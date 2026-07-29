@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ButtonTextStagger } from "./ButtonTextStagger";
 import { useLanguage } from "../i18n/LanguageContext";
 
 type HeroProps = {
@@ -37,10 +38,10 @@ export function Hero({
           {showActions ? (
             <div className="hero-actions">
               <Link to="/contact" className="btn btn--primary" data-cursor="merge">
-                {t("cta.letsTalk")}
+                <ButtonTextStagger text={t("cta.letsTalk")} />
               </Link>
               <Link to="/portfolio" className="btn btn--secondary" data-cursor="merge">
-                {t("cta.portfolio")}
+                <ButtonTextStagger text={t("cta.portfolio")} />
               </Link>
             </div>
           ) : null}

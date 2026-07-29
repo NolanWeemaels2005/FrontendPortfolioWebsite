@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
 type LegalSection = {
@@ -167,7 +168,7 @@ export function LegalPage({ type }: LegalPageProps) {
         </div>
 
         <Link to="/contact" className="btn btn--primary legal-page__cta" data-cursor="merge">
-          Contact opnemen
+          <ButtonTextStagger text="Contact opnemen" />
         </Link>
       </div>
     </section>

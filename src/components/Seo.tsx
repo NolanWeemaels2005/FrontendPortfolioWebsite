@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { getCombinedProjects } from "../data/projectQueries";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const siteUrl = "https://nolandesign.be";
 const siteName = "Nolan Design";
@@ -117,13 +118,20 @@ function getSeo(pathname: string) {
 
 export function Seo() {
   const { pathname } = useLocation();
+  const { language } = useLanguage();
 
   useEffect(() => {
     const seo = getSeo(pathname);
     const canonicalUrl = `${siteUrl}${seo.canonicalPath === "/" ? "" : seo.canonicalPath}`;
 
-    document.documentElement.lang = "nl";
+    document.documentElement.lang = language;
     document.title = seo.title;
+
+    const updateTabTitle = () => {
+      document.title = document.hidden ? "Hey, nu al weg?" : seo.title;
+    };
+
+    document.addEventListener("visibilitychange", updateTabTitle);
     setCanonical(canonicalUrl);
     setMeta("description", seo.description);
     setMeta("robots", seo.robots);
@@ -138,7 +146,9 @@ export function Seo() {
     setMeta("twitter:title", seo.title);
     setMeta("twitter:description", seo.description);
     setMeta("twitter:image", seo.image);
-  }, [pathname]);
+
+    return () => document.removeEventListener("visibilitychange", updateTabTitle);
+  }, [language, pathname]);
 
   return null;
 }
