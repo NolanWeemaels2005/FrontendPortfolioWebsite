@@ -6358,14 +6358,16 @@ body.about-route .about-story__sticky {
     transform: translate(-50%, 10px);
   }
 
-  .mouse-icon {
+  .mouse-icon,
+  .home-landing__scroll > span {
     width: 24px;
     height: 38px;
     border-width: 3px;
     border-radius: 7px;
   }
 
-  .mouse-icon::before {
+  .mouse-icon::before,
+  .home-landing__scroll > span::before {
     top: auto;
     bottom: 5px;
     width: 8px;
@@ -6374,7 +6376,8 @@ body.about-route .about-story__sticky {
     animation: phonePulse 1.55s ease-in-out infinite;
   }
 
-  .mouse-icon::after {
+  .mouse-icon::after,
+  .home-landing__scroll > span::after {
     content: "";
     position: absolute;
     top: 4px;
