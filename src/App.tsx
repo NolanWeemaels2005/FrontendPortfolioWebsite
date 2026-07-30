@@ -8,6 +8,7 @@ import { InitialLoader } from "./components/InitialLoader";
 import { ButtonTextStagger } from "./components/ButtonTextStagger";
 import { pageModuleLoaders } from "./utils/pageModules";
 import { featuredProjects } from "./data/projects";
+import { useLanguage } from "./i18n/LanguageContext";
 
 const HomePage = lazy(() => pageModuleLoaders.home().then((module) => ({ default: module.HomePage })));
 const PortfolioPage = lazy(() => pageModuleLoaders.portfolio().then((module) => ({ default: module.PortfolioPage })));
@@ -62,6 +63,7 @@ function ScrollToTop() {
 }
 
 function NotFoundPage() {
+  const { t } = useLanguage();
   const notFoundProjects = useMemo(() => {
     return [...notFoundProjectPool]
       .sort(() => Math.random() - 0.5)
@@ -78,33 +80,31 @@ function NotFoundPage() {
       <div className="not-found-page__inner">
         <div className="not-found-page__copy">
           <h1 id="not-found-title">
-            <span>Pagina niet</span>
-            <strong>gevonden</strong>
+            <span>{t("notFound.titleLineOne")}</span>
+            <strong>{t("notFound.titleLineTwo")}</strong>
           </h1>
-          <p>
-            Deze link bestaat niet meer, is verplaatst of heeft zich gewoon goed verstopt. Kies een nieuwe richting en je bent meteen terug in het portfolio.
-          </p>
+          <p>{t("notFound.body")}</p>
 
           <div className="not-found-page__actions">
             <Link to="/contact/" className="home-landing__action home-landing__action--primary" data-cursor="merge">
-              <ButtonTextStagger text="Let’s talk" />
+              <ButtonTextStagger text={t("notFound.talk")} />
             </Link>
             <Link to="/portfolio/" className="home-landing__action home-landing__action--secondary" data-cursor="merge">
-              <ButtonTextStagger text="Portfolio" />
+              <ButtonTextStagger text={t("notFound.portfolio")} />
             </Link>
           </div>
         </div>
 
         <div className="not-found-page__suggestions">
-          <h2>Interessante projecten</h2>
-          <div className="not-found-page__projects" aria-label="Interessante projecten">
+          <h2>{t("notFound.projects")}</h2>
+          <div className="not-found-page__projects" aria-label={t("notFound.projectsLabel")}>
             {notFoundProjects.map((project) => (
               <Link
                 to={`/portfolio/${project.slug}/`}
                 className="not-found-project"
                 data-cursor="merge"
                 key={project.slug}
-                aria-label={`Bekijk ${project.title}`}
+                aria-label={`${t("notFound.viewProject")} ${project.title}`}
               >
                 {project.logo ? <img className="not-found-project__logo" src={project.logo} alt="" loading="lazy" decoding="async" /> : null}
                 <span className="not-found-project__title">{project.title}</span>
