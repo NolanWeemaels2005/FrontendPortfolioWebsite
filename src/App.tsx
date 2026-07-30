@@ -18,6 +18,35 @@ const ContactPage = lazy(() => pageModuleLoaders.contact().then((module) => ({ d
 const AdminPage = lazy(() => pageModuleLoaders.admin().then((module) => ({ default: module.AdminPage })));
 const LegalPage = lazy(() => pageModuleLoaders.legal().then((module) => ({ default: module.LegalPage })));
 const notFoundProjectPool = featuredProjects.filter((project) => project.logo);
+const routeBodyClasses = [
+  "home-route",
+  "portfolio-route",
+  "about-route",
+  "contact-route",
+  "project-route",
+  "legal-route",
+  "admin-route",
+  "not-found-route",
+] as const;
+const legalPaths = new Set(["/cookiebeleid", "/juridische-voorwaarden", "/privacybeleid"]);
+
+function normalizePathname(pathname: string) {
+  return pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+}
+
+function getRouteBodyClass(pathname: string) {
+  const normalizedPathname = normalizePathname(pathname);
+
+  if (normalizedPathname === "/") return "home-route";
+  if (normalizedPathname === "/portfolio") return "portfolio-route";
+  if (normalizedPathname.startsWith("/portfolio/")) return "project-route";
+  if (normalizedPathname === "/about") return "about-route";
+  if (normalizedPathname === "/contact") return "contact-route";
+  if (normalizedPathname === "/beheer") return "admin-route";
+  if (legalPaths.has(normalizedPathname)) return "legal-route";
+
+  return "not-found-route";
+}
 
 function ScrollToTop() {
   const { hash, pathname } = useLocation();
@@ -119,6 +148,12 @@ function NotFoundPage() {
 
 export function App() {
   const location = useLocation();
+  const routeBodyClass = getRouteBodyClass(location.pathname);
+
+  useLayoutEffect(() => {
+    document.body.classList.remove(...routeBodyClasses);
+    document.body.classList.add(routeBodyClass);
+  }, [location.pathname, routeBodyClass]);
 
   return (
     <>
