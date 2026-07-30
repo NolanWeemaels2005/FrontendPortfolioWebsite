@@ -177,7 +177,6 @@ export function HomePage() {
               {t("home.audit.leadBefore")} <strong>{t("home.audit.value")}</strong>.
             </p>
             <p className="home-audit__body">{t("home.audit.body")}</p>
-            <p className="home-audit__local">{t("home.audit.local")}</p>
             <p className="home-audit__promise">{t("home.audit.promise")}</p>
 
             <ul className="home-audit__benefits" aria-label={t("home.audit.benefitsLabel")}>

@@ -2961,15 +2961,6 @@ body.home-route .site-footer {
   line-height: 1.38;
 }
 
-.home-audit__local {
-  max-width: 580px;
-  margin: 1rem 0 0;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: clamp(0.98rem, 1vw, 1.12rem);
-  font-weight: 650;
-  line-height: 1.42;
-}
-
 .home-audit__promise {
   margin: 1.35rem 0 0;
   font-size: clamp(1.1rem, 1.2vw, 1.4rem);
