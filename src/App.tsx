@@ -1,11 +1,13 @@
 import { Link, Route, Routes, useLocation } from "react-router-dom";
-import { lazy, Suspense, useEffect, useLayoutEffect } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect, useMemo } from "react";
 import { Footer } from "./components/Footer";
 import { Navigation } from "./components/Navigation";
 import { Seo } from "./components/Seo";
 import { WhatsAppPopup } from "./components/WhatsAppPopup";
 import { InitialLoader } from "./components/InitialLoader";
+import { ButtonTextStagger } from "./components/ButtonTextStagger";
 import { pageModuleLoaders } from "./utils/pageModules";
+import { featuredProjects } from "./data/projects";
 
 const HomePage = lazy(() => pageModuleLoaders.home().then((module) => ({ default: module.HomePage })));
 const PortfolioPage = lazy(() => pageModuleLoaders.portfolio().then((module) => ({ default: module.PortfolioPage })));
@@ -14,6 +16,7 @@ const AboutPage = lazy(() => pageModuleLoaders.about().then((module) => ({ defau
 const ContactPage = lazy(() => pageModuleLoaders.contact().then((module) => ({ default: module.ContactPage })));
 const AdminPage = lazy(() => pageModuleLoaders.admin().then((module) => ({ default: module.AdminPage })));
 const LegalPage = lazy(() => pageModuleLoaders.legal().then((module) => ({ default: module.LegalPage })));
+const notFoundProjectPool = featuredProjects.filter((project) => project.logo);
 
 function ScrollToTop() {
   const { hash, pathname } = useLocation();
@@ -59,15 +62,56 @@ function ScrollToTop() {
 }
 
 function NotFoundPage() {
+  const notFoundProjects = useMemo(() => {
+    return [...notFoundProjectPool]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 4);
+  }, []);
+
+  useLayoutEffect(() => {
+    document.body.classList.add("not-found-route");
+    return () => document.body.classList.remove("not-found-route");
+  }, []);
+
   return (
-    <section className="legal-page">
-      <div className="section-container legal-page__inner">
-        <p className="legal-page__eyebrow">404</p>
-        <h1>Pagina niet gevonden</h1>
-        <p className="legal-page__intro">Deze pagina bestaat niet of is verplaatst.</p>
-        <Link to="/" className="btn btn--primary legal-page__cta" data-cursor="merge">
-          Terug naar home
-        </Link>
+    <section className="not-found-page" aria-labelledby="not-found-title">
+      <div className="not-found-page__inner">
+        <div className="not-found-page__copy">
+          <h1 id="not-found-title">
+            <span>Pagina niet</span>
+            <strong>gevonden</strong>
+          </h1>
+          <p>
+            Deze link bestaat niet meer, is verplaatst of heeft zich gewoon goed verstopt. Kies een nieuwe richting en je bent meteen terug in het portfolio.
+          </p>
+
+          <div className="not-found-page__actions">
+            <Link to="/contact/" className="home-landing__action home-landing__action--primary" data-cursor="merge">
+              <ButtonTextStagger text="Let’s talk" />
+            </Link>
+            <Link to="/portfolio/" className="home-landing__action home-landing__action--secondary" data-cursor="merge">
+              <ButtonTextStagger text="Portfolio" />
+            </Link>
+          </div>
+        </div>
+
+        <div className="not-found-page__suggestions">
+          <h2>Interessante projecten</h2>
+          <div className="not-found-page__projects" aria-label="Interessante projecten">
+            {notFoundProjects.map((project) => (
+              <Link
+                to={`/portfolio/${project.slug}/`}
+                className="not-found-project"
+                data-cursor="merge"
+                key={project.slug}
+                aria-label={`Bekijk ${project.title}`}
+              >
+                {project.logo ? <img className="not-found-project__logo" src={project.logo} alt="" loading="lazy" decoding="async" /> : null}
+                <span className="not-found-project__title">{project.title}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
