@@ -99,8 +99,14 @@ function routeSeo(pathname: string): SeoRoute & { known: boolean } {
 
 function schemaFor(seo: SeoRoute, canonicalUrl: string, image: string, imageWidth: number, imageHeight: number) {
   const personId = `${site.url}/#nolan-weemaels`;
+  const businessId = `${site.url}/#nolan-design`;
   const websiteId = `${site.url}/#website`;
   const pageType = seo.type === "about" ? "ProfilePage" : seo.type === "portfolio" ? "CollectionPage" : seo.type === "contact" ? "ContactPage" : "WebPage";
+  const sameAs = [
+    "https://www.instagram.com/nolanweemaelsdesign/",
+    "https://www.linkedin.com/in/nolan-weemaels-1780511b4/",
+  ];
+  const serviceArea = site.areaServed.map((name) => ({ "@type": "Place", name }));
   const graph: Record<string, unknown>[] = [
     {
       "@type": "WebSite",
@@ -108,7 +114,28 @@ function schemaFor(seo: SeoRoute, canonicalUrl: string, image: string, imageWidt
       url: `${site.url}/`,
       name: site.name,
       inLanguage: "nl-BE",
-      publisher: { "@id": personId },
+      publisher: { "@id": businessId },
+    },
+    {
+      "@type": ["ProfessionalService", "Organization"],
+      "@id": businessId,
+      name: site.name,
+      url: `${site.url}/`,
+      logo: `${site.url}/apple-touch-icon.png`,
+      image: absoluteUrl(site.businessImage),
+      description: "Grafisch ontwerp, branding, logo-ontwerp, visuele identiteit, webdesign en digitale vormgeving voor ondernemers en organisaties in Galmaarden, Pajottegem, Geraardsbergen en omgeving.",
+      email: "mailto:info@nolandesign.be",
+      telephone: "+32472085890",
+      founder: { "@id": personId },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: site.baseLocality,
+        addressRegion: site.addressRegion,
+        addressCountry: "BE",
+      },
+      areaServed: serviceArea,
+      serviceType: ["Grafisch ontwerp", "Branding", "Logo-ontwerp", "Visuele identiteit", "Webdesign", "Digital design"],
+      sameAs,
     },
     {
       "@type": "Person",
@@ -121,10 +148,8 @@ function schemaFor(seo: SeoRoute, canonicalUrl: string, image: string, imageWidt
       email: "mailto:info@nolandesign.be",
       telephone: "+32472085890",
       knowsAbout: ["Grafisch ontwerp", "Branding", "Visuele identiteit", "Webdesign", "Digital design"],
-      sameAs: [
-        "https://www.instagram.com/nolanweemaelsdesign/",
-        "https://www.linkedin.com/in/nolan-weemaels-1780511b4/",
-      ],
+      worksFor: { "@id": businessId },
+      sameAs,
     },
     {
       "@type": pageType,

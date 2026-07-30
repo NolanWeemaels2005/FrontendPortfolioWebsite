@@ -42,7 +42,15 @@ function schemaFor(route) {
   const imageWidth = route.imageWidth || 1280;
   const imageHeight = route.imageHeight || 1280;
   const personId = `${site.url}/#nolan-weemaels`;
+  const businessId = `${site.url}/#nolan-design`;
   const websiteId = `${site.url}/#website`;
+  const sameAs = [
+    "https://www.instagram.com/nolanweemaelsdesign/",
+    "https://www.linkedin.com/in/nolan-weemaels-1780511b4/",
+  ];
+  const areaServed = Array.isArray(site.areaServed)
+    ? site.areaServed.map((name) => ({ "@type": "Place", name }))
+    : undefined;
   const graph = [
     {
       "@type": "WebSite",
@@ -50,7 +58,28 @@ function schemaFor(route) {
       url: `${site.url}/`,
       name: site.name,
       inLanguage: "nl-BE",
-      publisher: { "@id": personId },
+      publisher: { "@id": businessId },
+    },
+    {
+      "@type": ["ProfessionalService", "Organization"],
+      "@id": businessId,
+      name: site.name,
+      url: `${site.url}/`,
+      logo: `${site.url}/apple-touch-icon.png`,
+      image: absoluteUrl(site.businessImage || site.defaultImage),
+      description: "Grafisch ontwerp, branding, logo-ontwerp, visuele identiteit, webdesign en digitale vormgeving voor ondernemers en organisaties in Galmaarden, Pajottegem, Geraardsbergen en omgeving.",
+      email: "mailto:info@nolandesign.be",
+      telephone: "+32472085890",
+      founder: { "@id": personId },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: site.baseLocality || "Galmaarden",
+        addressRegion: site.addressRegion || "Vlaams-Brabant",
+        addressCountry: "BE",
+      },
+      areaServed,
+      serviceType: ["Grafisch ontwerp", "Branding", "Logo-ontwerp", "Visuele identiteit", "Webdesign", "Digital design"],
+      sameAs,
     },
     {
       "@type": "Person",
@@ -63,10 +92,8 @@ function schemaFor(route) {
       email: "mailto:info@nolandesign.be",
       telephone: "+32472085890",
       knowsAbout: ["Grafisch ontwerp", "Branding", "Visuele identiteit", "Webdesign", "Digital design"],
-      sameAs: [
-        "https://www.instagram.com/nolanweemaelsdesign/",
-        "https://www.linkedin.com/in/nolan-weemaels-1780511b4/",
-      ],
+      worksFor: { "@id": businessId },
+      sameAs,
     },
   ];
 
