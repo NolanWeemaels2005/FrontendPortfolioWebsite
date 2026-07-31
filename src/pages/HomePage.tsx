@@ -5,6 +5,7 @@ import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import ImageReveal from "../components/lightswind/ImageReveal";
 import { ProjectHallOfFame } from "../components/ProjectHallOfFame";
 import { useCombinedProjectsQuery, useLatestProjectQuery } from "../data/projectQueries";
+import { fetchHomeOfferVisible } from "../data/siteSettings";
 import { useLanguage } from "../i18n/LanguageContext";
 import { assetPath } from "../utils/asset";
 
@@ -71,6 +72,7 @@ export function HomePage() {
   const auditRef = useRef<HTMLElement>(null);
   const overviewRef = useRef<HTMLElement>(null);
   const [overviewStatsActive, setOverviewStatsActive] = useState(false);
+  const [showIrresistibleOffer, setShowIrresistibleOffer] = useState(false);
   const { data: latestProject } = useLatestProjectQuery();
   const { data: projects = [] } = useCombinedProjectsQuery();
   const projectCount = Math.max(projects.length, 16);
@@ -101,6 +103,16 @@ export function HomePage() {
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+    void fetchHomeOfferVisible().then((visible) => {
+      if (!cancelled) setShowIrresistibleOffer(visible);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
     const overview = overviewRef.current;
     if (!overview) return;
 
@@ -119,7 +131,8 @@ export function HomePage() {
   }, []);
 
   const scrollToAudit = () => {
-    auditRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const target = showIrresistibleOffer ? auditRef.current : overviewRef.current;
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
@@ -166,7 +179,7 @@ export function HomePage() {
         </button>
       </section>
 
-      <section className="home-audit" aria-labelledby="home-audit-heading" ref={auditRef}>
+      <section className="home-audit" aria-labelledby="home-audit-heading" ref={auditRef} hidden={!showIrresistibleOffer}>
         <div className="home-audit__inner">
           <div className="home-audit__content">
             <h2 id="home-audit-heading">

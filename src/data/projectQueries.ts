@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { allProjects, featuredProjects } from "./projects";
+import { isSiteSettingProject } from "./siteSettings";
 import type { Project } from "../types/project";
 import { webpImageUrl } from "../utils/asset";
 import { apiUrl } from "../utils/api";
@@ -46,23 +47,72 @@ const projectOrder = [
   "poutrel",
 ];
 
-export const projectQueryKeys = {
-  all: ["projects", projectDataVersion, "all"] as const,
-  featured: ["projects", projectDataVersion, "featured"] as const,
-  combined: ["projects", projectDataVersion, "combined"] as const,
-  latest: ["projects", projectDataVersion, "latest"] as const,
-  detail: (slug: string | undefined) => ["projects", projectDataVersion, "detail", slug] as const,
+type ProjectResource<T> = {
+  data: T;
+  promise: Promise<T> | null;
+  subscribers: Set<() => void>;
 };
 
-const queryOptions = {
-  staleTime: 1000 * 60 * 10,
-  gcTime: 1000 * 60 * 30,
-  refetchOnMount: false,
-  refetchOnReconnect: false,
-  refetchOnWindowFocus: false,
-};
+const projectCache = new Map<string, ProjectResource<unknown>>();
 
 let backendProjectsRequest: Promise<Project[]> | null = null;
+
+function cacheKey(parts: Array<string | undefined>) {
+  return [projectDataVersion, ...parts].join(":");
+}
+
+function getProjectResource<T>(key: string, placeholderData: T): ProjectResource<T> {
+  const existing = projectCache.get(key) as ProjectResource<T> | undefined;
+  if (existing) return existing;
+
+  const resource: ProjectResource<T> = {
+    data: placeholderData,
+    promise: null,
+    subscribers: new Set(),
+  };
+  projectCache.set(key, resource as ProjectResource<unknown>);
+  return resource;
+}
+
+function useProjectResource<T>(key: string, load: () => Promise<T>, placeholderData: T, enabled = true) {
+  const [resource] = useState(() => getProjectResource(key, placeholderData));
+  const [data, setData] = useState(resource.data);
+  const [isFetching, setIsFetching] = useState(Boolean(enabled && resource.promise));
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    const notify = () => {
+      setData(resource.data);
+      setIsFetching(Boolean(resource.promise));
+    };
+    resource.subscribers.add(notify);
+
+    if (!resource.promise) {
+      resource.promise = load()
+        .then((nextData) => {
+          resource.data = nextData;
+          resource.subscribers.forEach((subscriber) => subscriber());
+          return nextData;
+        })
+        .finally(() => {
+          resource.promise = null;
+          resource.subscribers.forEach((subscriber) => subscriber());
+        });
+      setIsFetching(true);
+    }
+
+    return () => {
+      resource.subscribers.delete(notify);
+    };
+  }, [enabled, resource]);
+
+  return { data, isLoading: enabled && isFetching && data === undefined, isFetching };
+}
+
+export function invalidateProjectQueries() {
+  projectCache.clear();
+}
 
 function normalizeTitle(title: string) {
   return title
@@ -186,7 +236,7 @@ async function fetchBackendProjects() {
       if (!response.ok) return [];
       const data = await response.json();
       const projects = Array.isArray(data) ? data : Array.isArray(data?.projects) ? data.projects : [];
-      return (projects as BackendProject[]).map(mapBackendProject);
+      return (projects as BackendProject[]).filter((project) => !isSiteSettingProject(project)).map(mapBackendProject);
     } catch {
       return [];
     }
@@ -218,41 +268,38 @@ export function getCombinedProjects() {
 }
 
 export function useFeaturedProjectsQuery() {
-  return useQuery({
-    queryKey: projectQueryKeys.featured,
-    queryFn: async () => {
+  return useProjectResource(
+    cacheKey(["featured"]),
+    async () => {
       const backendProjects = await fetchBackendProjects();
       const mergedProjects = mergeBackendProjects(backendProjects, featuredProjects);
       return mergedProjects.filter((project) => project.featured || featuredProjects.some((featuredProject) => featuredProject.slug === project.slug));
     },
-    placeholderData: featuredProjects,
-    ...queryOptions,
-  });
+    featuredProjects,
+  );
 }
 
 export function useAllProjectsQuery() {
-  return useQuery({
-    queryKey: projectQueryKeys.all,
-    queryFn: async () => {
+  return useProjectResource(
+    cacheKey(["all"]),
+    async () => {
       const backendProjects = await fetchBackendProjects();
       return mergeBackendProjects(backendProjects, allProjects);
     },
-    placeholderData: sortProjects(allProjects),
-    ...queryOptions,
-  });
+    sortProjects(allProjects),
+  );
 }
 
 export function useCombinedProjectsQuery() {
-  return useQuery({
-    queryKey: projectQueryKeys.combined,
-    queryFn: async () => {
+  return useProjectResource(
+    cacheKey(["combined"]),
+    async () => {
       const backendProjects = await fetchBackendProjects();
       const localProjects = getCombinedProjects();
       return mergeBackendProjects(backendProjects, localProjects);
     },
-    placeholderData: getCombinedProjects,
-    ...queryOptions,
-  });
+    getCombinedProjects(),
+  );
 }
 
 export function getFallbackLatestProject() {
@@ -260,21 +307,20 @@ export function getFallbackLatestProject() {
 }
 
 export function useLatestProjectQuery() {
-  return useQuery({
-    queryKey: projectQueryKeys.latest,
-    queryFn: async () => {
+  return useProjectResource(
+    cacheKey(["latest"]),
+    async () => {
       const backendProjects = await fetchBackendProjects();
       return backendProjects.find((project) => project.logo || project.clientLogoSvg) || getFallbackLatestProject();
     },
-    placeholderData: getFallbackLatestProject,
-    ...queryOptions,
-  });
+    getFallbackLatestProject(),
+  );
 }
 
 export function useProjectQuery(slug: string | undefined) {
-  return useQuery({
-    queryKey: projectQueryKeys.detail(slug),
-    queryFn: async () => {
+  return useProjectResource(
+    cacheKey(["detail", slug]),
+    async () => {
       if (!slug) return undefined;
       const localProject = getCombinedProjects().find((project) => project.slug === slug);
       const backendProject = await fetchBackendProject(slug);
@@ -290,8 +336,7 @@ export function useProjectQuery(slug: string | undefined) {
 
       return backendProjectFromList || localProject;
     },
-    placeholderData: () => getCombinedProjects().find((project) => project.slug === slug),
-    enabled: Boolean(slug),
-    ...queryOptions,
-  });
+    getCombinedProjects().find((project) => project.slug === slug),
+    Boolean(slug),
+  );
 }

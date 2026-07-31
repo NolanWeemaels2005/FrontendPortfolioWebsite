@@ -1,8 +1,8 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
-import { getCombinedProjects, projectQueryKeys } from "../data/projectQueries";
+import { getCombinedProjects, invalidateProjectQueries } from "../data/projectQueries";
+import { fetchHomeOfferVisible, updateHomeOfferVisible } from "../data/siteSettings";
 import { apiUrl, readApiError } from "../utils/api";
 import { clearAdminToken, getAdminToken, setAdminToken } from "../utils/adminAuth";
 import { assetPath } from "../utils/asset";
@@ -36,7 +36,6 @@ type EditableProject = {
 };
 
 export function AdminPage() {
-  const queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
   const editSlug = new URLSearchParams(location.search).get("project");
@@ -56,6 +55,9 @@ export function AdminPage() {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [migrating, setMigrating] = useState(false);
+  const [homeOfferVisible, setHomeOfferVisible] = useState(false);
+  const [homeOfferLoading, setHomeOfferLoading] = useState(false);
+  const [homeOfferSaving, setHomeOfferSaving] = useState(false);
 
   const selectedImages = useMemo(() => project.images.map((file) => file.name).join(", "), [project.images]);
 
@@ -64,6 +66,27 @@ export function AdminPage() {
     window.addEventListener("admin-auth-change", updateLoginState);
     return () => window.removeEventListener("admin-auth-change", updateLoginState);
   }, []);
+
+  useEffect(() => {
+    if (!token) {
+      setHomeOfferVisible(false);
+      return;
+    }
+
+    let cancelled = false;
+    setHomeOfferLoading(true);
+    void fetchHomeOfferVisible()
+      .then((visible) => {
+        if (!cancelled) setHomeOfferVisible(visible);
+      })
+      .finally(() => {
+        if (!cancelled) setHomeOfferLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [token]);
 
   useEffect(() => {
     if (!token || !editSlug) {
@@ -143,11 +166,12 @@ export function AdminPage() {
       const response = await fetch(`${apiUrl}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(login),
+        body: JSON.stringify({ email: login.email.trim(), password: login.password }),
       });
 
       if (!response.ok) {
-        throw new Error(await readApiError(response));
+        const message = await readApiError(response);
+        throw new Error(response.status >= 500 ? `${message} (${response.status})` : message);
       }
 
       const data = (await response.json()) as { token: string };
@@ -162,11 +186,8 @@ export function AdminPage() {
     }
   }
 
-  function invalidateProjectData(slug?: string) {
-    queryClient.invalidateQueries({ queryKey: projectQueryKeys.all });
-    queryClient.invalidateQueries({ queryKey: projectQueryKeys.featured });
-    queryClient.invalidateQueries({ queryKey: projectQueryKeys.combined });
-    queryClient.invalidateQueries({ queryKey: projectQueryKeys.detail(slug || editSlug || undefined) });
+  function invalidateProjectData(_slug?: string) {
+    invalidateProjectQueries();
   }
 
   function handleCloseEdit() {
@@ -377,17 +398,37 @@ export function AdminPage() {
         uploaded += 1;
       }
 
-      queryClient.invalidateQueries({ queryKey: projectQueryKeys.all });
-      queryClient.invalidateQueries({ queryKey: projectQueryKeys.featured });
-      queryClient.invalidateQueries({ queryKey: projectQueryKeys.combined });
-      getCombinedProjects().forEach((project) => {
-        queryClient.invalidateQueries({ queryKey: projectQueryKeys.detail(project.slug) });
-      });
+      invalidateProjectData();
       setStatus(`${uploaded} projecten geupload. ${skipped} projecten stonden al in de database.`);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Lokale projecten uploaden mislukt.");
     } finally {
       setMigrating(false);
+    }
+  }
+
+  async function handleHomeOfferToggle(nextVisible: boolean) {
+    if (!token) {
+      setError("Je bent niet ingelogd.");
+      return;
+    }
+
+    const previousVisible = homeOfferVisible;
+    setHomeOfferVisible(nextVisible);
+    setHomeOfferSaving(true);
+    setError("");
+    setStatus("");
+
+    try {
+      const savedVisible = await updateHomeOfferVisible(nextVisible, token);
+      setHomeOfferVisible(savedVisible);
+      invalidateProjectData();
+      setStatus(savedVisible ? "Offer sectie staat zichtbaar voor alle bezoekers." : "Offer sectie staat verborgen voor alle bezoekers.");
+    } catch (caught) {
+      setHomeOfferVisible(previousVisible);
+      setError(caught instanceof Error ? caught.message : "Offer instelling opslaan mislukt.");
+    } finally {
+      setHomeOfferSaving(false);
     }
   }
 
@@ -448,6 +489,23 @@ export function AdminPage() {
                 </button>
               </div>
             </div>
+
+            <section className="admin-settings" aria-labelledby="admin-settings-title">
+              <div>
+                <h2 id="admin-settings-title">Website instellingen</h2>
+                <p>Toon of verberg de gratis offer sectie op de homepage voor alle bezoekers.</p>
+              </div>
+              <label className="admin-toggle">
+                <input
+                  type="checkbox"
+                  checked={homeOfferVisible}
+                  disabled={homeOfferLoading || homeOfferSaving}
+                  onChange={(event) => void handleHomeOfferToggle(event.target.checked)}
+                />
+                <span aria-hidden="true" />
+                <strong>{homeOfferVisible ? "Offer zichtbaar" : "Offer verborgen"}</strong>
+              </label>
+            </section>
 
             <label>
               Naam

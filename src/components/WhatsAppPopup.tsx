@@ -1,5 +1,5 @@
 import { SendHorizontal, X } from "lucide-react";
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useLanguage } from "../i18n/LanguageContext";
 import { assetPath } from "../utils/asset";
 
@@ -12,9 +12,7 @@ export function createWhatsAppHref(message = whatsAppMessage) {
 
 export function WhatsAppPopup() {
   const { language, t } = useLanguage();
-  const contactRef = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
-  const [footerVisible, setFooterVisible] = useState(false);
   const [message, setMessage] = useState(t("whatsapp.defaultMessage"));
   const sendHref = useMemo(
     () => createWhatsAppHref(message.trim() || t("whatsapp.defaultMessage")),
@@ -41,45 +39,8 @@ export function WhatsAppPopup() {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [expanded]);
 
-  useEffect(() => {
-    const footer = document.querySelector(".site-footer");
-    const footerTop = footer?.querySelector(".footer-top");
-    const contact = contactRef.current;
-    if (!footer || !footerTop || !contact) return;
-
-    let frame = 0;
-    const syncFooterPosition = () => {
-      frame = 0;
-      const footerBounds = footer.getBoundingClientRect();
-      const dividerY = footerTop.getBoundingClientRect().bottom;
-      const isFooterVisible = footerBounds.top < window.innerHeight && footerBounds.bottom > 0;
-      const dividerOverlap = window.innerHeight - dividerY;
-
-      setFooterVisible(isFooterVisible);
-      if (isFooterVisible && dividerY > 0 && dividerOverlap > 0) {
-        contact.style.setProperty("--whatsapp-footer-bottom", `${dividerOverlap + 16}px`);
-      } else {
-        contact.style.removeProperty("--whatsapp-footer-bottom");
-      }
-    };
-
-    const requestSync = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(syncFooterPosition);
-    };
-
-    syncFooterPosition();
-    window.addEventListener("scroll", requestSync, { passive: true });
-    window.addEventListener("resize", requestSync);
-    return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", requestSync);
-      window.removeEventListener("resize", requestSync);
-    };
-  }, []);
-
   return (
-    <div ref={contactRef} className="whatsapp-contact" data-expanded={expanded} data-footer-visible={footerVisible}>
+    <div className="whatsapp-contact" data-expanded={expanded}>
       <button
         className="whatsapp-contact__launcher"
         type="button"

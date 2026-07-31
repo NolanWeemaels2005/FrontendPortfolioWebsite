@@ -157,6 +157,10 @@ function replaceScript(html, id, content) {
 
 function fallbackMarkup(route) {
   const projects = routes.filter((item) => item.type === "project" && item.index);
+  const crawlLinks = routes
+    .filter((item) => item.index && (["home", "portfolio", "about", "contact", "legal"].includes(item.type) || route.type === "portfolio"))
+    .map((item) => `<a href="${item.path}">${escapeHtml(item.heading)}</a>`)
+    .join("");
   const projectLinks = projects
     .map((item) => `<li><a href="${item.path}">${escapeHtml(item.heading)}</a></li>`)
     .join("");
@@ -169,7 +173,7 @@ function fallbackMarkup(route) {
     ? `<img src="${route.image}" alt="${escapeHtml(route.imageAlt || route.heading)}" width="${route.imageWidth || 1280}" height="${route.imageHeight || 1280}" />`
     : "";
 
-  return `<div id="root"><noscript><main class="seo-fallback"><article><h1>${escapeHtml(route.heading)}</h1><p>${escapeHtml(route.intro)}</p>${image}${related}</article></main></noscript></div>`;
+  return `<div id="root"><nav class="seo-crawl-links" aria-label="Interne links">${crawlLinks}</nav><noscript><main class="seo-fallback"><article><h1>${escapeHtml(route.heading)}</h1><p>${escapeHtml(route.intro)}</p>${image}${related}</article></main></noscript></div>`;
 }
 
 function renderRouteHtml(template, route) {
