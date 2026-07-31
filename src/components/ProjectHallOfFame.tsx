@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
+import { ButtonTextStagger } from "./ButtonTextStagger";
 import { featuredProjects } from "../data/projects";
 import { useFeaturedProjectsQuery } from "../data/projectQueries";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -112,7 +113,7 @@ export function ProjectHallOfFame() {
                       />
                     </span>
                     <span className="project-hall-card__label">
-                      {title}
+                      <ButtonTextStagger text={title} />
                       <ArrowRight aria-hidden="true" size={24} strokeWidth={3} />
                     </span>
                   </Link>

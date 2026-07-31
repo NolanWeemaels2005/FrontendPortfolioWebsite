@@ -259,15 +259,17 @@ export function AboutPage() {
             </header>
 
             <div className="about-skills__grid">
-              <img
-                className="about-skills__portrait"
-                src={assetPath("assets/about-story/optimized/MyStoryPicture7.webp")}
-                alt="Nolan Weemaels aan het werk als grafisch ontwerper"
-                width="1200"
-                height="1600"
-                loading="lazy"
-                decoding="async"
-              />
+              <div className="about-skills__portrait-frame">
+                <img
+                  className="about-skills__portrait"
+                  src={assetPath("assets/about-story/optimized/MyStoryPicture7.webp")}
+                  alt="Nolan Weemaels aan het werk als grafisch ontwerper"
+                  width="998"
+                  height="1400"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
               <div className="about-skills__copy">
                 <h3>{t("about.toolsHeading")}</h3>
                 <div className="tool-grid">

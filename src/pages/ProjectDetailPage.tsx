@@ -146,7 +146,7 @@ export function ProjectDetailPage() {
               aria-label={`${projectTitle} beeld ${index + 1} openen`}
               key={image}
             >
-              <img src={image} alt={`${projectTitle} beeld ${index + 1}`} width="1280" height="1600" loading="lazy" decoding="async" />
+              <img src={image} alt={`${projectTitle} beeld ${index + 1}`} width="1600" height="1200" loading="lazy" decoding="async" />
             </button>
           ))}
         </div>

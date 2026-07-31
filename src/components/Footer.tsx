@@ -49,16 +49,24 @@ export function Footer() {
           <div className="footer-columns">
             <div className="footer-column footer-column--links">
               <h3>{t("footer.links")}</h3>
-              <a href={createWhatsAppHref(t("whatsapp.defaultMessage"))} data-cursor="soft" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-              <a href="https://www.instagram.com/nolanweemaelsdesign/" data-cursor="soft" target="_blank" rel="noopener noreferrer">Instagram</a>
-              <a href="https://www.linkedin.com/in/nolan-weemaels-1780511b4/" data-cursor="soft" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-              <a href="https://kaai.be" data-cursor="soft" target="_blank" rel="noopener noreferrer" onClick={openKaaiModal}>Kaai.</a>
+              <a href={createWhatsAppHref(t("whatsapp.defaultMessage"))} data-cursor="soft" target="_blank" rel="noopener noreferrer">
+                <ButtonTextStagger text="WhatsApp" />
+              </a>
+              <a href="https://www.instagram.com/nolanweemaelsdesign/" data-cursor="soft" target="_blank" rel="noopener noreferrer">
+                <ButtonTextStagger text="Instagram" />
+              </a>
+              <a href="https://www.linkedin.com/in/nolan-weemaels-1780511b4/" data-cursor="soft" target="_blank" rel="noopener noreferrer">
+                <ButtonTextStagger text="LinkedIn" />
+              </a>
+              <a href="https://kaai.be" data-cursor="soft" target="_blank" rel="noopener noreferrer" onClick={openKaaiModal}>
+                <ButtonTextStagger text="Kaai." />
+              </a>
             </div>
             <div className="footer-column footer-column--pages">
               <h3>{t("footer.pages")}</h3>
               {navItems.map((item) => (
                 <Link to={item.href} data-cursor="soft" key={item.href}>
-                  {t(item.labelKey)}
+                  <ButtonTextStagger text={t(item.labelKey)} />
                 </Link>
               ))}
             </div>
@@ -73,7 +81,7 @@ export function Footer() {
                     onClick={() => setLanguage(item)}
                     key={item}
                   >
-                    {item.toUpperCase()}
+                    <ButtonTextStagger text={item.toUpperCase()} />
                   </button>
                 ))}
               </div>

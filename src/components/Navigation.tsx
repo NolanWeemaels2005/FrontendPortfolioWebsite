@@ -1,6 +1,6 @@
 import { Menu } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { ButtonTextStagger } from "./ButtonTextStagger";
 import { navItems } from "../data/nav";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -15,12 +15,18 @@ const navPreviewItems = [
 ];
 
 export function Navigation() {
+  const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activePreview, setActivePreview] = useState<string | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const { language, setLanguage, t } = useLanguage();
-  const activePreviewHref = activePreview;
+  const normalizedPathname = pathname.length > 1 ? `${pathname.replace(/^\/+|\/+$/g, "")}/` : "";
+  const currentPreviewHref = navPreviewItems.find((item) => {
+    if (item.href === "/") return pathname === "/";
+    return normalizedPathname.startsWith(item.href.replace(/^\/+/, ""));
+  })?.href || "/";
+  const activePreviewHref = activePreview || currentPreviewHref;
 
   function closeMenu() {
     setOpen(false);
@@ -119,7 +125,10 @@ export function Navigation() {
 
           <div className="menu-preview-grid" aria-hidden="true">
             {navPreviewItems.map((item) => (
-              <figure className={`menu-preview-card ${activePreviewHref === item.href ? "is-active" : ""}`} key={item.href}>
+              <figure
+                className={`menu-preview-card ${activePreviewHref === item.href ? "is-active" : ""} ${currentPreviewHref === item.href ? "is-current" : ""}`}
+                key={item.href}
+              >
                 <img src={item.image} alt={item.alt} width="900" height="1200" loading="lazy" decoding="async" fetchPriority="low" />
               </figure>
             ))}
@@ -133,12 +142,12 @@ export function Navigation() {
                   type="button"
                   data-cursor="merge"
                   className={language === item ? "is-active" : ""}
-                  onClick={() => setLanguage(item)}
-                  key={item}
-                >
-                  {item === "nl" ? "Nederlands" : item === "fr" ? "Français" : "English"}
-                </button>
-              ))}
+                    onClick={() => setLanguage(item)}
+                    key={item}
+                  >
+                    <ButtonTextStagger text={item === "nl" ? "Nederlands" : item === "fr" ? "Français" : "English"} />
+                  </button>
+                ))}
             </div>
           </div>
         </div>

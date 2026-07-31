@@ -1,9 +1,10 @@
 import { useForm, ValidationError } from "@formspree/react";
 import { BadgeCheck, CircleEllipsis, Instagram, Mail, Megaphone, Monitor, Palette, Phone, Send, Share2, Shirt } from "lucide-react";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { Hero } from "../components/Hero";
+import { fetchHomeOfferVisible } from "../data/siteSettings";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../i18n/LanguageContext";
 
@@ -22,10 +23,24 @@ export function ContactPage() {
   const { t } = useLanguage();
   const [state, handleSubmit] = useForm("mbdwrepv");
   const [searchParams] = useSearchParams();
-  const [selectedService, setSelectedService] = useState(() => searchParams.get("service") === "free-audit" ? "free-audit" : "");
+  const [showFreeAudit, setShowFreeAudit] = useState(false);
+  const [selectedService, setSelectedService] = useState("");
+  const visibleServiceOptions = useMemo(
+    () => serviceOptions.filter((option) => showFreeAudit || option.value !== "free-audit"),
+    [showFreeAudit],
+  );
 
   useEffect(() => {
-    if (searchParams.get("service") === "free-audit") setSelectedService("free-audit");
+    let cancelled = false;
+    void fetchHomeOfferVisible().then((visible) => {
+      if (cancelled) return;
+      setShowFreeAudit(visible);
+      if (visible && searchParams.get("service") === "free-audit") setSelectedService("free-audit");
+      if (!visible) setSelectedService((current) => current === "free-audit" ? "" : current);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [searchParams]);
 
   useLayoutEffect(() => {
@@ -60,7 +75,7 @@ export function ContactPage() {
               <legend>{t("contact.serviceTitle")}</legend>
               <p>{t("contact.serviceHint")}</p>
               <div className="contact-service-picker__options">
-                {serviceOptions.map(({ value, labelKey, icon: Icon }) => (
+                {visibleServiceOptions.map(({ value, labelKey, icon: Icon }) => (
                   <label className="contact-service-option" key={value}>
                     <input
                       className="sr-only"

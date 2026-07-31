@@ -84,7 +84,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                     />
                   </Link>
                   <Link className="featured-card__label" to={`/portfolio/${project.slug}/`} onClick={rememberPortfolioScroll}>
-                    {projectTitle}
+                    <ButtonTextStagger text={projectTitle} />
                     <ArrowRight aria-hidden="true" size={20} strokeWidth={3} />
                   </Link>
                 </div>
@@ -130,7 +130,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                   />
                 </span>
                 <span className="project-card__label">
-                  {project.titleKey ? t(project.titleKey) : project.title}
+                  <ButtonTextStagger text={project.titleKey ? t(project.titleKey) : project.title} />
                   <ArrowRight aria-hidden="true" size={24} strokeWidth={3} />
                 </span>
               </Link>
