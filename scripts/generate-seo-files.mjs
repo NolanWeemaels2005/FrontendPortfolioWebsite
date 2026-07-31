@@ -36,6 +36,10 @@ function routeUrl(route) {
   return route.path === "/" ? `${site.url}/` : `${site.url}${route.path}`;
 }
 
+function keywordsFor(route) {
+  return [...new Set([...(Array.isArray(route.keywords) ? route.keywords : []), ...(Array.isArray(site.keywords) ? site.keywords : [])])];
+}
+
 function schemaFor(route) {
   const url = routeUrl(route);
   const image = absoluteUrl(route.image || site.defaultImage);
@@ -51,6 +55,7 @@ function schemaFor(route) {
   const areaServed = Array.isArray(site.areaServed)
     ? site.areaServed.map((name) => ({ "@type": "Place", name }))
     : undefined;
+  const keywords = keywordsFor(route);
   const graph = [
     {
       "@type": "WebSite",
@@ -61,15 +66,17 @@ function schemaFor(route) {
       publisher: { "@id": businessId },
     },
     {
-      "@type": ["ProfessionalService", "Organization"],
+      "@type": ["LocalBusiness", "ProfessionalService", "Organization"],
       "@id": businessId,
       name: site.name,
       url: `${site.url}/`,
       logo: `${site.url}/apple-touch-icon.png`,
       image: absoluteUrl(site.businessImage || site.defaultImage),
       description: "Grafisch ontwerp, branding, logo-ontwerp, visuele identiteit, webdesign en digitale vormgeving voor ondernemers en organisaties in Galmaarden, Pajottegem, Geraardsbergen en omgeving.",
+      slogan: "Design dat blijft hangen",
       email: "mailto:info@nolandesign.be",
       telephone: "+32472085890",
+      priceRange: "€€",
       founder: { "@id": personId },
       address: {
         "@type": "PostalAddress",
@@ -79,6 +86,7 @@ function schemaFor(route) {
       },
       areaServed,
       serviceType: ["Grafisch ontwerp", "Branding", "Logo-ontwerp", "Visuele identiteit", "Webdesign", "Digital design"],
+      knowsAbout: keywords,
       sameAs,
     },
     {
@@ -103,6 +111,7 @@ function schemaFor(route) {
     url,
     name: route.title,
     description: route.description,
+    keywords,
     isPartOf: { "@id": websiteId },
     about: { "@id": personId },
     primaryImageOfPage: { "@type": "ImageObject", url: image, width: imageWidth, height: imageHeight },
@@ -186,6 +195,9 @@ function renderRouteHtml(template, route) {
 
   html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtml(route.title)}</title>`);
   html = replaceTag(html, "meta-description", `<meta id="meta-description" name="description" content="${escapeHtml(route.description)}" />`);
+  html = html.includes('name="keywords"')
+    ? html.replace(/<meta[^>]+name="keywords"[^>]*>/i, `<meta name="keywords" content="${escapeHtml(keywordsFor(route).join(", "))}" />`)
+    : html.replace("</head>", `<meta name="keywords" content="${escapeHtml(keywordsFor(route).join(", "))}" /></head>`);
   html = replaceTag(html, "meta-robots", `<meta id="meta-robots" name="robots" content="${robots}" />`);
   html = replaceTag(html, "canonical-url", `<link id="canonical-url" rel="canonical" href="${canonical}" />`);
   html = replaceTag(html, "og-type", `<meta id="og-type" property="og:type" content="${route.type === "project" ? "article" : "website"}" />`);
@@ -229,13 +241,41 @@ function sitemapXml() {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 
+function llmsTxt() {
+  const projectRoutes = routes.filter((route) => route.type === "project" && route.index);
+  const mainRoutes = routes.filter((route) => route.index && ["home", "portfolio", "about", "contact"].includes(route.type));
+  const lines = [
+    "# Nolan Design",
+    "",
+    "Nolan Design is het portfolio en de studio van Nolan Weemaels, grafisch ontwerper voor branding, logo-ontwerp, visuele identiteit, webdesign en digitale vormgeving in Galmaarden, Pajottegem, Geraardsbergen, Vlaams-Brabant en omgeving.",
+    "",
+    "## Belangrijke pagina's",
+    ...mainRoutes.map((route) => `- [${route.heading}](${routeUrl(route)}): ${route.intro}`),
+    "",
+    "## Portfolio projecten",
+    ...projectRoutes.map((route) => `- [${route.heading}](${routeUrl(route)}): ${route.intro}`),
+    "",
+    "## Contact",
+    `- Website: ${site.url}/`,
+    "- E-mail: info@nolandesign.be",
+    "- Telefoon/WhatsApp: +32 472 08 58 90",
+    "- Instagram: https://www.instagram.com/nolanweemaelsdesign/",
+    "- LinkedIn: https://www.linkedin.com/in/nolan-weemaels-1780511b4/",
+    "",
+  ];
+
+  return `${lines.join("\n")}\n`;
+}
+
 if (mode === "--public") {
   await writeFile(join(root, "public/sitemap.xml"), sitemapXml());
+  await writeFile(join(root, "public/llms.txt"), llmsTxt());
 } else if (mode === "--dist") {
   const dist = join(root, "dist");
   buildManifest = JSON.parse(await readFile(join(dist, ".vite/manifest.json"), "utf8"));
   const template = await readFile(join(dist, "index.html"), "utf8");
   await writeFile(join(dist, "sitemap.xml"), sitemapXml());
+  await writeFile(join(dist, "llms.txt"), llmsTxt());
 
   for (const route of routes) {
     const output = route.path === "/" ? join(dist, "index.html") : join(dist, route.path, "index.html");

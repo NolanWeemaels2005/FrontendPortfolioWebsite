@@ -54,6 +54,11 @@ function absoluteUrl(path: string) {
   return `${site.url}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+function keywordsFor(seo: SeoRoute) {
+  const routeKeywords = "keywords" in seo && Array.isArray(seo.keywords) ? seo.keywords : [];
+  return [...new Set([...routeKeywords, ...site.keywords])];
+}
+
 function titleFromSlug(slug: string) {
   return slug
     .split("-")
@@ -107,6 +112,7 @@ function schemaFor(seo: SeoRoute, canonicalUrl: string, image: string, imageWidt
     "https://www.linkedin.com/in/nolan-weemaels-1780511b4/",
   ];
   const serviceArea = site.areaServed.map((name) => ({ "@type": "Place", name }));
+  const keywords = keywordsFor(seo);
   const graph: Record<string, unknown>[] = [
     {
       "@type": "WebSite",
@@ -117,15 +123,17 @@ function schemaFor(seo: SeoRoute, canonicalUrl: string, image: string, imageWidt
       publisher: { "@id": businessId },
     },
     {
-      "@type": ["ProfessionalService", "Organization"],
+      "@type": ["LocalBusiness", "ProfessionalService", "Organization"],
       "@id": businessId,
       name: site.name,
       url: `${site.url}/`,
       logo: `${site.url}/apple-touch-icon.png`,
       image: absoluteUrl(site.businessImage),
       description: "Grafisch ontwerp, branding, logo-ontwerp, visuele identiteit, webdesign en digitale vormgeving voor ondernemers en organisaties in Galmaarden, Pajottegem, Geraardsbergen en omgeving.",
+      slogan: "Design dat blijft hangen",
       email: "mailto:info@nolandesign.be",
       telephone: "+32472085890",
+      priceRange: "€€",
       founder: { "@id": personId },
       address: {
         "@type": "PostalAddress",
@@ -135,6 +143,7 @@ function schemaFor(seo: SeoRoute, canonicalUrl: string, image: string, imageWidt
       },
       areaServed: serviceArea,
       serviceType: ["Grafisch ontwerp", "Branding", "Logo-ontwerp", "Visuele identiteit", "Webdesign", "Digital design"],
+      knowsAbout: keywords,
       sameAs,
     },
     {
@@ -157,6 +166,7 @@ function schemaFor(seo: SeoRoute, canonicalUrl: string, image: string, imageWidt
       url: canonicalUrl,
       name: seo.title,
       description: seo.description,
+      keywords,
       isPartOf: { "@id": websiteId },
       about: { "@id": personId },
       primaryImageOfPage: { "@type": "ImageObject", url: image, width: imageWidth, height: imageHeight },
@@ -224,6 +234,7 @@ export function Seo() {
     setMeta("robots", robots);
     setMeta("googlebot", robots);
     setMeta("author", site.owner);
+    setMeta("keywords", keywordsFor(seo).join(", "));
     setMeta("og:site_name", site.name, "property");
     setMeta("og:locale", site.locale, "property");
     setMeta("og:type", seo.type === "project" ? "article" : "website", "property");

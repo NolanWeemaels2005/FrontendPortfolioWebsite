@@ -7,6 +7,7 @@ const { site, routes } = JSON.parse(await readFile(join(root, "src/data/seoRoute
 const dist = join(root, "dist");
 const sitemap = await readFile(join(dist, "sitemap.xml"), "utf8");
 const robots = await readFile(join(dist, "robots.txt"), "utf8");
+const llms = await readFile(join(dist, "llms.txt"), "utf8").catch(() => "");
 const errors = [];
 const indexableRoutes = routes.filter((route) => route.index);
 const titles = new Set();
@@ -80,6 +81,8 @@ if (sitemapUrlCount !== indexableRoutes.length) {
 }
 if (!robots.includes(`Sitemap: ${site.url}/sitemap.xml`)) errors.push("robots.txt mist de sitemap-URL");
 if (!robots.includes("Disallow: /beheer")) errors.push("robots.txt blokkeert /beheer niet");
+if (!llms.includes("# Nolan Design")) errors.push("llms.txt ontbreekt of mist de titel");
+if (!llms.includes(`${site.url}/portfolio/`)) errors.push("llms.txt mist de portfolio-URL");
 
 if (errors.length) {
   console.error(`SEO-audit mislukt:\n- ${errors.join("\n- ")}`);

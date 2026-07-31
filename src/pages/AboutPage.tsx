@@ -262,7 +262,7 @@ export function AboutPage() {
               <img
                 className="about-skills__portrait"
                 src={assetPath("assets/about-story/optimized/MyStoryPicture7.webp")}
-                alt=""
+                alt="Nolan Weemaels aan het werk als grafisch ontwerper"
                 width="1200"
                 height="1600"
                 loading="lazy"
