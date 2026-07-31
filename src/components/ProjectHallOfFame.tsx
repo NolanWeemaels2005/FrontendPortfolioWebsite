@@ -94,6 +94,8 @@ export function ProjectHallOfFame() {
                           srcSet={responsiveImageSrcSet(cover, 640, 1280)}
                           sizes="(max-width: 760px) calc(100vw - 2rem), 390px"
                           alt=""
+                          width="1280"
+                          height="1600"
                           loading="lazy"
                           decoding="async"
                         />
@@ -103,6 +105,8 @@ export function ProjectHallOfFame() {
                         className="project-hall-card__logo"
                         src={project.logo}
                         alt={title}
+                        width="512"
+                        height="512"
                         loading="lazy"
                         decoding="async"
                       />

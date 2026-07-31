@@ -39,11 +39,12 @@ function waitForRouteMarkup() {
 
 function extractBackgroundUrls(root: Element) {
   const urls = new Set<string>();
-  const elements = [root, ...Array.from(root.querySelectorAll("*"))];
+  const elements = [
+    root,
+    ...Array.from(root.querySelectorAll("[class*='hero'], [class*='landing'], [class*='media'], [class*='cover']")),
+  ];
 
   elements.forEach((element) => {
-    const bounds = element.getBoundingClientRect();
-    if (bounds.bottom < -200 || bounds.top > window.innerHeight + 200) return;
     const backgroundImage = window.getComputedStyle(element).backgroundImage;
     const matches = backgroundImage.matchAll(/url\(["']?([^"')]+)["']?\)/g);
     for (const match of matches) {
@@ -70,18 +71,13 @@ async function waitForPageAssets() {
   if (!root) return;
 
   const imageUrls = new Set<string>();
-  root.querySelectorAll<HTMLImageElement>("img").forEach((image) => {
-    const bounds = image.getBoundingClientRect();
-    if (image.loading === "lazy" || bounds.bottom < -200 || bounds.top > window.innerHeight + 200) return;
+  root.querySelectorAll<HTMLImageElement>("img:not([loading='lazy'])").forEach((image) => {
     const url = image.currentSrc || image.src;
     if (url) imageUrls.add(url);
   });
   extractBackgroundUrls(root).forEach((url) => imageUrls.add(url));
 
-  const videos = Array.from(root.querySelectorAll<HTMLVideoElement>("video")).filter((video) => {
-    const bounds = video.getBoundingClientRect();
-    return bounds.bottom >= -200 && bounds.top <= window.innerHeight + 200;
-  });
+  const videos = Array.from(root.querySelectorAll<HTMLVideoElement>("video:not([preload='none'])"));
   const videoPromises = videos.map(
     (video) =>
       new Promise<void>((resolve) => {
@@ -158,7 +154,7 @@ export function InitialLoader({ pathname: _pathname }: { pathname: string }) {
       <div className="initial-loader__veil" aria-hidden="true" />
       <div className="initial-loader__logo-cover" aria-hidden="true" />
       <div className="initial-loader__center">
-        <img src={assetPath("assets/logos/main-logo-white.svg")} alt="Nolan" />
+        <img src={assetPath("assets/logos/main-logo-white.svg")} alt="Nolan" width="2034" height="572" />
         <span className="initial-loader__spinner" aria-hidden="true" />
         <span className="sr-only">{t("loader.loading")}</span>
       </div>

@@ -219,6 +219,8 @@ export function AboutPage() {
                     <img
                       src={assetPath(`assets/about-story/optimized/${item.image}`)}
                       alt={`${item.place}, ${item.year}`}
+                      width="1200"
+                      height="1600"
                       loading="lazy"
                       decoding="async"
                       fetchPriority="auto"
@@ -261,6 +263,8 @@ export function AboutPage() {
                 className="about-skills__portrait"
                 src={assetPath("assets/about-story/optimized/MyStoryPicture7.webp")}
                 alt=""
+                width="1200"
+                height="1600"
                 loading="lazy"
                 decoding="async"
               />
@@ -270,7 +274,7 @@ export function AboutPage() {
                   {tools.map((tool) => (
                     <div className="tool-item" key={tool.label}>
                       <span>
-                        <img src={assetPath(`assets/about-story/${tool.icon}`)} alt="" loading="lazy" decoding="async" />
+                        <img src={assetPath(`assets/about-story/${tool.icon}`)} alt="" width="256" height="256" loading="lazy" decoding="async" />
                       </span>
                       <strong>{tool.label}</strong>
                     </div>

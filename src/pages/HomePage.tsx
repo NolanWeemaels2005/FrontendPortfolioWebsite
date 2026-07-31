@@ -7,7 +7,7 @@ import { ProjectHallOfFame } from "../components/ProjectHallOfFame";
 import { useCombinedProjectsQuery, useLatestProjectQuery } from "../data/projectQueries";
 import { fetchHomeOfferVisible } from "../data/siteSettings";
 import { useLanguage } from "../i18n/LanguageContext";
-import { assetPath } from "../utils/asset";
+import { assetPath, webpImageUrl } from "../utils/asset";
 
 type CountUpNumberProps = {
   start: boolean;
@@ -90,7 +90,7 @@ export function HomePage() {
 
     return orderedProjects
       .map((project) => ({
-        src: project.images?.[1] || project.images?.[0] || project.cover || project.heroImage || project.logo || "",
+        src: webpImageUrl(project.images?.[1] || project.images?.[0] || project.cover || project.heroImage || project.logo || "", 900),
         alt: project.title,
         href: `/portfolio/${project.slug}/`,
       }))
@@ -168,7 +168,7 @@ export function HomePage() {
           <span className="home-landing__project-divider" />
           <strong>{t("home.latestProject")}</strong>
           {latestProject?.logo ? (
-            <img src={latestProject.logo} alt={latestProject.title} loading="eager" decoding="async" />
+            <img src={latestProject.logo} alt={latestProject.title} width="512" height="512" loading="eager" decoding="async" />
           ) : null}
           <small>{latestProject?.title}</small>
         </aside>
@@ -269,8 +269,8 @@ export function HomePage() {
             <div className="home-overview__content">
               <div className="home-overview__profile">
                 <div className="home-overview__portrait">
-                  <img src={assetPath("assets/home-overview/head-bw.webp")} alt="Nolan Weemaels" loading="lazy" decoding="async" />
-                  <img className="home-overview__signature" src={assetPath("assets/about-story/Signature.webp")} alt="" aria-hidden="true" />
+                  <img src={assetPath("assets/home-overview/head-bw.webp")} alt="Nolan Weemaels" width="1000" height="1250" loading="lazy" decoding="async" />
+                  <img className="home-overview__signature" src={assetPath("assets/about-story/Signature.webp")} alt="" width="1000" height="394" aria-hidden="true" />
                 </div>
                 <h3>{t("home.role")}</h3>
                 <p>
@@ -299,7 +299,7 @@ export function HomePage() {
                   <dd>
                     {latestProject?.logo ? (
                       <Link to={`/portfolio/${latestProject.slug}/`} aria-label={`${t("home.viewProject")} ${latestProject.title}`}>
-                        <img src={latestProject.logo} alt={latestProject.title} loading="lazy" decoding="async" />
+                        <img src={latestProject.logo} alt={latestProject.title} width="512" height="512" loading="lazy" decoding="async" />
                       </Link>
                     ) : null}
                   </dd>

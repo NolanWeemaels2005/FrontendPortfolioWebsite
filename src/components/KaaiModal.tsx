@@ -55,7 +55,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
         </button>
 
         <div className="kaai-modal__left">
-          <img className="kaai-modal__logo" src={assetPath("assets/kaai/logoKaai.webp")} alt="Kaai" />
+          <img className="kaai-modal__logo" src={assetPath("assets/kaai/logoKaai.webp")} alt="Kaai" width="960" height="540" />
 
           <h2 className="kaai-modal__headline" id={titleId}>
             Meer nodig dan wat
@@ -86,7 +86,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
 
             <div className="kaai-modal__services" aria-label="Diensten">
               <div className="kaai-modal__service">
-                <img src={assetPath("assets/kaai/code_xml_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" />
+                <img src={assetPath("assets/kaai/code_xml_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" width="24" height="24" />
                 <span>
                   Full Stack
                   <br />
@@ -94,7 +94,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
                 </span>
               </div>
               <div className="kaai-modal__service">
-                <img src={assetPath("assets/kaai/design_services_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" />
+                <img src={assetPath("assets/kaai/design_services_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" width="24" height="24" />
                 <span>
                   Graphic
                   <br />
@@ -102,7 +102,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
                 </span>
               </div>
               <div className="kaai-modal__service">
-                <img src={assetPath("assets/kaai/motion_blur_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" />
+                <img src={assetPath("assets/kaai/motion_blur_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" width="24" height="24" />
                 <span>
                   Motion
                   <br />
@@ -110,7 +110,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
                 </span>
               </div>
               <div className="kaai-modal__service">
-                <img src={assetPath("assets/kaai/camera_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" />
+                <img src={assetPath("assets/kaai/camera_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" width="24" height="24" />
                 <span>
                   Photo en
                   <br />
@@ -118,7 +118,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
                 </span>
               </div>
               <div className="kaai-modal__service">
-                <img src={assetPath("assets/kaai/visibility_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" />
+                <img src={assetPath("assets/kaai/visibility_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" width="24" height="24" />
                 <span>
                   Live
                   <br />
@@ -126,7 +126,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
                 </span>
               </div>
               <div className="kaai-modal__service">
-                <img src={assetPath("assets/kaai/deployed_code_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" />
+                <img src={assetPath("assets/kaai/deployed_code_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" width="24" height="24" />
                 <span>
                   Fysieke
                   <br />
@@ -142,7 +142,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
               className="kaai-modal__cta"
             >
               <span>Samen maken we impact.</span>
-              <img src={assetPath("assets/kaai/arrow_forward_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" />
+              <img src={assetPath("assets/kaai/arrow_forward_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" width="24" height="24" />
             </a>
           </div>
         </div>

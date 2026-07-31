@@ -135,7 +135,7 @@ function NotFoundPage() {
                 key={project.slug}
                 aria-label={`${t("notFound.viewProject")} ${project.title}`}
               >
-                {project.logo ? <img className="not-found-project__logo" src={project.logo} alt="" loading="lazy" decoding="async" /> : null}
+                {project.logo ? <img className="not-found-project__logo" src={project.logo} alt="" width="512" height="512" loading="lazy" decoding="async" /> : null}
                 <span className="not-found-project__title">{project.title}</span>
               </Link>
             ))}

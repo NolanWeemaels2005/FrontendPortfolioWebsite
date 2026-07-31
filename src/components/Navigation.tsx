@@ -120,7 +120,7 @@ export function Navigation() {
           <div className="menu-preview-grid" aria-hidden="true">
             {navPreviewItems.map((item) => (
               <figure className={`menu-preview-card ${activePreviewHref === item.href ? "is-active" : ""}`} key={item.href}>
-                <img src={item.image} alt={item.alt} loading="lazy" decoding="async" fetchPriority="low" />
+                <img src={item.image} alt={item.alt} width="900" height="1200" loading="lazy" decoding="async" fetchPriority="low" />
               </figure>
             ))}
           </div>

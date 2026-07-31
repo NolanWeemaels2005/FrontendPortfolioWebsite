@@ -22,7 +22,7 @@ export function LogoStrip() {
               data-cursor="soft"
               key={`${project.slug}-${index}`}
             >
-              <img src={project.logo} alt={project.titleKey ? t(project.titleKey) : project.title} loading="lazy" decoding="async" />
+              <img src={project.logo} alt={project.titleKey ? t(project.titleKey) : project.title} width="512" height="512" loading="lazy" decoding="async" />
             </Link>
           ))}
         </div>

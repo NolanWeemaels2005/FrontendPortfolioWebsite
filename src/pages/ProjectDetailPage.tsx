@@ -120,7 +120,7 @@ export function ProjectDetailPage() {
       </div>
 
       <div className={`section-container project-detail__showcase ${project.source === "backend" ? "project-detail__showcase--backend" : ""}`} data-reveal>
-        <img className="project-detail__logo" src={project.logo} alt={projectTitle} />
+        <img className="project-detail__logo" src={project.logo} alt={projectTitle} width="512" height="512" />
       </div>
 
       <div className="section-container project-detail__content" data-reveal>
@@ -146,7 +146,7 @@ export function ProjectDetailPage() {
               aria-label={`${projectTitle} beeld ${index + 1} openen`}
               key={image}
             >
-              <img src={image} alt={`${projectTitle} beeld ${index + 1}`} loading="lazy" decoding="async" />
+              <img src={image} alt={`${projectTitle} beeld ${index + 1}`} width="1280" height="1600" loading="lazy" decoding="async" />
             </button>
           ))}
         </div>
@@ -162,7 +162,7 @@ export function ProjectDetailPage() {
               return (
                 <Link to={`/portfolio/${relatedProject.slug}/`} className="related-project-card" key={relatedProject.slug}>
                   <span className="related-project-card__logo-wrap">
-                    <img src={relatedProject.logo} alt={relatedTitle} loading="lazy" decoding="async" />
+                    <img src={relatedProject.logo} alt={relatedTitle} width="512" height="512" loading="lazy" decoding="async" />
                   </span>
                   <span>{relatedTitle}</span>
                 </Link>
@@ -197,7 +197,7 @@ export function ProjectDetailPage() {
             <ChevronLeft aria-hidden="true" size={42} strokeWidth={2.8} />
           </button>
           <figure className="project-lightbox__figure">
-            <img src={activeImage} alt={`${projectTitle} beeld ${(activeImageIndex || 0) + 1}`} />
+            <img src={activeImage} alt={`${projectTitle} beeld ${(activeImageIndex || 0) + 1}`} width="1600" height="2000" />
           </figure>
           <button
             type="button"

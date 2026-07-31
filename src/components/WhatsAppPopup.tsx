@@ -50,7 +50,7 @@ export function WhatsAppPopup() {
         aria-expanded={expanded}
         tabIndex={expanded ? -1 : 0}
       >
-          <img src={assetPath("assets/icons/social/WhatsApp.webp")} alt="" />
+          <img src={assetPath("assets/icons/social/WhatsApp.webp")} alt="" width="256" height="256" />
       </button>
 
       <aside id="whatsapp-contact-panel" className="whatsapp-contact__panel" aria-label={t("whatsapp.contact")} aria-hidden={!expanded}>
@@ -70,7 +70,7 @@ export function WhatsAppPopup() {
           className="whatsapp-contact__body"
         >
           <span className="whatsapp-contact__avatar">
-        <img src={assetPath("assets/icons/social/WhatsApp.webp")} alt="" />
+        <img src={assetPath("assets/icons/social/WhatsApp.webp")} alt="" width="256" height="256" />
           </span>
           <span className="whatsapp-contact__message">
             <strong>Nolan</strong>

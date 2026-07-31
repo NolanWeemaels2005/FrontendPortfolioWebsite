@@ -66,6 +66,8 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                         srcSet={responsiveImageSrcSet(project.cover, 640, 1280)}
                         sizes="(max-width: 760px) calc(100vw - 2rem), (max-width: 1200px) 50vw, 580px"
                         alt=""
+                        width="1280"
+                        height="1600"
                         loading="lazy"
                         decoding="async"
                       />
@@ -75,6 +77,8 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                       className="featured-card__logo"
                       src={project.logo}
                       alt={projectTitle}
+                      width="512"
+                      height="512"
                       loading="lazy"
                       decoding="async"
                     />
@@ -119,6 +123,8 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                     className="project-card__logo"
                     src={project.logo}
                     alt={project.titleKey ? t(project.titleKey) : project.title}
+                    width="512"
+                    height="512"
                     loading="lazy"
                     decoding="async"
                   />
