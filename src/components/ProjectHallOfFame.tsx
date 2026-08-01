@@ -33,7 +33,7 @@ export function ProjectHallOfFame() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const { data: projects = [] } = useFeaturedProjectsQuery();
-  const columns = useMemo(() => splitColumns(projects.filter((project) => project.logo)), [projects]);
+  const columns = useMemo(() => splitColumns(projects.filter((project) => project.logo || getProjectCover(project))), [projects]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -102,15 +102,17 @@ export function ProjectHallOfFame() {
                         />
                       ) : null}
                       <span className="project-hall-card__shade" />
-                      <img
-                        className="project-hall-card__logo"
-                        src={project.logo}
-                        alt={title}
-                        width="512"
-                        height="512"
-                        loading="lazy"
-                        decoding="async"
-                      />
+                      {project.logo ? (
+                        <img
+                          className="project-hall-card__logo"
+                          src={project.logo}
+                          alt={title}
+                          width="512"
+                          height="512"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : null}
                     </span>
                     <span className="project-hall-card__label">
                       <ButtonTextStagger text={title} />

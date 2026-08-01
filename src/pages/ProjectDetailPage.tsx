@@ -1,4 +1,4 @@
-import { ArrowLeft, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, Navigate, useParams } from "react-router-dom";
@@ -104,7 +104,7 @@ export function ProjectDetailPage() {
         <div className="project-detail__topbar">
           <Link to="/portfolio/" className="back-link" data-cursor="soft">
             <ArrowLeft aria-hidden="true" size={22} />
-            {t("project.back")}
+            <ButtonTextStagger text={t("project.back")} />
           </Link>
           {isLoggedIn ? (
             <Link to={`/beheer/?project=${project.slug}`} className="btn btn--primary project-detail__edit" data-cursor="merge">
@@ -164,7 +164,10 @@ export function ProjectDetailPage() {
                   <span className="related-project-card__logo-wrap">
                     <img src={relatedProject.logo} alt={relatedTitle} width="512" height="512" loading="lazy" decoding="async" />
                   </span>
-                  <span>{relatedTitle}</span>
+                  <span className="related-project-card__label">
+                    <ButtonTextStagger text={relatedTitle} />
+                    <ArrowRight aria-hidden="true" size={22} strokeWidth={3} />
+                  </span>
                 </Link>
               );
             })}

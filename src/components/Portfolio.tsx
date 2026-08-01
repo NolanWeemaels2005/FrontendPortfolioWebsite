@@ -73,15 +73,17 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                       />
                     ) : null}
                     <span className="featured-card__wash" />
-                    <img
-                      className="featured-card__logo"
-                      src={project.logo}
-                      alt={projectTitle}
-                      width="512"
-                      height="512"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    {project.logo ? (
+                      <img
+                        className="featured-card__logo"
+                        src={project.logo}
+                        alt={projectTitle}
+                        width="512"
+                        height="512"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : null}
                   </Link>
                   <Link className="featured-card__label" to={`/portfolio/${project.slug}/`} onClick={rememberPortfolioScroll}>
                     <ButtonTextStagger text={projectTitle} />

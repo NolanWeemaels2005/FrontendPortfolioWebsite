@@ -15,10 +15,10 @@ export function LogoStrip() {
       <div className="logo-strip__inner">
         <p>{t("portfolio.clients")}</p>
         <div className="logo-rail">
-          {[...featuredProjects, ...featuredProjects].map((project, index) => (
+          {[...featuredProjects, ...featuredProjects].filter((project) => project.logo).map((project, index) => (
             <Link
               to={`/portfolio/${project.slug}/`}
-              className={`logo-rail__item logo-rail__item--${projectClassSlug(project.layoutSlug || project.slug)}`}
+              className={`logo-rail__item logo-rail__item--${projectClassSlug(project.slug)} logo-rail__item--layout-${projectClassSlug(project.layoutSlug || project.slug)}`}
               data-cursor="soft"
               key={`${project.slug}-${index}`}
             >

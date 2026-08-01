@@ -24,10 +24,11 @@ export function getProjectDescription(project: Project, language: Language, tran
     );
   }
 
+  if (translatedBackendText) return translatedBackendText;
+
   if (project.summaryKey) return translate(project.summaryKey);
 
   return (
-    translatedBackendText ||
     project.text ||
     project.summary ||
     translate("project.defaultApproach")

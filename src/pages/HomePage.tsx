@@ -19,7 +19,16 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-const fixedRevealProjectSlugs = ["shift-festival-2026", "kaai", "ring-tv", "city-to-ocean", "basisschool-nieuwland", "poutrel"];
+const fixedRevealProjectSlugs = [
+  "brussel-noord-basket",
+  "erasmus-hogeschool",
+  "videjo",
+  "city-to-ocean",
+  "fc-eisbar",
+  "shift-festival-2026",
+  "ring-tv",
+  "mentalite-sportswear",
+];
 
 function getYearsActive(date: Date) {
   const anniversaryPassed = date.getMonth() > 8 || (date.getMonth() === 8 && date.getDate() >= 20);

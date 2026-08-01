@@ -5,6 +5,12 @@ import type { Project } from "../types/project";
 import { webpImageUrl } from "../utils/asset";
 import { apiUrl } from "../utils/api";
 
+type BackendTranslationValue = {
+  text?: string;
+  summary?: string;
+  description?: string;
+};
+
 type BackendProject = {
   _id: string;
   title: string;
@@ -13,13 +19,34 @@ type BackendProject = {
   textNl?: string;
   textFr?: string;
   textEn?: string;
+  textNL?: string;
+  textFR?: string;
+  textEN?: string;
+  text_nl?: string;
+  text_fr?: string;
+  text_en?: string;
+  descriptionNl?: string;
+  descriptionFr?: string;
+  descriptionEn?: string;
+  descriptionNL?: string;
+  descriptionFR?: string;
+  descriptionEN?: string;
+  description_nl?: string;
+  description_fr?: string;
+  description_en?: string;
   summaryNl?: string;
   summaryFr?: string;
   summaryEn?: string;
+  summaryNL?: string;
+  summaryFR?: string;
+  summaryEN?: string;
+  summary_nl?: string;
+  summary_fr?: string;
+  summary_en?: string;
   translations?: {
-    nl?: { text?: string; summary?: string };
-    fr?: { text?: string; summary?: string };
-    en?: { text?: string; summary?: string };
+    nl?: BackendTranslationValue;
+    fr?: BackendTranslationValue;
+    en?: BackendTranslationValue;
   };
   heroImage: string;
   clientLogoSvg?: string | null;
@@ -159,6 +186,34 @@ function sortProjects(projects: Project[]) {
   });
 }
 
+function featuredOrderIndex(project: Project) {
+  const normalizedSlug = normalizeTitle(project.slug.replace(/-/g, " "));
+  const normalizedTitle = normalizeTitle(project.title);
+  const index = featuredProjects.findIndex((featuredProject) => {
+    const featuredSlug = normalizeTitle(featuredProject.slug.replace(/-/g, " "));
+    const featuredTitle = normalizeTitle(featuredProject.title);
+
+    return (
+      featuredProject.slug === project.slug ||
+      normalizedSlug === featuredSlug ||
+      normalizedTitle === featuredTitle ||
+      normalizedSlug.startsWith(`${featuredSlug} `) ||
+      normalizedTitle.startsWith(`${featuredTitle} `)
+    );
+  });
+
+  return index === -1 ? Number.POSITIVE_INFINITY : index;
+}
+
+function sortFeaturedProjects(projects: Project[]) {
+  return [...projects].sort((projectA, projectB) => {
+    const orderA = featuredOrderIndex(projectA);
+    const orderB = featuredOrderIndex(projectB);
+    if (orderA !== orderB) return orderA - orderB;
+    return sortProjects([projectA, projectB])[0] === projectA ? -1 : 1;
+  });
+}
+
 function findLocalProject(project: Pick<Project, "slug" | "title">) {
   const normalizedBackendTitle = normalizeTitle(project.title);
 
@@ -177,6 +232,10 @@ function findLocalProject(project: Pick<Project, "slug" | "title">) {
   );
 }
 
+function firstText(...values: Array<string | undefined | null>) {
+  return values.find((value) => typeof value === "string" && value.trim())?.trim();
+}
+
 function mapBackendProject(project: BackendProject): Project {
   const localProject = findLocalProject(project);
   const isLocalFeaturedProject = Boolean(localProject?.featured);
@@ -186,6 +245,43 @@ function mapBackendProject(project: BackendProject): Project {
   const logo = isLocalFeaturedProject
     ? backendLogo || localProject?.logo || backendHeroImage
     : localProject?.logo || backendLogo || "";
+  const summaryTranslations = {
+    nl: firstText(project.summaryNl, project.summaryNL, project.summary_nl, project.translations?.nl?.summary),
+    fr: firstText(project.summaryFr, project.summaryFR, project.summary_fr, project.translations?.fr?.summary),
+    en: firstText(project.summaryEn, project.summaryEN, project.summary_en, project.translations?.en?.summary),
+  };
+  const textTranslations = {
+    nl: firstText(
+      project.textNl,
+      project.textNL,
+      project.text_nl,
+      project.descriptionNl,
+      project.descriptionNL,
+      project.description_nl,
+      project.translations?.nl?.text,
+      project.translations?.nl?.description,
+    ),
+    fr: firstText(
+      project.textFr,
+      project.textFR,
+      project.text_fr,
+      project.descriptionFr,
+      project.descriptionFR,
+      project.description_fr,
+      project.translations?.fr?.text,
+      project.translations?.fr?.description,
+    ),
+    en: firstText(
+      project.textEn,
+      project.textEN,
+      project.text_en,
+      project.descriptionEn,
+      project.descriptionEN,
+      project.description_en,
+      project.translations?.en?.text,
+      project.translations?.en?.description,
+    ),
+  };
 
   return {
     id: project._id,
@@ -199,17 +295,9 @@ function mapBackendProject(project: BackendProject): Project {
     titleKey: localProject?.titleKey,
     summaryKey: localProject?.summaryKey,
     summary: project.text,
-    summaryTranslations: {
-      nl: project.summaryNl || project.translations?.nl?.summary,
-      fr: project.summaryFr || project.translations?.fr?.summary,
-      en: project.summaryEn || project.translations?.en?.summary,
-    },
+    summaryTranslations,
     text: project.text,
-    textTranslations: {
-      nl: project.textNl || project.translations?.nl?.text,
-      fr: project.textFr || project.translations?.fr?.text,
-      en: project.textEn || project.translations?.en?.text,
-    },
+    textTranslations,
     heroImage: backendHeroImage,
     clientLogoSvg: backendLogo || null,
     images: project.images.map((image) => webpImageUrl(image, 1600)),
@@ -273,7 +361,9 @@ export function useFeaturedProjectsQuery() {
     async () => {
       const backendProjects = await fetchBackendProjects();
       const mergedProjects = mergeBackendProjects(backendProjects, featuredProjects);
-      return mergedProjects.filter((project) => project.featured || featuredProjects.some((featuredProject) => featuredProject.slug === project.slug));
+      return sortFeaturedProjects(
+        mergedProjects.filter((project) => project.featured || featuredProjects.some((featuredProject) => featuredProject.slug === project.slug)),
+      );
     },
     featuredProjects,
   );
