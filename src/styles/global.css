@@ -5886,7 +5886,7 @@ body.about-route .about-story__sticky {
 .whatsapp-contact {
   position: fixed;
   right: max(1rem, env(safe-area-inset-right));
-  bottom: calc(max(1rem, env(safe-area-inset-bottom)) + var(--whatsapp-footer-lift, 0px));
+  bottom: max(1rem, env(safe-area-inset-bottom));
   z-index: 1000001;
   width: 3.625rem;
   height: 3.625rem;
@@ -7688,7 +7688,7 @@ body.about-route .about-story__sticky {
 
   .whatsapp-contact {
     right: max(0.75rem, env(safe-area-inset-right));
-    bottom: calc(max(0.75rem, env(safe-area-inset-bottom)) + var(--whatsapp-footer-lift, 0px));
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
     width: 3.375rem;
     height: 3.375rem;
   }
@@ -7704,7 +7704,7 @@ body.about-route .about-story__sticky {
   }
 
   body.home-route .whatsapp-contact {
-    bottom: calc(max(0.75rem, env(safe-area-inset-bottom)) + var(--whatsapp-footer-lift, 0px));
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
   }
 }
 
@@ -8034,11 +8034,11 @@ body.about-route .about-story__sticky {
   }
 
   body.home-route .whatsapp-contact {
-    bottom: calc(max(1rem, env(safe-area-inset-bottom)) + var(--whatsapp-footer-lift, 0px));
+    bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
   .whatsapp-contact {
-    bottom: calc(max(1rem, env(safe-area-inset-bottom)) + var(--whatsapp-footer-lift, 0px));
+    bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
   .home-overview__stats {

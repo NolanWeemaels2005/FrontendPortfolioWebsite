@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useFeaturedProjectsQuery } from "../data/projectQueries";
 import { useLanguage } from "../i18n/LanguageContext";
+import { previewImageUrl } from "../utils/asset";
 
 function projectClassSlug(slug: string) {
   return slug.replace(/[^a-z0-9-]/gi, "");
@@ -22,7 +23,7 @@ export function LogoStrip() {
               data-cursor="soft"
               key={`${project.slug}-${index}`}
             >
-              <img src={project.logo} alt={project.titleKey ? t(project.titleKey) : project.title} width="512" height="512" loading="lazy" decoding="async" />
+              <img src={previewImageUrl(project.logo, 256)} alt={project.titleKey ? t(project.titleKey) : project.title} width="256" height="256" loading="lazy" decoding="async" />
             </Link>
           ))}
         </div>

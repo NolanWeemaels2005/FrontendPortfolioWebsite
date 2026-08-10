@@ -1,4 +1,4 @@
-import { responsiveImageSrcSet } from "../../utils/asset";
+import { previewImageUrl, responsiveImageSrcSet } from "../../utils/asset";
 
 export type MarqueeImage = {
   src: string;
@@ -42,7 +42,8 @@ export function ThreeDMarquee({ images, className = "", onImageClick }: ThreeDMa
                 <div className="three-d-marquee__group" key={groupIndex}>
                   {columnImages.map((image, imageIndex) => {
                     const absoluteIndex = imageIndex * columnCount + columnIndex;
-                    const coverSrcSet = responsiveImageSrcSet(image.src, 640, 1280);
+                    const coverSrcSet = responsiveImageSrcSet(image.src, 320, 960);
+                    const isPriorityImage = columnIndex === 3 && groupIndex === 0 && imageIndex === 2;
                     const content = (
                       <>
                         <img
@@ -53,13 +54,24 @@ export function ThreeDMarquee({ images, className = "", onImageClick }: ThreeDMa
                           alt={image.alt}
                           width="640"
                           height="800"
-                          loading="eager"
+                          loading={isPriorityImage ? "eager" : "lazy"}
                           decoding="async"
+                          fetchPriority={isPriorityImage ? "high" : "low"}
                           data-loader-skip="true"
                         />
                         {image.logoSrc ? (
                           <span className="three-d-marquee__logo-wrap" aria-hidden="true">
-                            <img className="three-d-marquee__logo" src={image.logoSrc} alt="" width="512" height="512" loading="eager" decoding="async" data-loader-skip="true" />
+                            <img
+                              className="three-d-marquee__logo"
+                              src={previewImageUrl(image.logoSrc, 256)}
+                              alt=""
+                              width="256"
+                              height="256"
+                              loading={isPriorityImage ? "eager" : "lazy"}
+                              decoding="async"
+                              fetchPriority={isPriorityImage ? "high" : "low"}
+                              data-loader-skip="true"
+                            />
                           </span>
                         ) : null}
                       </>

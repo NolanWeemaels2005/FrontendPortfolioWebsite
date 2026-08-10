@@ -7,7 +7,7 @@ import { featuredProjects } from "../data/projects";
 import { useFeaturedProjectsQuery } from "../data/projectQueries";
 import { useLanguage } from "../i18n/LanguageContext";
 import type { Project } from "../types/project";
-import { responsiveImageSrcSet } from "../utils/asset";
+import { previewImageUrl, responsiveImageSrcSet } from "../utils/asset";
 
 function splitColumns(projects: Project[]) {
   const columns: Project[][] = [[], [], []];
@@ -105,7 +105,7 @@ export function ProjectHallOfFame() {
                       {project.logo ? (
                         <img
                           className="project-hall-card__logo"
-                          src={project.logo}
+                          src={previewImageUrl(project.logo, 256)}
                           alt={title}
                           width="512"
                           height="512"

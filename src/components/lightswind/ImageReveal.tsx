@@ -83,10 +83,11 @@ export default function ImageReveal({ images = [], children }: ImageRevealProps)
                 <img
                   src={image.src}
                   alt=""
-                  width="960"
-                  height="1200"
+                  width="320"
+                  height="400"
                   loading="lazy"
                   decoding="async"
+                  fetchPriority="low"
                 />
               </Link>
             </figure>

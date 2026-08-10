@@ -1,5 +1,5 @@
 import { SendHorizontal, X } from "lucide-react";
-import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useLanguage } from "../i18n/LanguageContext";
 import { assetPath } from "../utils/asset";
 
@@ -14,7 +14,6 @@ export function WhatsAppPopup() {
   const { language, t } = useLanguage();
   const [expanded, setExpanded] = useState(false);
   const [message, setMessage] = useState(t("whatsapp.defaultMessage"));
-  const [footerLift, setFooterLift] = useState(0);
   const sendHref = useMemo(
     () => createWhatsAppHref(message.trim() || t("whatsapp.defaultMessage")),
     [message, t],
@@ -40,50 +39,8 @@ export function WhatsAppPopup() {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [expanded]);
 
-  useEffect(() => {
-    let frame = 0;
-
-    const updateFooterLift = () => {
-      frame = 0;
-      const footerTop = document.querySelector<HTMLElement>(".site-footer .footer-top");
-      if (!footerTop) {
-        setFooterLift(0);
-        return;
-      }
-
-      const lineY = footerTop.getBoundingClientRect().bottom;
-      const viewportHeight = window.innerHeight;
-      const buttonHeight = window.matchMedia("(max-width: 40rem)").matches ? 54 : 58;
-      const edgeGap = window.matchMedia("(max-width: 40rem)").matches ? 16 : 18;
-      const currentBottom = window.matchMedia("(max-width: 40rem) and (min-width: 30.0625rem)").matches ? 12 : 16;
-      const requiredBottom = viewportHeight - lineY + edgeGap;
-      const nextLift = lineY < viewportHeight && requiredBottom > currentBottom
-        ? Math.ceil(requiredBottom - currentBottom + buttonHeight * 0.05)
-        : 0;
-
-      setFooterLift((currentLift) => (Math.abs(currentLift - nextLift) > 1 ? nextLift : currentLift));
-    };
-
-    const requestUpdate = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(updateFooterLift);
-    };
-
-    updateFooterLift();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-
-    return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
-    };
-  }, []);
-
-  const contactStyle = { "--whatsapp-footer-lift": `${footerLift}px` } as CSSProperties;
-
   return (
-    <div className="whatsapp-contact" data-expanded={expanded} style={contactStyle}>
+    <div className="whatsapp-contact" data-expanded={expanded}>
       <button
         className="whatsapp-contact__launcher"
         type="button"

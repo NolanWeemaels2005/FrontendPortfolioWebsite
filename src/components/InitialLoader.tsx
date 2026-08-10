@@ -154,7 +154,7 @@ export function InitialLoader({ pathname: _pathname }: { pathname: string }) {
       <div className="initial-loader__veil" aria-hidden="true" />
       <div className="initial-loader__logo-cover" aria-hidden="true" />
       <div className="initial-loader__center">
-        <img src={assetPath("assets/logos/main-logo-white.svg")} alt="Nolan" width="2034" height="572" />
+        <img src={assetPath("assets/logos/main-logo-white.svg")} alt="Nolan" width="2034" height="572" fetchPriority="high" />
         <span className="initial-loader__spinner" aria-hidden="true" />
         <span className="sr-only">{t("loader.loading")}</span>
       </div>

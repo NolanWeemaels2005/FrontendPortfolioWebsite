@@ -13,15 +13,29 @@ export function webpImageUrl(url: string | null | undefined, maxWidth = 1600) {
   );
 }
 
+export function previewImageUrl(url: string | null | undefined, maxWidth = 320) {
+  if (!url) return "";
+  if (url.includes("res.cloudinary.com")) return webpImageUrl(url, maxWidth);
+
+  if (url.includes("/assets/project-covers/") && /\/cover[^/]+\.webp$/.test(url)) {
+    return url.replace(/\.webp$/, maxWidth <= 320 ? "-320.webp" : "-640.webp");
+  }
+
+  if (maxWidth <= 256 && url.includes("/assets/project-logos/") && /\.webp$/.test(url)) {
+    return url.replace(/\.webp$/, "-256.webp");
+  }
+
+  return url;
+}
+
 export function responsiveImageSrcSet(url: string, smallWidth: number, largeWidth: number) {
   const mediumWidth = Math.round((smallWidth + largeWidth) / 2);
   if (url.includes("res.cloudinary.com") && url.includes("/image/upload/")) {
     return `${webpImageUrl(url, smallWidth)} ${smallWidth}w, ${webpImageUrl(url, mediumWidth)} ${mediumWidth}w, ${webpImageUrl(url, largeWidth)} ${largeWidth}w`;
   }
   if (!url.endsWith(".webp")) return undefined;
-  const hasLocalVariant = smallWidth === 640 && largeWidth === 1280 && url.includes("/assets/project-covers/");
+  const hasLocalVariant = url.includes("/assets/project-covers/");
   if (!hasLocalVariant) return undefined;
-  const smallUrl = url.replace(/\.webp$/, `-${smallWidth}.webp`);
-  const mediumUrl = url.replace(/\.webp$/, `-${mediumWidth}.webp`);
-  return `${smallUrl} ${smallWidth}w, ${mediumUrl} ${mediumWidth}w, ${url} ${largeWidth}w`;
+  const variantUrl = (width: number) => width === 1280 ? url : url.replace(/\.webp$/, `-${width}.webp`);
+  return `${variantUrl(smallWidth)} ${smallWidth}w, ${variantUrl(mediumWidth)} ${mediumWidth}w, ${variantUrl(largeWidth)} ${largeWidth}w`;
 }

@@ -57,6 +57,20 @@ const tools = [
   { label: "Artificial Intelligence", icon: "AIIcon.webp" },
 ];
 
+const storySourceWidths: Record<string, number> = {
+  "MyStoryPicture1.webp": 1093,
+  "MyStoryPicture2.webp": 1310,
+  "MyStoryPicture3.webp": 1600,
+  "MyStoryPicture4.webp": 911,
+  "MyStoryPicture5.webp": 1400,
+  "MyStoryPicture7.webp": 998,
+};
+
+function storyImageSrcSet(image: string) {
+  const base = assetPath(`assets/about-story/optimized/${image}`);
+  return `${base.replace(/\.webp$/, "-480.webp")} 480w, ${base.replace(/\.webp$/, "-800.webp")} 800w, ${base} ${storySourceWidths[image]}w`;
+}
+
 export function AboutPage() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
@@ -218,6 +232,8 @@ export function AboutPage() {
                   <div className="story-card__frame">
                     <img
                       src={assetPath(`assets/about-story/optimized/${item.image}`)}
+                      srcSet={storyImageSrcSet(item.image)}
+                      sizes="(max-width: 68.75rem) min(74vw, 18.125rem), min(18vw, 19.375rem)"
                       alt={`${item.place}, ${item.year}`}
                       width="1200"
                       height="1600"
@@ -263,6 +279,8 @@ export function AboutPage() {
                 <img
                   className="about-skills__portrait"
                   src={assetPath("assets/about-story/optimized/MyStoryPicture7.webp")}
+                  srcSet={storyImageSrcSet("MyStoryPicture7.webp")}
+                  sizes="(max-width: 61.25rem) min(calc(100vw - 2rem), 26.25rem), min(27.5rem, 38vw)"
                   alt="Nolan Weemaels aan het werk als grafisch ontwerper"
                   width="998"
                   height="1400"
@@ -276,7 +294,7 @@ export function AboutPage() {
                   {tools.map((tool) => (
                     <div className="tool-item" key={tool.label}>
                       <span>
-                        <img src={assetPath(`assets/about-story/${tool.icon}`)} alt="" width="256" height="256" loading="lazy" decoding="async" />
+                        <img src={assetPath(`assets/about-story/${tool.icon.replace(/\.webp$/, "-64.webp")}`)} alt="" width="64" height="64" loading="lazy" decoding="async" />
                       </span>
                       <strong>{tool.label}</strong>
                     </div>

@@ -23,7 +23,7 @@ export function ContactPage() {
   const { t } = useLanguage();
   const [state, handleSubmit] = useForm("mbdwrepv");
   const [searchParams] = useSearchParams();
-  const [showFreeAudit, setShowFreeAudit] = useState(false);
+  const [showFreeAudit, setShowFreeAudit] = useState(true);
   const [selectedService, setSelectedService] = useState("");
   const visibleServiceOptions = useMemo(
     () => serviceOptions.filter((option) => showFreeAudit || option.value !== "free-audit"),

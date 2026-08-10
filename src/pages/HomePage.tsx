@@ -7,7 +7,7 @@ import { ProjectHallOfFame } from "../components/ProjectHallOfFame";
 import { useCombinedProjectsQuery, useLatestProjectQuery } from "../data/projectQueries";
 import { fetchHomeOfferVisible } from "../data/siteSettings";
 import { useLanguage } from "../i18n/LanguageContext";
-import { assetPath, webpImageUrl } from "../utils/asset";
+import { assetPath, previewImageUrl } from "../utils/asset";
 
 type CountUpNumberProps = {
   start: boolean;
@@ -81,7 +81,10 @@ export function HomePage() {
   const auditRef = useRef<HTMLElement>(null);
   const overviewRef = useRef<HTMLElement>(null);
   const [overviewStatsActive, setOverviewStatsActive] = useState(false);
-  const [showIrresistibleOffer, setShowIrresistibleOffer] = useState(false);
+  // The offer is currently enabled in production. Starting with the same
+  // state prevents the rest of the page from being pushed down after the
+  // setting request finishes (the source of the large CLS in PageSpeed).
+  const [showIrresistibleOffer, setShowIrresistibleOffer] = useState(true);
   const { data: latestProject } = useLatestProjectQuery();
   const { data: projects = [] } = useCombinedProjectsQuery();
   const projectCount = Math.max(projects.length, 16);
@@ -99,7 +102,7 @@ export function HomePage() {
 
     return orderedProjects
       .map((project) => ({
-        src: webpImageUrl(project.images?.[1] || project.images?.[0] || project.cover || project.heroImage || project.logo || "", 900),
+        src: previewImageUrl(project.images?.[1] || project.images?.[0] || project.cover || project.heroImage || project.logo || "", 320),
         alt: project.title,
         href: `/portfolio/${project.slug}/`,
       }))

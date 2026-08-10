@@ -16,9 +16,9 @@ type SocialItem = {
 };
 
 const socialLinks: SocialItem[] = [
-  { label: "Instagram", icon: assetPath("assets/icons/social/InstagramWhite.webp"), href: "https://www.instagram.com/nolanweemaelsdesign/" },
-  { label: "LinkedIn", icon: assetPath("assets/icons/social/LinkedInWhite.webp"), href: "https://www.linkedin.com/in/nolan-weemaels-1780511b4/" },
-  { label: "Kaai", icon: assetPath("assets/icons/social/kaaiIconWhite.webp"), href: "https://kaai.be", modal: true },
+  { label: "Instagram", icon: assetPath("assets/icons/social/InstagramWhite-64.webp"), href: "https://www.instagram.com/nolanweemaelsdesign/" },
+  { label: "LinkedIn", icon: assetPath("assets/icons/social/LinkedInWhite-64.webp"), href: "https://www.linkedin.com/in/nolan-weemaels-1780511b4/" },
+  { label: "Kaai", icon: assetPath("assets/icons/social/kaaiIconWhite-64.webp"), href: "https://kaai.be", modal: true },
 ];
 
 export function Footer() {
@@ -35,7 +35,7 @@ export function Footer() {
   }
 
   function renderSocialIcon(social: SocialItem) {
-    return social.icon ? <img src={social.icon} alt="" width="256" height="256" loading="lazy" decoding="async" /> : null;
+    return social.icon ? <img src={social.icon} alt="" width="64" height="64" loading="lazy" decoding="async" /> : null;
   }
 
   return (
@@ -43,7 +43,7 @@ export function Footer() {
       <div className="footer-top">
         <div>
           <Link to="/" className="footer-logo" data-cursor="merge" aria-label={t("nav.homeLabel")}>
-            <img src={assetPath("assets/logos/main-logo-white.webp")} alt="Nolan" width="2034" height="572" loading="lazy" decoding="async" />
+            <img src={assetPath("assets/logos/main-logo-white.svg")} alt="Nolan" width="2034" height="572" loading="lazy" decoding="async" />
           </Link>
 
           <div className="footer-columns">

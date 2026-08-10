@@ -83,6 +83,7 @@ type ProjectResource<T> = {
 const projectCache = new Map<string, ProjectResource<unknown>>();
 
 let backendProjectsRequest: Promise<Project[]> | null = null;
+let backendProjectsData: Project[] | null = null;
 
 function cacheKey(parts: Array<string | undefined>) {
   return [projectDataVersion, ...parts].join(":");
@@ -139,6 +140,7 @@ function useProjectResource<T>(key: string, load: () => Promise<T>, placeholderD
 
 export function invalidateProjectQueries() {
   projectCache.clear();
+  backendProjectsData = null;
 }
 
 function normalizeTitle(title: string) {
@@ -316,6 +318,7 @@ function mergeBackendProjects(backendProjects: Project[], localProjects: Project
 }
 
 async function fetchBackendProjects() {
+  if (backendProjectsData) return backendProjectsData;
   if (backendProjectsRequest) return backendProjectsRequest;
 
   backendProjectsRequest = (async () => {
@@ -324,7 +327,9 @@ async function fetchBackendProjects() {
       if (!response.ok) return [];
       const data = await response.json();
       const projects = Array.isArray(data) ? data : Array.isArray(data?.projects) ? data.projects : [];
-      return (projects as BackendProject[]).filter((project) => !isSiteSettingProject(project)).map(mapBackendProject);
+      const mappedProjects = (projects as BackendProject[]).filter((project) => !isSiteSettingProject(project)).map(mapBackendProject);
+      backendProjectsData = mappedProjects;
+      return mappedProjects;
     } catch {
       return [];
     }
@@ -335,6 +340,10 @@ async function fetchBackendProjects() {
   } finally {
     backendProjectsRequest = null;
   }
+}
+
+export function preloadProjectData() {
+  return fetchBackendProjects();
 }
 
 async function fetchBackendProject(slug: string) {

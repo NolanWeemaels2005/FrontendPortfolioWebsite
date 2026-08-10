@@ -6,7 +6,7 @@ import { ButtonTextStagger } from "./ButtonTextStagger";
 import { useAllProjectsQuery, useFeaturedProjectsQuery } from "../data/projectQueries";
 import { useTilt } from "../hooks/useTilt";
 import { useLanguage } from "../i18n/LanguageContext";
-import { responsiveImageSrcSet } from "../utils/asset";
+import { previewImageUrl, responsiveImageSrcSet } from "../utils/asset";
 
 function projectClassSlug(slug: string) {
   return slug.replace(/[^a-z0-9-]/gi, "");
@@ -76,7 +76,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                     {project.logo ? (
                       <img
                         className="featured-card__logo"
-                        src={project.logo}
+                        src={previewImageUrl(project.logo, 256)}
                         alt={projectTitle}
                         width="512"
                         height="512"
@@ -123,7 +123,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                 <span className="project-card__logo-wrap" data-cursor-surface>
                   <img
                     className="project-card__logo"
-                    src={project.logo}
+                    src={previewImageUrl(project.logo, 256)}
                     alt={project.titleKey ? t(project.titleKey) : project.title}
                     width="512"
                     height="512"

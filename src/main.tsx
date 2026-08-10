@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import { LanguageProvider } from "./i18n/LanguageContext";
+import { preloadProjectData } from "./data/projectQueries";
 import "./styles/global.css";
 
 const redirectRoute = window.location.search.match(/^\?\/([^&]*)/);
@@ -10,6 +11,10 @@ if (redirectRoute) {
   const route = redirectRoute[1];
   const search = window.location.search.replace(/^\?\/[^&]*/, "").replace(/^&/, "?");
   window.history.replaceState(null, "", `${import.meta.env.BASE_URL}${route}${search}${window.location.hash}`);
+}
+
+if (window.location.pathname.startsWith("/portfolio")) {
+  void preloadProjectData();
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
