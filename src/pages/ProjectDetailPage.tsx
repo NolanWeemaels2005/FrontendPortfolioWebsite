@@ -165,7 +165,7 @@ export function ProjectDetailPage() {
                     <img src={relatedProject.logo} alt={relatedTitle} width="512" height="512" loading="lazy" decoding="async" />
                   </span>
                   <span className="related-project-card__label">
-                    <ButtonTextStagger text={relatedTitle} />
+                    <ButtonTextStagger text={relatedTitle} wrap />
                     <ArrowRight aria-hidden="true" size={22} strokeWidth={3} />
                   </span>
                 </Link>

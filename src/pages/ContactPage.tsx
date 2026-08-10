@@ -127,7 +127,7 @@ export function ContactPage() {
 
             <ValidationError className="contact-form__error contact-form__error--form" errors={state.errors} />
 
-            <button type="submit" data-cursor="merge" disabled={state.submitting || state.succeeded}>
+            <button type="submit" data-cursor="merge" data-sending={state.submitting} disabled={state.submitting || state.succeeded}>
               <Send aria-hidden="true" size={17} />
               <ButtonTextStagger text={state.submitting ? t("contact.sending") : t("contact.send")} />
             </button>

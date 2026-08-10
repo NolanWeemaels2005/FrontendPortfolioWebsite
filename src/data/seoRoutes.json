@@ -9,7 +9,23 @@
     "baseLocality": "Galmaarden",
     "addressRegion": "Vlaams-Brabant",
     "areaServed": ["Galmaarden", "Pajottegem", "Geraardsbergen", "Ninove", "Herne", "Gooik", "Lennik", "Pajottenland", "Vlaamse Ardennen"],
-    "keywords": ["grafisch ontwerper", "grafisch ontwerp", "branding", "logo ontwerp", "visuele identiteit", "webdesign", "digital design", "Galmaarden", "Pajottegem", "Geraardsbergen", "Vlaams-Brabant"],
+    "keywords": ["grafisch ontwerper", "grafisch ontwerp", "branding", "branding Galmaarden", "branding Pajottegem", "rebranding", "rebranding Galmaarden", "rebranding Pajottegem", "logo ontwerp", "logo ontwerp Galmaarden", "logo ontwerp Pajottegem", "logo laten ontwerpen Galmaarden", "logo laten ontwerpen Pajottegem", "logo ontwerper Galmaarden", "logo ontwerper Pajottegem", "visuele identiteit", "webdesign", "digital design", "Galmaarden", "Pajottegem", "Geraardsbergen", "Vlaams-Brabant"],
+    "services": [
+      {
+        "name": "Logo ontwerp",
+        "serviceType": "LogoDesign",
+        "description": "Logo ontwerp, branding en visuele identiteit voor ondernemers, verenigingen en organisaties in Galmaarden en Pajottegem.",
+        "keywords": ["logo ontwerp Galmaarden", "logo ontwerp Pajottegem", "logo laten ontwerpen Galmaarden", "logo laten ontwerpen Pajottegem"],
+        "areaServed": ["Galmaarden", "Pajottegem"]
+      },
+      {
+        "name": "Branding en visuele identiteit",
+        "serviceType": "Branding",
+        "description": "Branding, rebranding, huisstijl en visuele identiteit voor lokale merken in Galmaarden, Pajottegem en omgeving.",
+        "keywords": ["branding Galmaarden", "branding Pajottegem", "rebranding Galmaarden", "rebranding Pajottegem", "huisstijl Galmaarden", "huisstijl Pajottegem"],
+        "areaServed": ["Galmaarden", "Pajottegem", "Geraardsbergen"]
+      }
+    ],
     "lastModified": "2026-07-29"
   },
   "routes": [
@@ -17,7 +33,7 @@
       "path": "/",
       "title": "Nolan Design | Grafisch ontwerp, branding en webdesign",
       "description": "Portfolio van Nolan Weemaels: branding, logo's, visuele identiteiten en webdesign voor ondernemers, verenigingen en merken.",
-      "keywords": ["grafisch ontwerper Galmaarden", "branding", "logo ontwerp", "webdesign", "portfolio grafisch ontwerp"],
+      "keywords": ["grafisch ontwerper Galmaarden", "logo ontwerp Galmaarden", "logo ontwerp Pajottegem", "logo laten ontwerpen Galmaarden", "logo laten ontwerpen Pajottegem", "branding Galmaarden", "branding Pajottegem", "rebranding Galmaarden", "rebranding Pajottegem", "branding", "rebranding", "logo ontwerp", "webdesign", "portfolio grafisch ontwerp"],
       "heading": "Design dat blijft hangen",
       "intro": "Ontdek het grafisch ontwerpportfolio van Nolan Weemaels, met werk rond branding, visuele identiteit, webdesign en digitale vormgeving.",
       "image": "/assets/nolan-design-google-preview.png",
@@ -31,7 +47,7 @@
       "path": "/portfolio/",
       "title": "Grafisch ontwerp portfolio | Nolan Design",
       "description": "Bekijk branding, logo's, visuele identiteiten, websites, campagnes en grafische projecten ontworpen door Nolan Weemaels.",
-      "keywords": ["grafisch ontwerp portfolio", "branding portfolio", "logo ontwerp portfolio", "webdesign portfolio", "visuele identiteit"],
+      "keywords": ["grafisch ontwerp portfolio", "branding portfolio", "rebranding portfolio", "logo ontwerp portfolio", "logo ontwerp Galmaarden", "logo ontwerp Pajottegem", "branding Galmaarden", "branding Pajottegem", "rebranding Galmaarden", "rebranding Pajottegem", "webdesign portfolio", "visuele identiteit"],
       "heading": "Grafisch ontwerp portfolio",
       "intro": "Een selectie branding, visuele identiteiten, webdesign, campagnes en grafische projecten van Nolan Design.",
       "image": "/assets/project-covers/coverCTO.webp",
@@ -57,7 +73,7 @@
       "path": "/contact/",
       "title": "Grafisch ontwerper contacteren | Galmaarden & Pajottegem",
       "description": "Contacteer Nolan Design voor branding, logo-ontwerp, webdesign en grafisch ontwerp in Galmaarden, Pajottegem, Geraardsbergen en omgeving.",
-      "keywords": ["grafisch ontwerper contacteren", "webdesign Galmaarden", "branding Pajottegem", "logo ontwerp Geraardsbergen"],
+      "keywords": ["grafisch ontwerper contacteren", "logo ontwerp Galmaarden", "logo ontwerp Pajottegem", "logo laten ontwerpen Galmaarden", "logo laten ontwerpen Pajottegem", "branding Galmaarden", "branding Pajottegem", "rebranding Galmaarden", "rebranding Pajottegem", "webdesign Galmaarden", "logo ontwerp Geraardsbergen"],
       "heading": "Contacteer Nolan Design",
       "intro": "Een branding-, grafisch ontwerp- of webdesignproject in Galmaarden, Pajottegem, Geraardsbergen of omgeving? Vertel me wat je zoekt.",
       "image": "/assets/project-covers/coverKAAI.webp",
@@ -244,7 +260,7 @@
     {
       "path": "/portfolio/brussel-noord-basket/",
       "title": "Brussel Noord Basket branding | Nolan Design",
-      "description": "Bekijk het logo en de visuele identiteit voor Brussel Noord Basket, geïnspireerd door basketbal en de kleuren van Schaarbeek.",
+      "description": "Bekijk het logo en de visuele identiteit voor Brussel Noord Basket, geïnspireerd door basketbal en een sportieve beeldtaal.",
       "heading": "Brussel Noord Basket",
       "intro": "Een sportieve visuele identiteit waarin de letters B.N.B. samen de vorm van een basketbal creëren.",
       "image": "https://res.cloudinary.com/dw4wq5atx/image/upload/f_webp,q_auto,w_1200,h_630,c_fill/v1785002316/portfolio/hero/f3x27ok9dtsjjy1cgicu.png",

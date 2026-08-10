@@ -59,6 +59,14 @@ function keywordsFor(seo: SeoRoute) {
   return [...new Set([...routeKeywords, ...site.keywords])];
 }
 
+function siteServices() {
+  return "services" in site && Array.isArray(site.services) ? site.services : [];
+}
+
+function serviceId(service: { name?: string; serviceType?: string }) {
+  return `${site.url}/#service-${String(service.serviceType || service.name || "design").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+}
+
 function titleFromSlug(slug: string) {
   return slug
     .split("-")
@@ -113,6 +121,12 @@ function schemaFor(seo: SeoRoute, canonicalUrl: string, image: string, imageWidt
   ];
   const serviceArea = site.areaServed.map((name) => ({ "@type": "Place", name }));
   const keywords = keywordsFor(seo);
+  const services = siteServices();
+  const serviceOffers = services.map((service) => ({
+    "@type": "Offer",
+    itemOffered: { "@id": serviceId(service) },
+    areaServed: Array.isArray(service.areaServed) ? service.areaServed.map((name) => ({ "@type": "Place", name })) : serviceArea,
+  }));
   const graph: Record<string, unknown>[] = [
     {
       "@type": "WebSite",
@@ -144,6 +158,14 @@ function schemaFor(seo: SeoRoute, canonicalUrl: string, image: string, imageWidt
       areaServed: serviceArea,
       serviceType: ["Grafisch ontwerp", "Branding", "Logo-ontwerp", "Visuele identiteit", "Webdesign", "Digital design"],
       knowsAbout: keywords,
+      ...(serviceOffers.length ? {
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Grafisch ontwerp diensten in Galmaarden en Pajottegem",
+          itemListElement: serviceOffers,
+        },
+        makesOffer: serviceOffers,
+      } : {}),
       sameAs,
     },
     {
@@ -174,6 +196,20 @@ function schemaFor(seo: SeoRoute, canonicalUrl: string, image: string, imageWidt
       ...(seo.type === "home" || seo.type === "about" ? { mainEntity: { "@id": personId } } : {}),
     },
   ];
+
+  services.forEach((service) => {
+    graph.push({
+      "@type": "Service",
+      "@id": serviceId(service),
+      name: service.name,
+      serviceType: service.serviceType || service.name,
+      description: service.description,
+      provider: { "@id": businessId },
+      areaServed: Array.isArray(service.areaServed) ? service.areaServed.map((name) => ({ "@type": "Place", name })) : serviceArea,
+      keywords: Array.isArray(service.keywords) ? service.keywords : undefined,
+      inLanguage: "nl-BE",
+    });
+  });
 
   if (seo.type === "project") {
     graph.push({

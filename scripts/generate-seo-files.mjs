@@ -40,6 +40,14 @@ function keywordsFor(route) {
   return [...new Set([...(Array.isArray(route.keywords) ? route.keywords : []), ...(Array.isArray(site.keywords) ? site.keywords : [])])];
 }
 
+function siteServices() {
+  return Array.isArray(site.services) ? site.services : [];
+}
+
+function serviceId(service) {
+  return `${site.url}/#service-${String(service.serviceType || service.name || "design").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+}
+
 function schemaFor(route) {
   const url = routeUrl(route);
   const image = absoluteUrl(route.image || site.defaultImage);
@@ -56,6 +64,12 @@ function schemaFor(route) {
     ? site.areaServed.map((name) => ({ "@type": "Place", name }))
     : undefined;
   const keywords = keywordsFor(route);
+  const services = siteServices();
+  const serviceOffers = services.map((service) => ({
+    "@type": "Offer",
+    itemOffered: { "@id": serviceId(service) },
+    areaServed: Array.isArray(service.areaServed) ? service.areaServed.map((name) => ({ "@type": "Place", name })) : areaServed,
+  }));
   const graph = [
     {
       "@type": "WebSite",
@@ -87,6 +101,14 @@ function schemaFor(route) {
       areaServed,
       serviceType: ["Grafisch ontwerp", "Branding", "Logo-ontwerp", "Visuele identiteit", "Webdesign", "Digital design"],
       knowsAbout: keywords,
+      ...(serviceOffers.length ? {
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Grafisch ontwerp diensten in Galmaarden en Pajottegem",
+          itemListElement: serviceOffers,
+        },
+        makesOffer: serviceOffers,
+      } : {}),
       sameAs,
     },
     {
@@ -104,6 +126,20 @@ function schemaFor(route) {
       sameAs,
     },
   ];
+
+  services.forEach((service) => {
+    graph.push({
+      "@type": "Service",
+      "@id": serviceId(service),
+      name: service.name,
+      serviceType: service.serviceType || service.name,
+      description: service.description,
+      provider: { "@id": businessId },
+      areaServed: Array.isArray(service.areaServed) ? service.areaServed.map((name) => ({ "@type": "Place", name })) : areaServed,
+      keywords: Array.isArray(service.keywords) ? service.keywords : undefined,
+      inLanguage: "nl-BE",
+    });
+  });
 
   const page = {
     "@type": route.type === "about" ? "ProfilePage" : route.type === "portfolio" ? "CollectionPage" : route.type === "contact" ? "ContactPage" : "WebPage",
@@ -244,6 +280,7 @@ function sitemapXml() {
 function llmsTxt() {
   const projectRoutes = routes.filter((route) => route.type === "project" && route.index);
   const mainRoutes = routes.filter((route) => route.index && ["home", "portfolio", "about", "contact"].includes(route.type));
+  const services = siteServices();
   const lines = [
     "# Nolan Design",
     "",
@@ -251,6 +288,9 @@ function llmsTxt() {
     "",
     "## Belangrijke pagina's",
     ...mainRoutes.map((route) => `- [${route.heading}](${routeUrl(route)}): ${route.intro}`),
+    "",
+    "## Diensten en regio",
+    ...services.map((service) => `- ${service.name}: ${service.description}`),
     "",
     "## Portfolio projecten",
     ...projectRoutes.map((route) => `- [${route.heading}](${routeUrl(route)}): ${route.intro}`),

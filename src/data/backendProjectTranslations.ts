@@ -2,8 +2,8 @@ import type { Language } from "../i18n/LanguageContext";
 
 export const backendProjectTranslations: Record<string, Partial<Record<Language, string>>> = {
   "brussel-noord-basket": {
-    fr: "Pour Brussel Noord Basket, ou B.N.B., j'ai eu l'occasion de concevoir le style visuel et le logo. Pour le logo, je me suis inspire de la forme d'un ballon de basket et de la maniere dont les lettres B.N.B. pouvaient s'integrer dans cette forme. Les couleurs sont basees sur celles de Schaerbeek.",
-    en: "For Brussel Noord Basket, or B.N.B., I designed the visual style and logo. The inspiration for the logo was the shape of a basketball and how the B.N.B. letters could be worked into that form. The colours are based on the colours of Schaerbeek.",
+    fr: "Pour Brussel Noord Basket, ou B.N.B., j'ai eu l'occasion de concevoir le style visuel et le logo. Pour le logo, je me suis inspire de la forme d'un ballon de basket et de la maniere dont les lettres B.N.B. pouvaient s'integrer dans cette forme.",
+    en: "For Brussel Noord Basket, or B.N.B., I designed the visual style and logo. The inspiration for the logo was the shape of a basketball and how the B.N.B. letters could be worked into that form.",
   },
   "erasmus-hogeschool": {
     fr: "Pour le programme Multimedia en Creatieve Technologie, j'ai eu l'occasion de concevoir l'affiche de la formation. Elle est affichée dans les écoles secondaires à côté de l'affiche du Shift Festival 2026.",

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import type { ReactNode } from "react";
 import { ButtonTextStagger } from "./ButtonTextStagger";
 import { useLanguage } from "../i18n/LanguageContext";
 
@@ -10,6 +11,7 @@ type HeroProps = {
   showActions?: boolean;
   showStrip?: boolean;
   className?: string;
+  visual?: ReactNode;
 };
 
 export function Hero({
@@ -20,6 +22,7 @@ export function Hero({
   showActions = false,
   showStrip = false,
   className = "",
+  visual,
 }: HeroProps) {
   const { t } = useLanguage();
   const resolvedScrollText = scrollText ?? t("hero.scroll");
@@ -27,6 +30,8 @@ export function Hero({
   return (
     <section className={`hero section-purple ${showStrip ? "hero--with-strip" : ""} ${className}`}>
       <div className="hero__inner">
+        {visual}
+
         <div className="hero-copy">
           <span className="hero-title-mask">
             <h1 className="hero-title">{title}</h1>

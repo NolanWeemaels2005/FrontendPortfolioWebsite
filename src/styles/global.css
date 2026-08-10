@@ -105,8 +105,10 @@
 }
 
 html {
+  background: var(--black);
   scroll-behavior: smooth;
   scrollbar-gutter: stable;
+  overscroll-behavior-y: none;
 }
 
 body {
@@ -115,6 +117,7 @@ body {
   background: var(--black);
   color: var(--white);
   overflow-x: hidden;
+  overscroll-behavior-y: none;
 }
 
 @property --loader-mask-size {
@@ -1324,6 +1327,19 @@ video {
   line-height: 1.1;
 }
 
+.button-text-stagger--wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  column-gap: .25em;
+  white-space: normal;
+}
+
+.button-text-stagger__word {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
 .button-text-stagger__top,
 .button-text-stagger__bottom {
   display: block;
@@ -2045,7 +2061,24 @@ body.contact-route .contact-studio-hero {
   margin: 0 0 clamp(1rem, 1.8vw, 1.8rem);
   background: url("/assets/logos/main-logo-white.svg") center / contain no-repeat;
   opacity: 0;
-  animation: portfolioHeroTextIn 0.01s linear 0.26s forwards;
+  transform: translateY(.8rem);
+  filter: blur(.25rem);
+  animation: portfolioHeroTextIn 0.72s var(--ease) 0.12s forwards;
+}
+
+body.portfolio-route .portfolio-showcase-hero .hero-copy {
+  isolation: isolate;
+}
+
+body.portfolio-route .portfolio-showcase-hero .hero-copy::before {
+  position: relative;
+  z-index: 2;
+}
+
+body.portfolio-route .portfolio-showcase-hero .hero-copy .hero-title-mask,
+body.portfolio-route .portfolio-showcase-hero .hero-copy .hero-script-mask {
+  position: relative;
+  z-index: 2;
 }
 
 .portfolio-showcase-hero .hero-title-mask {
@@ -2054,33 +2087,6 @@ body.contact-route .contact-studio-hero {
   max-width: 100%;
   padding: 0;
   overflow: hidden;
-}
-
-.portfolio-showcase-hero .hero-title-mask::after,
-.portfolio-showcase-hero .hero-script-mask::after,
-.portfolio-showcase-hero .hero-copy::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background: #fff;
-  opacity: 1;
-  transform: translateX(-102%);
-  animation: titleBlockWipe 0.58s var(--ease) forwards;
-}
-
-.portfolio-showcase-hero .hero-copy::after {
-  left: 0;
-  top: 0;
-  right: auto;
-  bottom: auto;
-  width: clamp(6rem, 8.3vw, 8.75rem);
-  aspect-ratio: 142 / 46;
-  animation-delay: 0.06s;
-}
-
-.portfolio-showcase-hero .hero-title-mask::after {
-  animation-delay: 0.13s;
 }
 
 .portfolio-showcase-hero .hero-script-mask {
@@ -2092,18 +2098,16 @@ body.contact-route .contact-studio-hero {
   overflow: visible !important;
 }
 
-.portfolio-showcase-hero .hero-script-mask::after {
-  background: #ee9d59;
-  animation-delay: 0.2s;
-}
-
 .portfolio-showcase-hero .hero-title {
   opacity: 0;
   font-size: calc(var(--portfolio-showcase-script-size) * 0.843);
   font-weight: 900;
   line-height: 0.84;
   text-transform: uppercase;
-  animation: portfolioHeroTextIn 0.01s linear 0.32s forwards;
+  text-shadow: 0 .12rem .55rem rgba(18, 0, 18, 0.46);
+  transform: translateY(.22em);
+  filter: blur(.18rem);
+  animation: portfolioHeroTextIn 0.76s var(--ease) 0.16s forwards;
 }
 
 .portfolio-showcase-hero .hero-script {
@@ -2116,30 +2120,175 @@ body.contact-route .contact-studio-hero {
   line-height: 1.18;
   text-transform: uppercase;
   white-space: nowrap;
-  transform: translateY(-0.14em);
-  animation: portfolioHeroTextIn 0.01s linear 0.39s forwards;
+  transform: translateY(.1em);
+  filter: blur(.18rem);
+  text-shadow: 0 .14rem .65rem rgba(18, 0, 18, 0.5);
+  animation: portfolioHeroScriptIn 0.82s var(--ease) 0.24s forwards;
 }
 
-@keyframes titleBlockWipe {
-  0% {
-    transform: translateX(-102%);
+.three-d-marquee {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.three-d-marquee::before,
+.three-d-marquee::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.three-d-marquee::before {
+  background:
+    linear-gradient(90deg, rgba(32, 0, 31, 0.82), rgba(32, 0, 31, 0.28) 32%, rgba(32, 0, 31, 0.34) 62%, rgba(32, 0, 31, 0.86)),
+    linear-gradient(180deg, rgba(32, 0, 31, 0.8), rgba(32, 0, 31, 0.2) 30%, rgba(32, 0, 31, 0.2) 68%, rgba(32, 0, 31, 0.86));
+}
+
+.three-d-marquee::after {
+  background: linear-gradient(180deg, rgba(32, 0, 31, 0.85), transparent 24%, transparent 76%, rgba(32, 0, 31, 0.9));
+}
+
+.three-d-marquee__scene {
+  position: absolute;
+  inset: -85% -18%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(9rem, 1fr));
+  gap: clamp(1.1rem, 2.2vw, 2rem);
+  perspective: 75rem;
+  transform: rotateX(56deg) rotateZ(-17deg) translate3d(-4%, -4%, 0) scale(1.18);
+  transform-style: preserve-3d;
+}
+
+.three-d-marquee__column {
+  overflow: visible;
+  transform-style: preserve-3d;
+}
+
+.three-d-marquee__track {
+  --marquee-gap: clamp(1rem, 2vw, 1.8rem);
+  display: block;
+  animation: threeDMarqueeScroll 120s linear infinite;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.three-d-marquee__group {
+  display: grid;
+  gap: var(--marquee-gap);
+  padding-bottom: var(--marquee-gap);
+  transform-style: preserve-3d;
+}
+
+.three-d-marquee__column:nth-child(2) .three-d-marquee__track,
+.three-d-marquee__column:nth-child(4) .three-d-marquee__track {
+  animation-name: threeDMarqueeScrollReverse;
+  animation-duration: 132s;
+}
+
+.three-d-marquee__item {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: .0625rem solid rgba(255, 255, 255, 0.18);
+  border-radius: 1.15rem 0 1.15rem 0;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.22);
+  transform: translateZ(0);
+}
+
+.three-d-marquee__cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.12) brightness(0.78);
+}
+
+.three-d-marquee__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.46) 72%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.46));
+  pointer-events: none;
+}
+
+.three-d-marquee__logo-wrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: 56%;
+  height: 34%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.three-d-marquee__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: brightness(0) invert(1) drop-shadow(0 .75rem 1rem rgba(0, 0, 0, 0.32));
+  opacity: 0.94;
+}
+
+.portfolio-hero-marquee {
+  opacity: 0;
+  animation: portfolioHeroMarqueeIn 0.9s var(--ease) both 0.22s;
+}
+
+@keyframes threeDMarqueeScroll {
+  from {
+    transform: translate3d(0, -50%, 0);
   }
-  42% {
-    opacity: 1;
-    transform: translateX(0);
+  to {
+    transform: translate3d(0, 0, 0);
   }
-  99% {
-    opacity: 1;
+}
+
+@keyframes threeDMarqueeScrollReverse {
+  from {
+    transform: translate3d(0, 0, 0);
   }
-  100% {
+  to {
+    transform: translate3d(0, -50%, 0);
+  }
+}
+
+@keyframes portfolioHeroMarqueeIn {
+  from {
     opacity: 0;
-    transform: translateX(102%);
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 0.72;
+    transform: scale(1);
   }
 }
 
 @keyframes portfolioHeroTextIn {
   to {
     opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes portfolioHeroScriptIn {
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(-0.14em);
   }
 }
 
@@ -4526,7 +4675,7 @@ body.about-route .about-story__sticky {
 }
 
 .related-projects {
-  margin-top: 6rem;
+  margin-top: 8rem;
 }
 
 .related-projects h2 {
@@ -4584,8 +4733,9 @@ body.about-route .about-story__sticky {
 
 .related-project-card__label {
   min-width: 0;
-  display: inline-flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
   gap: 0.65rem;
   line-height: 1.08;
 }
@@ -4598,6 +4748,7 @@ body.about-route .about-story__sticky {
 
 .related-project-card__label svg {
   flex: 0 0 auto;
+  margin-top: .03em;
   transition: transform 0.25s var(--ease);
 }
 
@@ -4688,8 +4839,16 @@ body.about-route .about-story__sticky {
 }
 
 .project-lightbox__nav--next {
-  right: max(1rem, calc(15vw - 4.625rem));
+  right: max(1rem, calc(15vw - .75rem));
   transform: translateY(-50%);
+}
+
+.project-lightbox__nav--prev svg {
+  transform: translateX(-.125rem);
+}
+
+.project-lightbox__nav--next svg {
+  transform: translateX(.125rem);
 }
 
 .project-lightbox__nav--prev:hover,
@@ -5128,6 +5287,7 @@ body.about-route .about-story__sticky {
 }
 
 .contact-studio-form button {
+  position: relative;
   width: fit-content;
   min-width: 8.375rem;
   min-height: 3rem;
@@ -5148,8 +5308,53 @@ body.about-route .about-story__sticky {
   transition: transform 0.3s var(--ease), opacity 0.25s ease;
 }
 
+.contact-studio-form button::after,
+.whatsapp-contact__send::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1.35rem;
+  height: .125rem;
+  border-radius: 62.4375rem;
+  background: currentColor;
+  opacity: 0;
+  transform: translate(-1.7rem, .46rem) scaleX(0);
+  transform-origin: right center;
+  pointer-events: none;
+}
+
+.contact-studio-form button > svg,
+.whatsapp-contact__send > svg {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  transform: translate3d(0, 0, 0) rotate(0deg);
+  transform-origin: 60% 42%;
+  transition: transform 0.28s var(--ease);
+  will-change: transform, opacity;
+}
+
 .contact-studio-form button:hover {
   transform: translateY(-.125rem);
+}
+
+.contact-studio-form button:hover > svg,
+.contact-studio-form button:focus-visible > svg,
+.contact-studio-form button[data-sending="true"] > svg,
+.whatsapp-contact__send:hover > svg,
+.whatsapp-contact__send:focus-visible > svg,
+.whatsapp-contact__send:active > svg {
+  animation: sendPlaneTakeoff 1.18s cubic-bezier(0.18, 0.78, 0.16, 1) both;
+}
+
+.contact-studio-form button:hover::after,
+.contact-studio-form button:focus-visible::after,
+.contact-studio-form button[data-sending="true"]::after,
+.whatsapp-contact__send:hover::after,
+.whatsapp-contact__send:focus-visible::after,
+.whatsapp-contact__send:active::after {
+  animation: sendPlaneTrail 1.18s cubic-bezier(0.18, 0.78, 0.16, 1) both;
 }
 
 .contact-studio-form button:disabled {
@@ -5681,7 +5886,7 @@ body.about-route .about-story__sticky {
 .whatsapp-contact {
   position: fixed;
   right: max(1rem, env(safe-area-inset-right));
-  bottom: max(1rem, env(safe-area-inset-bottom));
+  bottom: calc(max(1rem, env(safe-area-inset-bottom)) + var(--whatsapp-footer-lift, 0px));
   z-index: 1000001;
   width: 3.625rem;
   height: 3.625rem;
@@ -5884,6 +6089,7 @@ body.about-route .about-story__sticky {
 }
 
 .whatsapp-contact__send {
+  position: relative;
   width: 2.625rem;
   height: 2.625rem;
   display: grid;
@@ -5893,6 +6099,7 @@ body.about-route .about-story__sticky {
   background: #00a884;
   color: #fff;
   cursor: pointer;
+  overflow: hidden;
   box-shadow: 0 .4375rem 1rem rgba(0, 168, 132, 0.24);
   transition: transform 0.25s var(--ease), background 0.2s ease, box-shadow 0.25s ease;
 }
@@ -5906,6 +6113,46 @@ body.about-route .about-story__sticky {
 .whatsapp-contact__send:focus-visible {
   outline: .1875rem solid rgba(0, 168, 132, 0.35);
   outline-offset: .1875rem;
+}
+
+@keyframes sendPlaneTakeoff {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  42% {
+    opacity: 1;
+    transform: translate3d(.18rem, -.16rem, 0) rotate(-7deg) scale(1.03);
+  }
+  76% {
+    opacity: 0;
+    transform: translate3d(1.45rem, -0.96rem, 0) rotate(-14deg) scale(0.86);
+  }
+  77% {
+    opacity: 0;
+    transform: translate3d(-0.9rem, .64rem, 0) rotate(-14deg) scale(0.86);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes sendPlaneTrail {
+  0%,
+  18% {
+    opacity: 0;
+    transform: translate(-1.7rem, .46rem) scaleX(0);
+  }
+  42% {
+    opacity: .52;
+    transform: translate(-1.42rem, .38rem) scaleX(1);
+  }
+  72%,
+  100% {
+    opacity: 0;
+    transform: translate(-.55rem, -.06rem) scaleX(0);
+  }
 }
 
 @keyframes whatsappFloatIn {
@@ -5924,7 +6171,11 @@ body.about-route .about-story__sticky {
   .whatsapp-contact__launcher,
   .whatsapp-contact__panel,
   .whatsapp-contact__close,
-  .whatsapp-contact__send {
+  .whatsapp-contact__send,
+  .contact-studio-form button > svg,
+  .contact-studio-form button::after,
+  .whatsapp-contact__send > svg,
+  .whatsapp-contact__send::after {
     animation: none;
     transition-duration: 0.01ms;
   }
@@ -6272,7 +6523,7 @@ body.about-route .about-story__sticky {
   }
 
   .related-projects {
-    margin-top: 4rem;
+    margin-top: 6rem;
   }
 
   .related-projects__grid {
@@ -6633,6 +6884,42 @@ body.about-route .about-story__sticky {
 
   body.portfolio-route .portfolio-showcase-hero {
     --portfolio-showcase-script-size: clamp(3.9rem, 18vw, 6rem);
+  }
+
+  body.portfolio-route .portfolio-hero-marquee {
+    opacity: 0.82;
+  }
+
+  body.portfolio-route .three-d-marquee::before {
+    background:
+      linear-gradient(90deg, rgba(32, 0, 31, 0.78), rgba(32, 0, 31, 0.2) 34%, rgba(32, 0, 31, 0.32) 68%, rgba(32, 0, 31, 0.8)),
+      linear-gradient(180deg, rgba(32, 0, 31, 0.58), rgba(32, 0, 31, 0.16) 30%, rgba(32, 0, 31, 0.22) 72%, rgba(32, 0, 31, 0.78));
+  }
+
+  body.portfolio-route .three-d-marquee::after {
+    background: linear-gradient(180deg, rgba(32, 0, 31, 0.56), transparent 20%, transparent 78%, rgba(32, 0, 31, 0.82));
+  }
+
+  body.portfolio-route .three-d-marquee__scene {
+    inset: -110% -112%;
+    grid-template-columns: repeat(5, minmax(10.75rem, 1fr));
+    gap: 0.95rem;
+    transform: rotateX(52deg) rotateZ(-16deg) translate3d(-7%, 5%, 0) scale(1.34);
+  }
+
+  body.portfolio-route .three-d-marquee__track {
+    gap: 0.95rem;
+    animation-duration: 120s;
+  }
+
+  body.portfolio-route .three-d-marquee__column:nth-child(2) .three-d-marquee__track,
+  body.portfolio-route .three-d-marquee__column:nth-child(4) .three-d-marquee__track {
+    animation-duration: 132s;
+  }
+
+  body.portfolio-route .three-d-marquee__item {
+    aspect-ratio: 3.8 / 5;
+    border-radius: 1rem 0 1rem 0;
   }
 
   .portfolio-showcase-content .logo-strip {
@@ -7401,7 +7688,7 @@ body.about-route .about-story__sticky {
 
   .whatsapp-contact {
     right: max(0.75rem, env(safe-area-inset-right));
-    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    bottom: calc(max(0.75rem, env(safe-area-inset-bottom)) + var(--whatsapp-footer-lift, 0px));
     width: 3.375rem;
     height: 3.375rem;
   }
@@ -7417,7 +7704,7 @@ body.about-route .about-story__sticky {
   }
 
   body.home-route .whatsapp-contact {
-    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    bottom: calc(max(0.75rem, env(safe-area-inset-bottom)) + var(--whatsapp-footer-lift, 0px));
   }
 }
 
@@ -7747,11 +8034,11 @@ body.about-route .about-story__sticky {
   }
 
   body.home-route .whatsapp-contact {
-    bottom: max(1rem, env(safe-area-inset-bottom));
+    bottom: calc(max(1rem, env(safe-area-inset-bottom)) + var(--whatsapp-footer-lift, 0px));
   }
 
   .whatsapp-contact {
-    bottom: max(1rem, env(safe-area-inset-bottom));
+    bottom: calc(max(1rem, env(safe-area-inset-bottom)) + var(--whatsapp-footer-lift, 0px));
   }
 
   .home-overview__stats {
@@ -7936,7 +8223,6 @@ body.about-route .about-story__sticky {
   .language-switcher button,
   .footer-language-switcher button,
   .whatsapp-contact__launcher,
-  .whatsapp-contact__close,
   .whatsapp-contact__send,
   .project-lightbox__close,
   .project-lightbox__nav

@@ -1,13 +1,24 @@
 import { useLayoutEffect } from "react";
 import { Hero } from "../components/Hero";
+import { ThreeDMarquee } from "../components/lightswind/3d-marquee";
 import { LogoStrip } from "../components/LogoStrip";
 import { Portfolio } from "../components/Portfolio";
+import { useFeaturedProjectsQuery } from "../data/projectQueries";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../i18n/LanguageContext";
 
 export function PortfolioPage() {
   useScrollReveal();
   const { t } = useLanguage();
+  const { data: featuredProjects = [] } = useFeaturedProjectsQuery();
+  const marqueeImages = featuredProjects
+    .filter((project) => project.cover || project.heroImage)
+    .map((project) => ({
+      src: project.cover || project.heroImage || "",
+      alt: project.titleKey ? t(project.titleKey) : project.title,
+      logoSrc: project.logo || project.clientLogoSvg || undefined,
+      href: `/portfolio/${project.slug}/`,
+    }));
 
   useLayoutEffect(() => {
     document.body.classList.add("portfolio-route");
@@ -40,6 +51,7 @@ export function PortfolioPage() {
         script={t("hero.portfolioScript")}
         scrollText={t("hero.scroll")}
         className="portfolio-showcase-hero"
+        visual={<ThreeDMarquee images={marqueeImages} className="portfolio-hero-marquee" />}
       />
       <div id="page-content" className="portfolio-showcase-content">
         <LogoStrip />

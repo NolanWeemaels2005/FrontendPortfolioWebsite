@@ -71,7 +71,7 @@ async function waitForPageAssets() {
   if (!root) return;
 
   const imageUrls = new Set<string>();
-  root.querySelectorAll<HTMLImageElement>("img:not([loading='lazy'])").forEach((image) => {
+  root.querySelectorAll<HTMLImageElement>("img:not([loading='lazy']):not([data-loader-skip='true'])").forEach((image) => {
     const url = image.currentSrc || image.src;
     if (url) imageUrls.add(url);
   });
