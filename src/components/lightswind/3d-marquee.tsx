@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { previewImageUrl, responsiveImageSrcSet } from "../../utils/asset";
 
 export type MarqueeImage = {
@@ -14,10 +15,26 @@ type ThreeDMarqueeProps = {
   onImageClick?: (image: MarqueeImage, index: number) => void;
 };
 
-const columnCount = 5;
-const itemsPerColumn = 8;
+const compactMarqueeQuery = "(max-width: 61.25rem)";
 
-function splitColumns(images: MarqueeImage[]) {
+function useCompactMarquee() {
+  const [isCompact, setIsCompact] = useState(() => (
+    typeof window !== "undefined" && window.matchMedia(compactMarqueeQuery).matches
+  ));
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(compactMarqueeQuery);
+    const update = () => setIsCompact(mediaQuery.matches);
+
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
+
+  return isCompact;
+}
+
+function splitColumns(images: MarqueeImage[], columnCount: number, itemsPerColumn: number) {
   if (images.length === 0) {
     return Array.from({ length: columnCount }, () => []);
   }
@@ -30,7 +47,10 @@ function splitColumns(images: MarqueeImage[]) {
 }
 
 export function ThreeDMarquee({ images, className = "", onImageClick }: ThreeDMarqueeProps) {
-  const columns = splitColumns(images);
+  const isCompact = useCompactMarquee();
+  const columnCount = isCompact ? 3 : 5;
+  const itemsPerColumn = isCompact ? 6 : 8;
+  const columns = splitColumns(images, columnCount, itemsPerColumn);
 
   return (
     <div className={`three-d-marquee ${className}`} aria-hidden={onImageClick ? undefined : true}>
@@ -43,7 +63,7 @@ export function ThreeDMarquee({ images, className = "", onImageClick }: ThreeDMa
                   {columnImages.map((image, imageIndex) => {
                     const absoluteIndex = imageIndex * columnCount + columnIndex;
                     const coverSrcSet = responsiveImageSrcSet(image.src, 320, 960);
-                    const isPriorityImage = columnIndex === 3 && groupIndex === 0 && imageIndex === 2;
+                    const isPriorityImage = columnIndex === (isCompact ? 1 : 3) && groupIndex === 0 && imageIndex === 2;
                     const content = (
                       <>
                         <img
