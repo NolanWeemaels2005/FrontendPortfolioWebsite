@@ -6,6 +6,7 @@ import { fetchHomeOfferVisible, updateHomeOfferVisible } from "../data/siteSetti
 import { apiUrl, readApiError } from "../utils/api";
 import { clearAdminToken, getAdminToken, setAdminToken } from "../utils/adminAuth";
 import { assetPath } from "../utils/asset";
+import { maxUploadBytes, prepareProjectImage } from "../utils/projectUpload";
 
 type LoginState = {
   email: string;
@@ -243,6 +244,7 @@ export function AdminPage() {
 
   async function handleCreateProject(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setSubmitting(true);
     setError("");
     setStatus("");
@@ -280,7 +282,7 @@ export function AdminPage() {
       setProject({ title: "", text: "", textNl: "", textFr: "", textEn: "", heroSvg: null, images: [] });
       setEditingProject(null);
       invalidateProjectData(editingProject?.slug);
-      event.currentTarget.reset();
+      form.reset();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Project toevoegen mislukt.");
     } finally {
@@ -293,7 +295,7 @@ export function AdminPage() {
       throw new Error("Upload een SVG/logo.");
     }
 
-    if (project.images.length !== 3 && (editingProject?.images?.length || 0) !== 3) {
+    if ((project.images.length > 0 && project.images.length !== 3) || (!project.images.length && (editingProject?.images?.length || 0) !== 3)) {
       throw new Error("Upload exact 3 foto's.");
     }
 
@@ -308,6 +310,13 @@ export function AdminPage() {
         : null);
 
     if (!logoFile) throw new Error("Upload een SVG/logo.");
+    if (logoFile.type !== "image/svg+xml") throw new Error("Het logo moet een SVG-bestand zijn.");
+    if (logoFile.size > maxUploadBytes) throw new Error(`Het logo “${logoFile.name}” is groter dan 10 MB. Kies een kleiner SVG-bestand.`);
+
+    const preparedImages: File[] = [];
+    for (const image of selectedImagesForUpload) {
+      preparedImages.push(await prepareProjectImage(image));
+    }
 
     const editingTitle = editingProject?.title || project.title;
     const localProject = getCombinedProjects().find(
@@ -317,8 +326,8 @@ export function AdminPage() {
         item.title.trim().toLowerCase() === editingTitle.trim().toLowerCase(),
     );
     const heroFile = localProject?.cover
-      ? await fileFromUrl(localProject.cover, `${localProject.slug || "project"}-hero.png`)
-      : selectedImagesForUpload[0];
+      ? await prepareProjectImage(await fileFromUrl(localProject.cover, `${localProject.slug || "project"}-hero.png`))
+      : preparedImages[0];
 
     const formData = new FormData();
     formData.append("title", project.title);
@@ -328,7 +337,7 @@ export function AdminPage() {
     formData.append("textEn", project.textEn);
     formData.append("heroImage", heroFile);
     formData.append("clientLogoSvg", logoFile);
-    selectedImagesForUpload.forEach((image) => formData.append("images", image));
+    preparedImages.forEach((image) => formData.append("images", image));
 
     return formData;
   }
@@ -569,12 +578,13 @@ export function AdminPage() {
 
             <label>
               3 foto's
+              <span>Foto's groter dan 10 MB worden automatisch verkleind naar JPG, met een witte achtergrond bij transparantie.</span>
               <input
                 type="file"
                 accept="image/*"
                 multiple
                 onChange={(event) =>
-                  setProject((current) => ({ ...current, images: Array.from(event.target.files || []).slice(0, 3) }))
+                  setProject((current) => ({ ...current, images: Array.from(event.target.files || []) }))
                 }
                 required={!editingProject?.images?.length}
               />

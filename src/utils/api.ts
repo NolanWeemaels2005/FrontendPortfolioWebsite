@@ -11,7 +11,13 @@ type ApiErrorBody = {
 export async function readApiError(response: Response) {
   try {
     const data = (await response.json()) as ApiErrorBody;
-    return data.message || data.error || "Er ging iets mis met de API.";
+    if (data.error === "File too large") {
+      return "Een bestand is te groot. De maximale bestandsgrootte is 10 MB per bestand.";
+    }
+    if (data.error === "Unexpected field") {
+      return "De upload bevat een onverwacht bestand of te veel bestanden. Kies één SVG/logo en exact 3 foto's.";
+    }
+    return [...new Set([data.message, data.error].filter(Boolean))].join(" ") || "Er ging iets mis met de API.";
   } catch {
     return "Er ging iets mis met de API.";
   }
