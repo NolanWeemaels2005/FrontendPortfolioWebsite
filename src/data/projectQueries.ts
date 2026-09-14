@@ -53,7 +53,7 @@ type BackendProject = {
   images: string[];
 };
 
-const projectDataVersion = "v11";
+const projectDataVersion = "v12";
 const fallbackLatestProjectSlug = "shift-festival-2026";
 const projectOrder = [
   "find your light",
@@ -68,7 +68,6 @@ const projectOrder = [
   "boit bobby",
   "city to ocean",
   "ferraaawri",
-  "la maison des 3 garcons",
   "basisschool nieuwland",
   "happy dancers",
   "poutrel",
@@ -152,6 +151,12 @@ function normalizeTitle(title: string) {
     .replace(/\btrois\b/g, "3")
     .replace(/[._]/g, "")
     .replace(/\s+/g, " ");
+}
+
+function isRemovedProject(project: { slug: string; title?: string }) {
+  return [project.slug.replace(/-/g, " "), project.title || ""].some(
+    (value) => normalizeTitle(value) === "la maison des 3 garcons",
+  );
 }
 
 function projectOrderIndex(project: Project) {
@@ -327,7 +332,7 @@ async function fetchBackendProjects() {
       if (!response.ok) return [];
       const data = await response.json();
       const projects = Array.isArray(data) ? data : Array.isArray(data?.projects) ? data.projects : [];
-      const mappedProjects = (projects as BackendProject[]).filter((project) => !isSiteSettingProject(project)).map(mapBackendProject);
+      const mappedProjects = (projects as BackendProject[]).filter((project) => !isSiteSettingProject(project) && !isRemovedProject(project)).map(mapBackendProject);
       backendProjectsData = mappedProjects;
       return mappedProjects;
     } catch {
@@ -347,11 +352,12 @@ export function preloadProjectData() {
 }
 
 async function fetchBackendProject(slug: string) {
+  if (isRemovedProject({ slug })) return undefined;
   try {
     const response = await fetch(`${apiUrl}/projects/${slug}`, { cache: "no-store" });
     if (!response.ok) return undefined;
     const data = (await response.json()) as BackendProject;
-    return mapBackendProject(data);
+    return isRemovedProject(data) ? undefined : mapBackendProject(data);
   } catch {
     return undefined;
   }

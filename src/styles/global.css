@@ -4457,12 +4457,6 @@ body.about-route .about-story__sticky {
   gap: clamp(2.5rem, 4.8vw, 4.2rem) clamp(0.95rem, 1.5vw, 1.25rem);
 }
 
-@media (min-width: 61.3125rem) {
-  .portfolio--showcase .project-grid--remainder-1 .project-card:last-child {
-    grid-column: 2;
-  }
-}
-
 .portfolio--showcase .project-card {
   color: #000;
 }

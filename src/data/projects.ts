@@ -109,7 +109,6 @@ export const allProjects: Project[] = [
   { title: "Boit Bobby", titleKey: "project.boit-bobby.title", slug: "boit-bobby", logo: `${logoPath}BoitBobbyWhite.webp`, color: "#000" },
   { title: "City to Ocean", titleKey: "project.city-to-ocean.title", slug: "city-to-ocean", logo: `${logoPath}ctoWhite.webp`, color: "#000" },
   { title: "Ferraaawri", titleKey: "project.ferraaawri.title", slug: "ferraaawri", logo: `${logoPath}FerraaawriWhite.webp`, color: "#000" },
-  { title: "La Maison des 3 Garcons", titleKey: "project.la-maison-des-3-garcons.title", slug: "la-maison-des-trois-garcons", layoutSlug: "la-maison-des-3-garcons", logo: `${logoPath}LMD3GWhite.webp`, color: "#000" },
   { title: "Basisschool Nieuwland", titleKey: "project.nieuwland.title", slug: "basisschool-nieuwland", layoutSlug: "nieuwland", logo: `${logoPath}nieuwlandWhite.webp`, color: "#000" },
   { title: "Happy Dancers", titleKey: "project.happy-dancers.title", slug: "happy-dancers", logo: `${logoPath}HappyDancersWhite.webp`, color: "#000" },
   { title: "Poutrel", titleKey: "project.poutrel.title", slug: "poutrel", logo: `${logoPath}PoutrelWhite.webp`, color: "#000" },

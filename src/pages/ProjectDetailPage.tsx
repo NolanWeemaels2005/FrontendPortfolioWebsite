@@ -11,7 +11,6 @@ import { getAdminToken } from "../utils/adminAuth";
 import { getProjectDescription } from "../utils/projectText";
 
 const projectSlugAliases: Record<string, string> = {
-  "la-maison-des-3-garcons": "la-maison-des-trois-garcons",
   nieuwland: "basisschool-nieuwland",
   "shift-festival": "shift-festival-2026",
   erasmus: "erasmus-hogeschool",

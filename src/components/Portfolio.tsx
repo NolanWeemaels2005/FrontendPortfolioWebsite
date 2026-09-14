@@ -105,7 +105,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
             <h2 className="all-projects-title" data-reveal>{t("portfolio.all")}</h2>
           )}
 
-          <div className={`project-grid ${allProjects.length % 3 === 1 ? "project-grid--remainder-1" : ""} ${showAllMobileProjects ? "is-mobile-expanded" : ""}`}>
+          <div className={`project-grid ${showAllMobileProjects ? "is-mobile-expanded" : ""}`}>
             {allProjects.map((project) => (
               (() => {
                 const classSlug = projectClassSlug(project.layoutSlug || project.slug);
