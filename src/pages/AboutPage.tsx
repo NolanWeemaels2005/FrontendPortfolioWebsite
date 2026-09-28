@@ -1,6 +1,4 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
-import Lenis from "lenis";
-import "lenis/dist/lenis.css";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
@@ -75,7 +73,6 @@ export function AboutPage() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const storyProgressRef = useRef(0);
   useScrollReveal();
 
   function scrollStory(direction: -1 | 1) {
@@ -93,116 +90,59 @@ export function AboutPage() {
   }, []);
 
   useEffect(() => {
-    if (window.matchMedia("(max-width: 1024px)").matches) {
-      storyProgressRef.current = 0;
-      sectionRef.current?.style.removeProperty("height");
-      sectionRef.current?.style.removeProperty("--about-story-height");
-      sectionRef.current?.style.removeProperty("--story-progress");
-      trackRef.current?.style.removeProperty("--story-x");
-      return;
-    }
+    const section = sectionRef.current;
+    const track = trackRef.current;
+    if (!section || !track) return;
 
+    const desktop = window.matchMedia("(min-width: 1025px)");
     let frame = 0;
     let maxStoryX = 0;
-    let targetStoryProgress = storyProgressRef.current;
-    let storyHasWheelControl = false;
-    const lenis = new Lenis({
-      anchors: true,
-      lerp: 0.09,
-      overscroll: false,
-      smoothWheel: true,
-      syncTouch: true,
-      touchMultiplier: 1.1,
-      wheelMultiplier: 0.9,
-    });
 
-    const applyStoryProgress = (progress: number) => {
-      const section = sectionRef.current;
-      const track = trackRef.current;
-      if (!section || !track) return;
-
-      const nextProgress = Math.min(1, Math.max(0, progress));
-      storyProgressRef.current = nextProgress;
-      track.style.setProperty("--story-x", `${-(maxStoryX * nextProgress)}px`);
-      section.style.setProperty("--story-progress", `${nextProgress}`);
+    const update = () => {
+      frame = 0;
+      if (!desktop.matches) return;
+      const distance = Math.min(maxStoryX, Math.max(0, -section.getBoundingClientRect().top));
+      track.style.setProperty("--story-x", `${-distance}px`);
+      section.style.setProperty("--story-progress", `${maxStoryX ? distance / maxStoryX : 0}`);
     };
-
-    const syncStoryPosition = () => {
-      const section = sectionRef.current;
-      if (!section) return;
-
-      const rect = section.getBoundingClientRect();
-      if (rect.top > window.innerHeight * 0.5) {
-        targetStoryProgress = 0;
-        applyStoryProgress(0);
-      } else if (rect.bottom < window.innerHeight * 0.5) {
-        targetStoryProgress = 1;
-        applyStoryProgress(1);
+    const scheduleUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    const measure = () => {
+      if (desktop.matches) {
+        maxStoryX = Math.max(0, track.scrollWidth - section.clientWidth);
+        section.style.setProperty("--about-story-height", `${window.innerHeight}px`);
+        section.style.height = `${window.innerHeight + maxStoryX}px`;
+        track.scrollLeft = 0;
+      } else {
+        section.style.removeProperty("height");
+        section.style.removeProperty("--about-story-height");
+        section.style.removeProperty("--story-progress");
+        track.style.removeProperty("--story-x");
       }
+      scheduleUpdate();
     };
-
-    const measureStory = () => {
-      const section = sectionRef.current;
-      const track = trackRef.current;
-      if (!section || !track) return;
-
-      const viewportWidth = section.clientWidth || window.innerWidth;
-      const viewportHeight = window.innerHeight || section.getBoundingClientRect().height;
-      section.style.setProperty("--about-story-height", `${viewportHeight}px`);
-      maxStoryX = Math.max(0, track.scrollWidth - viewportWidth);
-      section.style.height = `${viewportHeight}px`;
-      lenis.resize();
-      syncStoryPosition();
+    const onFocus = (event: FocusEvent) => {
+      if (!desktop.matches) return;
+      const card = (event.target as HTMLElement).closest<HTMLElement>(".story-card");
+      if (!card) return;
+      const distance = Math.min(maxStoryX, Math.max(0, card.offsetLeft - (section.clientWidth - card.offsetWidth) / 2));
+      window.scrollTo({ top: window.scrollY + section.getBoundingClientRect().top + distance, behavior: "instant" });
     };
-
-    const handleStoryWheel = (event: WheelEvent) => {
-      const section = sectionRef.current;
-      if (!section || maxStoryX <= 0) return;
-
-      const rect = section.getBoundingClientRect();
-      const tolerance = 28;
-      const sectionFillsViewport = rect.top <= tolerance && rect.bottom >= window.innerHeight - tolerance;
-      const delta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
-      const canMoveForward = delta > 0 && targetStoryProgress < 1;
-      const canMoveBack = delta < 0 && targetStoryProgress > 0;
-
-      if (!sectionFillsViewport || (!canMoveForward && !canMoveBack)) {
-        if (storyHasWheelControl) {
-          storyHasWheelControl = false;
-          lenis.start();
-        }
-        return;
-      }
-
-      event.preventDefault();
-      event.stopPropagation();
-      storyHasWheelControl = true;
-      lenis.stop();
-      targetStoryProgress = Math.min(1, Math.max(0, targetStoryProgress + delta / maxStoryX));
-    };
-
-    const raf = (time: number) => {
-      lenis.raf(time);
-      if (Math.abs(storyProgressRef.current - targetStoryProgress) > 0.0001) {
-        const nextProgress = storyProgressRef.current + (targetStoryProgress - storyProgressRef.current) * 0.16;
-        applyStoryProgress(Math.abs(nextProgress - targetStoryProgress) < 0.0005 ? targetStoryProgress : nextProgress);
-      }
-      frame = window.requestAnimationFrame(raf);
-    };
-
-    measureStory();
-    syncStoryPosition();
-    lenis.on("scroll", syncStoryPosition);
-    frame = window.requestAnimationFrame(raf);
-    window.addEventListener("resize", measureStory);
-    window.addEventListener("wheel", handleStoryWheel, { passive: false, capture: true });
+    const observer = new ResizeObserver(measure);
+    observer.observe(track);
+    measure();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", measure);
+    desktop.addEventListener("change", measure);
+    track.addEventListener("focusin", onFocus);
     return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      lenis.start();
-      lenis.off("scroll", syncStoryPosition);
-      lenis.destroy();
-      window.removeEventListener("resize", measureStory);
-      window.removeEventListener("wheel", handleStoryWheel, { capture: true });
+      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", measure);
+      desktop.removeEventListener("change", measure);
+      track.removeEventListener("focusin", onFocus);
     };
   }, []);
 
@@ -216,6 +156,52 @@ export function AboutPage() {
       />
 
       <div id="page-content" className="about-story-content">
+        <section className="about-skills" data-reveal>
+          <div className="about-skills__inner">
+            <header className="about-section-heading">
+              <h2>{t("about.helpTitle")}</h2>
+              <p>{t("about.skillsTitle")}</p>
+            </header>
+
+            <div className="about-skills__grid">
+              <div className="about-skills__portrait-frame">
+                <img
+                  className="about-skills__portrait"
+                  src={assetPath("assets/about-story/optimized/MyStoryPicture7.webp")}
+                  srcSet={storyImageSrcSet("MyStoryPicture7.webp")}
+                  sizes="(max-width: 61.25rem) min(calc(100vw - 2rem), 26.25rem), min(27.5rem, 38vw)"
+                  alt={t("about.portraitAlt")}
+                  width="998"
+                  height="1400"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="about-skills__copy">
+                <h3>{t("about.toolsHeading")}</h3>
+                <div className="tool-grid">
+                  {tools.map((tool) => (
+                    <div className="tool-item" key={tool.label}>
+                      <span>
+                        <img src={assetPath(`assets/about-story/${tool.icon.replace(/\.webp$/, "-64.webp")}`)} alt="" width="64" height="64" loading="lazy" decoding="async" />
+                      </span>
+                      <strong>{tool.label}</strong>
+                    </div>
+                  ))}
+                </div>
+
+                <p>
+                  {t("about.skillsCopy")}
+                </p>
+                <p>{t("about.skillsPrompt")}</p>
+                <Link to="/contact/" className="btn btn--primary about-skills__button" data-cursor="merge">
+                  <ButtonTextStagger text={t("cta.letsTalk")} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="about-story" ref={sectionRef}>
           <div className="about-story__sticky">
             <div className="about-story__pattern" aria-hidden="true" />
@@ -263,52 +249,6 @@ export function AboutPage() {
 
             <div className="about-story__progress" aria-hidden="true">
               <span />
-            </div>
-          </div>
-        </section>
-
-        <section className="about-skills" data-reveal>
-          <div className="about-skills__inner">
-            <header className="about-section-heading">
-              <h2>{t("about.helpTitle")}</h2>
-              <p>{t("about.skillsTitle")}</p>
-            </header>
-
-            <div className="about-skills__grid">
-              <div className="about-skills__portrait-frame">
-                <img
-                  className="about-skills__portrait"
-                  src={assetPath("assets/about-story/optimized/MyStoryPicture7.webp")}
-                  srcSet={storyImageSrcSet("MyStoryPicture7.webp")}
-                  sizes="(max-width: 61.25rem) min(calc(100vw - 2rem), 26.25rem), min(27.5rem, 38vw)"
-                  alt="Nolan Weemaels aan het werk als grafisch ontwerper"
-                  width="998"
-                  height="1400"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div className="about-skills__copy">
-                <h3>{t("about.toolsHeading")}</h3>
-                <div className="tool-grid">
-                  {tools.map((tool) => (
-                    <div className="tool-item" key={tool.label}>
-                      <span>
-                        <img src={assetPath(`assets/about-story/${tool.icon.replace(/\.webp$/, "-64.webp")}`)} alt="" width="64" height="64" loading="lazy" decoding="async" />
-                      </span>
-                      <strong>{tool.label}</strong>
-                    </div>
-                  ))}
-                </div>
-
-                <p>
-                  {t("about.skillsCopy")}
-                </p>
-                <p>{t("about.skillsPrompt")}</p>
-                <Link to="/contact/" className="btn btn--primary about-skills__button" data-cursor="merge">
-                  <ButtonTextStagger text={t("cta.letsTalk")} />
-                </Link>
-              </div>
             </div>
           </div>
         </section>

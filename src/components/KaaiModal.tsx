@@ -51,7 +51,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
           onClick={onClose}
         >
           <X className="kaai-modal__close-icon" aria-hidden="true" size={22} strokeWidth={4} />
-          <span>Close</span>
+          <span>Sluiten</span>
         </button>
 
         <div className="kaai-modal__left">
@@ -88,7 +88,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
               <div className="kaai-modal__service">
                 <img src={assetPath("assets/kaai/code_xml_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" width="24" height="24" />
                 <span>
-                  Full Stack
+                  Full-stack
                   <br />
                   Development
                 </span>
@@ -112,7 +112,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
               <div className="kaai-modal__service">
                 <img src={assetPath("assets/kaai/camera_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.webp")} alt="" width="24" height="24" />
                 <span>
-                  Photo en
+                  Foto en
                   <br />
                   Video
                 </span>

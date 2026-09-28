@@ -104,7 +104,9 @@ function getProjectResource<T>(key: string, placeholderData: T): ProjectResource
 function useProjectResource<T>(key: string, load: () => Promise<T>, placeholderData: T, enabled = true) {
   const [resource] = useState(() => getProjectResource(key, placeholderData));
   const [data, setData] = useState(resource.data);
-  const [isFetching, setIsFetching] = useState(Boolean(enabled && resource.promise));
+  // Every enabled mount starts or joins a request in the effect below.
+  // Mark it pending on the first render, before a detail page can redirect.
+  const [isFetching, setIsFetching] = useState(enabled);
 
   useEffect(() => {
     if (!enabled) return;

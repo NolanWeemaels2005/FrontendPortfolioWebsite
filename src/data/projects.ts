@@ -18,7 +18,7 @@ export const featuredProjects: Project[] = [
     summaryKey: "project.brussel-noord-basket.summary",
   },
   {
-    title: "Erasmus Hogeschool Brussel",
+    title: "Erasmushogeschool Brussel",
     titleKey: "project.erasmus.title",
     slug: "erasmus-hogeschool",
     layoutSlug: "la-maison-des-3-garcons",
@@ -26,7 +26,7 @@ export const featuredProjects: Project[] = [
     cover: `${coverPath}coverEHB.webp`,
     color: "#ffffff",
     featured: true,
-    summary: "Een affiche en visuele uitwerking voor Erasmus Hogeschool Brussel.",
+    summary: "Een affiche en visuele uitwerking voor Erasmushogeschool Brussel.",
   },
   {
     title: "Videjo",
@@ -49,7 +49,7 @@ export const featuredProjects: Project[] = [
     cover: `${coverPath}coverCTO.webp`,
     color: "#00b9ad",
     featured: true,
-    summary: "Branding en visuele identiteit voor een sportief ocean minded project.",
+    summary: "Branding en visuele identiteit voor een sportief project geïnspireerd op de oceaan.",
     summaryKey: "project.city-to-ocean.summary",
   },
   {
@@ -86,7 +86,7 @@ export const featuredProjects: Project[] = [
     summaryKey: "project.ring-tv.summary",
   },
   {
-    title: "Mentalite Sportswear",
+    title: "Mentalité Sportswear",
     titleKey: "project.mentalite.title",
     slug: "mentalite-sportswear",
     layoutSlug: "kaai",
@@ -102,9 +102,9 @@ export const allProjects: Project[] = [
   { title: "FC EISBÄR", slug: "fc-eisbar", layoutSlug: "happy-dancers", logo: "https://res.cloudinary.com/dw4wq5atx/image/upload/f_webp,q_auto/v1777838483/portfolio/client-logos/wifatbn8yxwfugw1vkpg.svg", color: "#000" },
   { title: "Studio By Cas", titleKey: "project.studio-by-cas.title", slug: "studio-by-cas", logo: `${logoPath}studioByCasWhite.webp`, color: "#000" },
   { title: "Kaai", titleKey: "project.kaai.title", slug: "kaai", logo: `${logoPath}kaaiWhite.webp`, color: "#000" },
-  { title: "Mentalite Sportswear", titleKey: "project.mentalite.title", slug: "mentalite-sportswear", layoutSlug: "mentalite", logo: `${logoPath}MentaliteWhite.webp`, color: "#000" },
+  { title: "Mentalité Sportswear", titleKey: "project.mentalite.title", slug: "mentalite-sportswear", layoutSlug: "mentalite", logo: `${logoPath}MentaliteWhite.webp`, color: "#000" },
   { title: "Ring TV", titleKey: "project.ring-tv.title", slug: "ring-tv", logo: `${logoPath}RingtvWhite.webp`, color: "#000" },
-  { title: "Erasmus Hogeschool", titleKey: "project.erasmus.title", slug: "erasmus-hogeschool", layoutSlug: "erasmus", logo: `${logoPath}ehbWhite.webp`, color: "#000" },
+  { title: "Erasmushogeschool", titleKey: "project.erasmus.title", slug: "erasmus-hogeschool", layoutSlug: "erasmus", logo: `${logoPath}ehbWhite.webp`, color: "#000" },
   { title: "Shift Festival 2026", titleKey: "project.shift-festival.title", slug: "shift-festival-2026", layoutSlug: "shift-festival", logo: `${logoPath}ShiftWhite.webp`, color: "#000" },
   { title: "Boit Bobby", titleKey: "project.boit-bobby.title", slug: "boit-bobby", logo: `${logoPath}BoitBobbyWhite.webp`, color: "#000" },
   { title: "City to Ocean", titleKey: "project.city-to-ocean.title", slug: "city-to-ocean", logo: `${logoPath}ctoWhite.webp`, color: "#000" },

@@ -3,6 +3,7 @@ import { ArrowRight, BadgeEuro, Clock3, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import ImageReveal from "../components/lightswind/ImageReveal";
+import { HomeServices } from "../components/HomeServices";
 import { ProjectHallOfFame } from "../components/ProjectHallOfFame";
 import { useCombinedProjectsQuery, useLatestProjectQuery } from "../data/projectQueries";
 import { fetchHomeOfferVisible } from "../data/siteSettings";
@@ -103,11 +104,11 @@ export function HomePage() {
     return orderedProjects
       .map((project) => ({
         src: previewImageUrl(project.images?.[1] || project.images?.[0] || project.cover || project.heroImage || project.logo || "", 320),
-        alt: project.title,
+        alt: project.titleKey ? t(project.titleKey) : project.title,
         href: `/portfolio/${project.slug}/`,
       }))
       .filter((image) => Boolean(image.src));
-  }, [projects]);
+  }, [projects, t]);
 
   useLayoutEffect(() => {
     document.body.classList.add("home-route");
@@ -270,6 +271,8 @@ export function HomePage() {
             </ImageReveal>
           </div>
 
+          <HomeServices />
+
           <div className="home-overview__stats-screen" id="home-overview-stats">
             <header className="home-overview__heading">
               <h2>
@@ -280,9 +283,30 @@ export function HomePage() {
 
             <div className="home-overview__content">
               <div className="home-overview__profile">
-                <div className="home-overview__portrait">
-                  <img src={assetPath("assets/home-overview/head-bw.webp")} alt="Nolan Weemaels" width="1000" height="1250" loading="lazy" decoding="async" />
-                  <img className="home-overview__signature" src={assetPath("assets/about-story/Signature.webp")} alt="" width="1000" height="394" aria-hidden="true" />
+                <div className="home-overview__portrait" tabIndex={0}>
+                  <img
+                    className="home-overview__portrait-photo"
+                    src={assetPath("assets/home-overview/portrait-bw-960.jpg")}
+                    srcSet={`${assetPath("assets/home-overview/portrait-bw-480.jpg")} 480w, ${assetPath("assets/home-overview/portrait-bw-960.jpg")} 960w`}
+                    sizes="(max-width: 700px) 90vw, 42vw"
+                    alt="Nolan Weemaels"
+                    width="960"
+                    height="1366"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <img
+                    className="home-overview__portrait-photo home-overview__portrait-photo--color"
+                    src={assetPath("assets/home-overview/portrait-color-960.jpg")}
+                    srcSet={`${assetPath("assets/home-overview/portrait-color-480.jpg")} 480w, ${assetPath("assets/home-overview/portrait-color-960.jpg")} 960w`}
+                    sizes="(max-width: 700px) 90vw, 42vw"
+                    alt=""
+                    aria-hidden="true"
+                    width="960"
+                    height="1366"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
                 <h3>{t("home.role")}</h3>
                 <p>

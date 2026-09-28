@@ -111,9 +111,9 @@
     {
       "path": "/portfolio/city-to-ocean/",
       "title": "City to Ocean branding | Nolan Design",
-      "description": "Bekijk de branding en visuele identiteit voor City to Ocean, een sportief project met een frisse, ocean minded uitstraling.",
+      "description": "Bekijk de branding en visuele identiteit voor City to Ocean, een sportief project met een frisse, op de oceaan geïnspireerde uitstraling.",
       "heading": "City to Ocean",
-      "intro": "Branding en visuele identiteit voor een sportief project met een frisse, ocean minded uitstraling.",
+      "intro": "Branding en visuele identiteit voor een sportief project met een frisse, op de oceaan geïnspireerde uitstraling.",
       "image": "/assets/project-covers/coverCTO.webp",
       "imageAlt": "City to Ocean branding en visuele identiteit",
       "type": "project",
@@ -219,9 +219,9 @@
     {
       "path": "/portfolio/erasmus-hogeschool/",
       "aliases": ["/portfolio/erasmus/"],
-      "title": "Erasmus Hogeschool affiche | Nolan Design",
-      "description": "Bekijk de affiche voor de opleiding Multimedia en Creatieve Technologie van Erasmus Hogeschool Brussel, ontworpen met een sterke visuele focus.",
-      "heading": "Erasmus Hogeschool",
+      "title": "Erasmushogeschool affiche | Nolan Design",
+      "description": "Bekijk de affiche voor de opleiding Multimedia en Creatieve Technologie van Erasmushogeschool Brussel, ontworpen met een sterke visuele focus.",
+      "heading": "Erasmushogeschool",
       "intro": "Afficheontwerp voor de opleiding Multimedia en Creatieve Technologie.",
       "type": "project",
       "index": true
@@ -229,9 +229,9 @@
     {
       "path": "/portfolio/studio-by-cas/",
       "title": "Studio By Cas branding en website | Nolan Design",
-      "description": "Ontdek de visuele identiteit en portfolio-website voor Studio By Cas, een studio voor video, foto, motion en dronebeelden.",
+      "description": "Ontdek de visuele identiteit en portfoliowebsite voor Studio By Cas, een studio voor video, foto, motion en dronebeelden.",
       "heading": "Studio By Cas",
-      "intro": "Een heldere visuele identiteit en portfolio-website voor een veelzijdige motionstudio.",
+      "intro": "Een heldere visuele identiteit en portfoliowebsite voor een veelzijdige motionstudio.",
       "type": "project",
       "index": true
     },
@@ -241,7 +241,7 @@
       "title": "Mentalité Sportswear branding | Nolan Design",
       "description": "Bekijk de branding en grafische uitwerking voor Mentalité Sportswear in het portfolio van Nolan Design, met een sportieve visuele identiteit.",
       "heading": "Mentalité Sportswear",
-      "intro": "Branding en grafische uitwerking voor een sportwearmerk met karakter.",
+      "intro": "Branding en grafische uitwerking voor een sportswearmerk met karakter.",
       "type": "project",
       "index": true
     },
