@@ -1,5 +1,5 @@
 import { SendHorizontal, X } from "lucide-react";
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useLanguage } from "../i18n/LanguageContext";
 import { assetPath } from "../utils/asset";
 
@@ -12,12 +12,42 @@ export function createWhatsAppHref(message = whatsAppMessage) {
 
 export function WhatsAppPopup() {
   const { language, t } = useLanguage();
+  const contactRef = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [message, setMessage] = useState(t("whatsapp.defaultMessage"));
   const sendHref = useMemo(
     () => createWhatsAppHref(message.trim() || t("whatsapp.defaultMessage")),
     [message, t],
   );
+
+  useEffect(() => {
+    const contact = contactRef.current;
+    const footer = document.querySelector<HTMLElement>(".footer-top");
+    if (!contact || !footer) return;
+
+    let frame = 0;
+    const syncPosition = () => {
+      frame = 0;
+      const boundary = footer.getBoundingClientRect().bottom;
+      const offset = Math.max(0, window.innerHeight - boundary);
+      contact.style.translate = `0 ${-offset}px`;
+    };
+    const requestSync = () => {
+      if (!frame) frame = window.requestAnimationFrame(syncPosition);
+    };
+    const observer = new ResizeObserver(requestSync);
+    observer.observe(document.body);
+    observer.observe(footer);
+    syncPosition();
+    window.addEventListener("scroll", requestSync, { passive: true });
+    window.addEventListener("resize", requestSync);
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", requestSync);
+      window.removeEventListener("resize", requestSync);
+    };
+  }, []);
 
   function sendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -40,7 +70,7 @@ export function WhatsAppPopup() {
   }, [expanded]);
 
   return (
-    <div className="whatsapp-contact" data-expanded={expanded}>
+    <div ref={contactRef} className="whatsapp-contact" data-expanded={expanded}>
       <button
         className="whatsapp-contact__launcher"
         type="button"

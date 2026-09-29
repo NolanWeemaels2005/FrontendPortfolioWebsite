@@ -65,7 +65,7 @@ export function Navigation() {
 
   return (
     <>
-      <header className={`nav ${open ? "open" : ""} ${scrolled ? "scrolled" : ""}`} id="nav">
+      <header className={`nav nav--glass ${open ? "open" : ""} ${scrolled ? "scrolled" : ""}`} id="nav">
         <button
           ref={menuButtonRef}
           className="menu-btn"

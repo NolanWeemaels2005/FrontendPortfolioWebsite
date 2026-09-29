@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import { useLanguage } from "../../i18n/LanguageContext";
-import { projectRevealLayout } from "../../utils/projectRevealLayout";
+import { projectRevealLayout, type RevealExclusion } from "../../utils/projectRevealLayout";
 import { Link } from "react-router-dom";
 
 type ImageRevealItem = {
   src: string;
   alt: string;
   href: string;
+  background?: string;
 };
 
 type ImageRevealProps = {
@@ -17,18 +18,57 @@ type ImageRevealProps = {
 export default function ImageReveal({ images = [], children }: ImageRevealProps) {
   const { t } = useLanguage();
   const rootRef = useRef<HTMLDivElement>(null);
-  const [bounds, setBounds] = useState({ width: 0, height: 0 });
-  useEffect(() => {
+  const [bounds, setBounds] = useState<{ width: number; height: number; exclusion: RevealExclusion } | null>(null);
+  useLayoutEffect(() => {
     const root = rootRef.current;
-    if (!root) return;
-    const observer = new ResizeObserver(([entry]) => {
-      const { width, height } = entry.contentRect;
-      setBounds({ width, height });
-    });
-    observer.observe(root);
-    return () => observer.disconnect();
+    const number = root?.querySelector(".home-overview__project-number");
+    if (!root || !number) return;
+
+    const measure = () => {
+      const label = root.querySelector(".home-overview__project-label");
+      if (!label) return;
+      const rootRect = root.getBoundingClientRect();
+      const labelRect = label.getBoundingClientRect();
+      // The text can extend beyond its narrow element and its short line height.
+      const range = document.createRange();
+      range.selectNodeContents(label);
+      const textRect = range.getBoundingClientRect();
+      const padding = Math.max(20, textRect.height * 0.3);
+      const next = {
+        width: rootRect.width,
+        height: rootRect.height,
+        exclusion: {
+          left: Math.min(labelRect.left, textRect.left) - rootRect.left - padding,
+          right: Math.max(labelRect.right, textRect.right) - rootRect.left + padding,
+          top: Math.min(labelRect.top, textRect.top) - rootRect.top - padding,
+          bottom: Math.max(labelRect.bottom, textRect.bottom) - rootRect.top + padding,
+        },
+      };
+      setBounds((current) => JSON.stringify(current) === JSON.stringify(next) ? current : next);
+    };
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(root);
+    resizeObserver.observe(number);
+    const mutationObserver = new MutationObserver(measure);
+    mutationObserver.observe(number, { childList: true, characterData: true, subtree: true });
+    document.fonts.addEventListener("loadingdone", measure);
+    window.addEventListener("resize", measure);
+    measure();
+    return () => {
+      resizeObserver.disconnect();
+      mutationObserver.disconnect();
+      document.fonts.removeEventListener("loadingdone", measure);
+      window.removeEventListener("resize", measure);
+    };
   }, []);
   const [introHrefs, setIntroHrefs] = useState<string[]>([]);
+  const [expiredIntroHrefs, setExpiredIntroHrefs] = useState<string[]>([]);
+  useEffect(() => {
+    const timers = introHrefs.map((href, index) => window.setTimeout(() => {
+      setExpiredIntroHrefs((expired) => [...expired, href]);
+    }, 2000 + index * 70));
+    return () => timers.forEach(window.clearTimeout);
+  }, [introHrefs]);
   const [hasInteracted, setHasInteracted] = useState(false);
   useEffect(() => {
     const root = rootRef.current;
@@ -49,7 +89,8 @@ export default function ImageReveal({ images = [], children }: ImageRevealProps)
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const positionedImages = useMemo(
     () => {
-      const positions = projectRevealLayout(images.length, bounds.width, bounds.height);
+      if (!bounds) return [];
+      const positions = projectRevealLayout(images.length, bounds.width, bounds.height, bounds.exclusion);
       return images.flatMap((image, index) => positions[index] ? [{ ...image, position: positions[index] }] : []);
     },
     [images, bounds],
@@ -93,6 +134,7 @@ export default function ImageReveal({ images = [], children }: ImageRevealProps)
           const introIndex = introHrefs.indexOf(image.href);
           const position = image.position;
           const frameStyle = {
+            "--reveal-background": image.background,
             "--reveal-x": `${position.x}px`,
             "--reveal-y": `${position.y}px`,
             "--reveal-order": introIndex,
@@ -100,7 +142,7 @@ export default function ImageReveal({ images = [], children }: ImageRevealProps)
           } as CSSProperties;
 
           return (
-            <figure className={`image-reveal__frame ${activeIndex === index ? "is-active" : ""} ${!hasInteracted && introIndex >= 0 ? "is-intro" : ""}`} key={image.href} style={frameStyle}>
+            <figure className={`image-reveal__frame ${activeIndex === index ? "is-active" : ""} ${!hasInteracted && introIndex >= 0 && !expiredIntroHrefs.includes(image.href) ? "is-intro" : ""}`} key={image.href} style={frameStyle}>
               <Link to={image.href} aria-label={`${t("home.viewProject")} ${image.alt}`} onFocus={() => {
                 setHasInteracted(true);
                 setActiveIndex(index);

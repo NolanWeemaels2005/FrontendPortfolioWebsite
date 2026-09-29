@@ -5,6 +5,7 @@ import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { Hero } from "../components/Hero";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../i18n/LanguageContext";
+import { softwareTools } from "../data/softwareTools";
 import { assetPath } from "../utils/asset";
 
 const storyItems = [
@@ -46,14 +47,7 @@ const storyItems = [
   },
 ];
 
-const tools = [
-  { label: "Adobe Photoshop", icon: "NewPHOTOSHOPLogo.webp" },
-  { label: "Figma", icon: "NewFIGMALogo.webp" },
-  { label: "Adobe Illustrator", icon: "NewILLUSTRATORLogo.webp" },
-  { label: "Microsoft VS Code", icon: "NewVSCODELogo.webp" },
-  { label: "Adobe InDesign", icon: "NewINDESIGNLogo.webp" },
-  { label: "Artificial Intelligence", icon: "AIIcon.webp" },
-];
+
 
 const storySourceWidths: Record<string, number> = {
   "MyStoryPicture1.webp": 1093,
@@ -167,12 +161,12 @@ export function AboutPage() {
               <div className="about-skills__portrait-frame">
                 <img
                   className="about-skills__portrait"
-                  src={assetPath("assets/about-story/optimized/MyStoryPicture7.webp")}
-                  srcSet={storyImageSrcSet("MyStoryPicture7.webp")}
+                  src={assetPath("assets/home-overview/portrait-bw-960.jpg")}
+                  srcSet={`${assetPath("assets/home-overview/portrait-bw-480.jpg")} 480w, ${assetPath("assets/home-overview/portrait-bw-960.jpg")} 960w`}
                   sizes="(max-width: 61.25rem) min(calc(100vw - 2rem), 26.25rem), min(27.5rem, 38vw)"
                   alt={t("about.portraitAlt")}
-                  width="998"
-                  height="1400"
+                  width="960"
+                  height="1366"
                   loading="lazy"
                   decoding="async"
                 />
@@ -180,7 +174,7 @@ export function AboutPage() {
               <div className="about-skills__copy">
                 <h3>{t("about.toolsHeading")}</h3>
                 <div className="tool-grid">
-                  {tools.map((tool) => (
+                  {softwareTools.map((tool) => (
                     <div className="tool-item" key={tool.label}>
                       <span>
                         <img src={assetPath(`assets/about-story/${tool.icon.replace(/\.webp$/, "-64.webp")}`)} alt="" width="64" height="64" loading="lazy" decoding="async" />
@@ -253,12 +247,7 @@ export function AboutPage() {
           </div>
         </section>
 
-        <section className="about-story-cta" data-reveal>
-          <h2>{t("portfolio.cta")}</h2>
-          <Link to="/contact/" className="btn btn--primary" data-cursor="merge">
-            <ButtonTextStagger text={t("cta.letsTalk")} />
-          </Link>
-        </section>
+
       </div>
     </>
   );

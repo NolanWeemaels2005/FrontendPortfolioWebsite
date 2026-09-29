@@ -60,7 +60,10 @@ export function ContactPage() {
       <section className="contact-studio-page" id="page-content">
         <div className="contact-studio-page__inner">
           <header className="contact-studio-intro" data-reveal>
-            <h2>{t("contact.title")}</h2>
+            <h2>
+              <span>{t("contact.titleLine1")}</span>{" "}
+              <span>{t("contact.titleLine2")}</span>
+            </h2>
             <p>{t("contact.intro")}</p>
           </header>
 

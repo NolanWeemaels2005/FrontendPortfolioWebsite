@@ -3127,7 +3127,7 @@ body.home-route .site-footer {
 
 .home-overview__project-number {
   position: relative;
-  z-index: 2;
+  z-index: auto;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -3138,7 +3138,7 @@ body.home-route .site-footer {
   letter-spacing: 0;
   text-align: center;
   pointer-events: none;
-  transform: translateY(-0.08em);
+  top: -0.08em;
 }
 
 .home-overview__project-digit {
@@ -3158,7 +3158,7 @@ body.home-route .site-footer {
   position: absolute;
   left: 50%;
   top: 104%;
-  z-index: 3;
+  z-index: 9;
   display: block;
   width: 72%;
   margin-top: 0;
@@ -3188,8 +3188,8 @@ body.home-route .site-footer {
   margin: 0;
   overflow: hidden;
   border: clamp(.1875rem, 0.28vw, .3125rem) solid var(--orange);
-  border-radius: clamp(1.125rem, 2.5vw, 2.625rem) 0 clamp(1.125rem, 2.5vw, 2.625rem) 0;
-  background: var(--orange);
+  border-radius: clamp(.5rem, 1vw, .875rem) 0 clamp(.5rem, 1vw, .875rem) 0;
+  background: var(--reveal-background, var(--orange));
   background-clip: padding-box;
   opacity: 0;
   transform: translate3d(-50%, -46%, 0) scale(0.82);
@@ -4168,7 +4168,7 @@ body.about-route .about-story__sticky {
 .about-skills__copy p {
   max-width: 42.5rem;
   margin: 0 0 1.35rem;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .about-skills__button,
@@ -5126,7 +5126,7 @@ body.about-route .about-story__sticky {
 }
 
 .contact-studio-page__inner {
-  width: min(100%, 72.5rem);
+  width: min(100%, 101.125rem);
   margin: 0 auto;
 }
 
@@ -5137,15 +5137,20 @@ body.about-route .about-story__sticky {
 .contact-studio-intro h2 {
   color: #ee9d59;
   font-family: var(--font-display);
-  font-size: clamp(3.3rem, 6.15vw, 7.35rem);
+  font-size: clamp(1rem, 7vw, 8.25rem);
   font-weight: 900;
-  line-height: 0.86;
+  line-height: 1.15;
   text-transform: uppercase;
+}
+
+.contact-studio-intro h2 span {
+  display: block;
+  white-space: nowrap;
 }
 
 .contact-studio-intro p {
   max-width: 38.75rem;
-  margin: 1.05rem auto 0;
+  margin: 1.75rem auto 0;
   color: #fff;
   font-size: clamp(0.96rem, 1.15vw, 1.18rem);
   font-weight: 850;
@@ -7515,11 +7520,6 @@ body.about-route .about-story__sticky {
     text-align: left;
   }
 
-  .contact-studio-intro h2 {
-    font-size: 3.25rem;
-    line-height: 0.9;
-  }
-
   .contact-studio-intro p {
     margin-inline: 0;
     line-height: 1.35;
@@ -7840,10 +7840,6 @@ body.about-route .about-story__sticky {
     grid-column: 1;
   }
 
-  .contact-studio-intro h2 {
-    font-size: 2.55rem;
-  }
-
   .project-detail__title h1 {
     font-size: 2.45rem;
   }
@@ -7917,7 +7913,7 @@ body.about-route .about-story__sticky {
   body.about-route .about-story__intro,
   body.about-route .about-section-heading,
   body.about-route .about-skills__copy > h3,
-  body.about-route .about-story-cta h2 {
+  .about-story-cta h2 {
     width: 100%;
     max-width: 100%;
     margin-right: auto;
@@ -8389,4 +8385,294 @@ body.about-route .about-story__sticky {
 @media (prefers-reduced-motion: reduce) {
   .home-services__row,
   .home-services__image { transition: none; }
+}
+
+.software-carousel {
+  --software-gap: clamp(1rem, 2.2vw, 2.5rem);
+  background: #000;
+  color: #fff;
+  padding: 0 0 clamp(4rem, 7vw, 8rem);
+}
+
+.software-carousel__header {
+  width: min(calc(100% - 2 * var(--page-gutter)), 101.125rem);
+  margin: 0 auto clamp(1.5rem, 2.5vw, 2.75rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.software-carousel__header h2 {
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.software-carousel__header h2 span {
+  display: block;
+  font-size: clamp(1.75rem, 2.8vw, 3rem);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.software-carousel__header h2 strong {
+  display: block;
+  margin-top: .4rem;
+  color: var(--orange);
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1.8vw, 2rem);
+  line-height: 1.2;
+}
+
+.software-carousel__toggle {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--orange);
+  border-radius: .625rem 0 .625rem 0;
+  background: transparent;
+  color: var(--orange);
+  cursor: pointer;
+}
+
+.software-carousel__toggle:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.software-carousel__viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
+
+.software-carousel__track {
+  display: flex;
+  width: max-content;
+  animation: software-scroll 42s linear infinite;
+}
+
+.software-carousel__group {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--software-gap);
+  margin: 0;
+  padding: 0 var(--software-gap) 0 0;
+  list-style: none;
+}
+
+.software-carousel__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .75rem;
+  width: clamp(16.5rem, 30vw, 33rem);
+  min-height: clamp(9rem, 12vw, 13rem);
+  padding: clamp(1rem, 1.8vw, 2rem);
+  border: clamp(3px, .3vw, 5px) solid var(--orange);
+  border-radius: clamp(1.25rem, 2.4vw, 2.75rem) 0 clamp(1.25rem, 2.4vw, 2.75rem) 0;
+  background: #1a1a1a;
+}
+
+.software-carousel__card img {
+  width: clamp(2.75rem, 4vw, 4.5rem);
+  height: clamp(2.75rem, 4vw, 4.5rem);
+  object-fit: contain;
+  object-position: left center;
+}
+
+.software-carousel__card span {
+  font-size: clamp(1.15rem, 2vw, 2.3rem);
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.software-carousel[data-paused="true"] .software-carousel__track {
+  animation-play-state: paused;
+}
+
+@media (hover: hover) {
+  .software-carousel__viewport:hover .software-carousel__track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes software-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .software-carousel__track { animation: none; width: 100%; }
+  .software-carousel__group { flex-wrap: wrap; justify-content: center; width: 100%; padding: 0 var(--page-gutter); }
+  .software-carousel__group[aria-hidden="true"],
+  .software-carousel__toggle { display: none; }
+  .software-carousel__viewport { mask-image: none; -webkit-mask-image: none; }
+  .software-carousel__card { max-width: 100%; }
+}
+
+/* The software strip shares the bottom row with the profile caption. */
+.home-overview__content > .software-carousel {
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+  align-self: end;
+  --software-gap: 1rem;
+}
+
+.home-overview__content .software-carousel__header {
+  width: 100%;
+  margin-bottom: .75rem;
+}
+
+.home-overview__content .software-carousel__header h2 span {
+  font-size: clamp(1.1rem, 1.4vw, 1.5rem);
+}
+
+.home-overview__content .software-carousel__header h2 strong {
+  margin-top: .2rem;
+  font-size: clamp(.85rem, 1vw, 1.1rem);
+}
+
+.home-overview__content .software-carousel__toggle {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.home-overview__content .software-carousel__card {
+  width: clamp(13rem, 18vw, 20rem);
+  min-height: 0;
+  padding: .65rem 1rem;
+  gap: .35rem;
+  border-width: 3px;
+  border-radius: 1.25rem 0 1.25rem 0;
+}
+
+.home-overview__content .software-carousel__card img {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.home-overview__content .software-carousel__card span {
+  font-size: clamp(.95rem, 1.2vw, 1.3rem);
+}
+
+@media (min-width: 68.751rem) {
+  .home-overview__content {
+    row-gap: clamp(1.3rem, 1.7vw, 2rem);
+  }
+
+  .home-overview__profile {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .home-overview__profile-caption {
+    grid-row: 2;
+    align-self: end;
+  }
+
+  .home-overview__profile-caption h3 {
+    margin-top: 0;
+  }
+
+  .home-overview__stats {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .home-overview__content > .software-carousel {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+@media (max-width: 68.75rem) {
+  .home-overview__profile-caption {
+    margin-top: -2rem;
+  }
+}
+
+/* Keep the header out of an opacity-animation backdrop root in Chromium. */
+#nav.nav--glass {
+  animation: none;
+}
+
+/* Show the frosted bar only after scrolling, with the menu closed. */
+#nav.nav--glass {
+  background: transparent;
+  box-shadow: none;
+}
+
+#nav.nav--glass::before {
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(255, 255, 255, .07), transparent 48%, rgba(255, 255, 255, .035)), rgba(10, 10, 10, .28);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .12);
+  transition: opacity .25s ease;
+}
+
+#nav.nav--glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("/assets/textures/frosted-glass.svg");
+  background-size: 160px 160px;
+  opacity: 0;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .55);
+  transition: opacity .25s ease;
+}
+
+#nav.nav--glass.scrolled:not(.open)::before {
+  opacity: 1;
+  -webkit-backdrop-filter: blur(28px) saturate(1.65);
+  backdrop-filter: blur(28px) saturate(1.65);
+}
+
+#nav.nav--glass.scrolled:not(.open)::after {
+  opacity: .22;
+}
+
+#nav.nav--glass.open::before,
+#nav.nav--glass.open::after {
+  visibility: hidden;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  #nav.nav--glass::before { background-color: rgba(20, 20, 20, .94); }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  #nav.nav--glass.scrolled:not(.open)::before {
+    background: #1b1b1b;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #nav.nav--glass::before,
+  #nav.nav--glass::after { transition: none; }
+}
+
+/* Separate adjoining charcoal sections using the same dashed rule as the footer. */
+:is(.project-hall, .about-story-content, .not-found-page) + .about-story-cta {
+  position: relative;
+}
+
+:is(.project-hall, .about-story-content, .not-found-page) + .about-story-cta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: min(calc(100% - (var(--page-gutter) * 2)), 101.125rem);
+  border-top: .1875rem dashed rgba(255, 255, 255, .9);
+  pointer-events: none;
 }

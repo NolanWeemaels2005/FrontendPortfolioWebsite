@@ -1,5 +1,6 @@
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo } from "react";
+import { PageContactCta } from "./components/PageContactCta";
 import { Footer } from "./components/Footer";
 import { Navigation } from "./components/Navigation";
 import { Seo } from "./components/Seo";
@@ -175,6 +176,7 @@ export function App() {
             <Route path="/privacybeleid" element={<LegalPage type="privacy" />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
+          {location.pathname.replace(/\/+$/, "") !== "/contact" && <PageContactCta />}
         </Suspense>
       </main>
       <WhatsAppPopup />

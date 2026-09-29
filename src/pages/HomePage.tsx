@@ -3,6 +3,7 @@ import { ArrowRight, BadgeEuro, Clock3, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import ImageReveal from "../components/lightswind/ImageReveal";
+import { SoftwareCarousel } from "../components/SoftwareCarousel";
 import { HomeServices } from "../components/HomeServices";
 import { ProjectHallOfFame } from "../components/ProjectHallOfFame";
 import { useCombinedProjectsQuery, useLatestProjectQuery } from "../data/projectQueries";
@@ -106,6 +107,7 @@ export function HomePage() {
         src: previewImageUrl(project.images?.[1] || project.images?.[0] || project.cover || project.heroImage || project.logo || "", 320),
         alt: project.titleKey ? t(project.titleKey) : project.title,
         href: `/portfolio/${project.slug}/`,
+        background: project.slug.startsWith("brussel-noord-basket") ? "#292929" : undefined,
       }))
       .filter((image) => Boolean(image.src));
   }, [projects, t]);
@@ -308,6 +310,8 @@ export function HomePage() {
                     decoding="async"
                   />
                 </div>
+              </div>
+              <div className="home-overview__profile home-overview__profile-caption">
                 <h3>{t("home.role")}</h3>
                 <p>
                   <span className="sr-only">{t("home.since")}</span>
@@ -341,6 +345,7 @@ export function HomePage() {
                   </dd>
                 </div>
               </dl>
+              <SoftwareCarousel />
             </div>
           </div>
         </div>
