@@ -1,3 +1,4 @@
+import { ScrollSectionEdge } from "../components/ScrollSectionEdge";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -142,12 +143,15 @@ export function AboutPage() {
 
   return (
     <>
-      <Hero
-        title={t("hero.aboutTitle")}
-        script={t("hero.aboutScript")}
-        scrollText={t("hero.scroll")}
-        className="portfolio-showcase-hero about-story-hero"
-      />
+      <div className="hero-overlap-scroll">
+        <Hero
+          title={t("hero.aboutTitle")}
+          script={t("hero.aboutScript")}
+          scrollText={t("hero.scroll")}
+          className="portfolio-showcase-hero about-story-hero"
+        />
+      </div>
+      <ScrollSectionEdge color="#fff" />
 
       <div id="page-content" className="about-story-content">
         <section className="about-skills" data-reveal>

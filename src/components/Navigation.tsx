@@ -104,11 +104,11 @@ export function Navigation() {
                 key={item.href}
                 onClick={closeMenu}
                 onFocus={() => {
-                  setActivePreview(item.href);
+                  setActivePreview(item.href === "/blog/" ? "/portfolio/" : item.href);
                   void preloadPageModule(item.href);
                 }}
                 onMouseEnter={() => {
-                  setActivePreview(item.href);
+                  setActivePreview(item.href === "/blog/" ? "/portfolio/" : item.href);
                   void preloadPageModule(item.href);
                 }}
                 end={item.href === "/"}

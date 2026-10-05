@@ -1,10 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { App } from "./App";
 import { LanguageProvider } from "./i18n/LanguageContext";
 import { preloadProjectData } from "./data/projectQueries";
 import "./styles/global.css";
+import "./styles/blog.css";
 
 const redirectRoute = window.location.search.match(/^\?\/([^&]*)/);
 if (redirectRoute) {
@@ -17,12 +18,12 @@ if (window.location.pathname.startsWith("/portfolio")) {
   void preloadProjectData();
 }
 
+const router = createBrowserRouter([
+  { path: "*", element: <LanguageProvider><App /></LanguageProvider> },
+], { basename: import.meta.env.BASE_URL });
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <LanguageProvider>
-        <App />
-      </LanguageProvider>
-    </BrowserRouter>
+    <RouterProvider router={router} />
   </React.StrictMode>,
 );

@@ -9,6 +9,7 @@
     "build": "tsc --noEmit && vite build",
     "postbuild": "node scripts/generate-seo-files.mjs --dist && npm run audit:seo",
     "audit:seo": "node scripts/audit-seo.mjs",
+    "check:blog": "node scripts/check-blog.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

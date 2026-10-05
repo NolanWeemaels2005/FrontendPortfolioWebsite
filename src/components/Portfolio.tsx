@@ -59,6 +59,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                     style={{ "--accent": project.color, "--featured-delay": `${Math.min(index * 80, 520)}ms` } as CSSProperties}
                     {...featuredTilt}
                   >
+                    <span className="featured-card__art">
                     {project.cover ? (
                       <img
                         className="featured-card__cover"
@@ -83,6 +84,36 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                         loading="lazy"
                         decoding="async"
                       />
+                    ) : null}
+                    </span>
+                    {variant === "showcase" ? (
+                      <span className="featured-card__art featured-card__art--color" aria-hidden="true">
+                    {project.cover ? (
+                      <img
+                        className="featured-card__cover"
+                        src={project.cover}
+                        srcSet={responsiveImageSrcSet(project.cover, 640, 1280)}
+                        sizes="(max-width: 760px) calc(100vw - 2rem), (max-width: 1200px) 50vw, 580px"
+                        alt=""
+                        width="1280"
+                        height="1600"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : null}
+                    <span className="featured-card__wash" />
+                    {project.logo ? (
+                      <img
+                        className="featured-card__logo"
+                        src={previewImageUrl(project.logo, 256)}
+                        alt={projectTitle}
+                        width="512"
+                        height="512"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : null}
+                      </span>
                     ) : null}
                   </Link>
                   <Link className="featured-card__label" to={`/portfolio/${project.slug}/`} onClick={rememberPortfolioScroll}>

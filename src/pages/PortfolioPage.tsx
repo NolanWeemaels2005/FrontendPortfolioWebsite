@@ -1,3 +1,4 @@
+import { ScrollSectionEdge } from "../components/ScrollSectionEdge";
 import { useLayoutEffect } from "react";
 import { Hero } from "../components/Hero";
 import { ThreeDMarquee } from "../components/lightswind/3d-marquee";
@@ -46,13 +47,16 @@ export function PortfolioPage() {
 
   return (
     <>
-      <Hero
-        title={t("hero.portfolioTitle")}
-        script={t("hero.portfolioScript")}
-        scrollText={t("hero.scroll")}
-        className="portfolio-showcase-hero"
-        visual={<ThreeDMarquee images={marqueeImages} className="portfolio-hero-marquee" />}
-      />
+      <div className="hero-overlap-scroll">
+        <Hero
+          title={t("hero.portfolioTitle")}
+          script={t("hero.portfolioScript")}
+          scrollText={t("hero.scroll")}
+          className="portfolio-showcase-hero"
+          visual={<ThreeDMarquee images={marqueeImages} className="portfolio-hero-marquee" />}
+        />
+      </div>
+      <ScrollSectionEdge color="#000" />
       <div id="page-content" className="portfolio-showcase-content">
         <LogoStrip />
         <Portfolio variant="showcase" />

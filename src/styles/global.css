@@ -2099,7 +2099,7 @@ body.portfolio-route .portfolio-showcase-hero .hero-copy .hero-script-mask {
 
 .portfolio-showcase-hero .hero-title {
   opacity: 0;
-  font-size: calc(var(--portfolio-showcase-script-size) * 0.843);
+  font-size: calc(var(--portfolio-showcase-script-size, clamp(4.8rem, 7vw, 8.25rem)) * 0.843);
   font-weight: 900;
   line-height: 0.84;
   text-transform: uppercase;
@@ -2114,7 +2114,7 @@ body.portfolio-route .portfolio-showcase-hero .hero-copy .hero-script-mask {
   display: block;
   color: #ee9d59;
   font-family: var(--font-display);
-  font-size: var(--portfolio-showcase-script-size);
+  font-size: var(--portfolio-showcase-script-size, clamp(4.8rem, 7vw, 8.25rem));
   font-weight: 900;
   line-height: 1.18;
   text-transform: uppercase;
@@ -2441,8 +2441,27 @@ body.home-route .site-footer {
   contain-intrinsic-size: auto !important;
 }
 
-.home-landing {
+/* One viewport of overlap lets the next section cover the pinned landing.
+   Release it afterwards so it does not remain fixed behind the entire page. */
+.home-landing-scroll,
+.hero-overlap-scroll {
   position: relative;
+  z-index: 0;
+  display: flow-root;
+  margin-bottom: -100svh;
+}
+
+.home-landing-scroll::after,
+.hero-overlap-scroll::after {
+  content: "";
+  display: block;
+  height: 100svh;
+  pointer-events: none;
+}
+
+.home-landing {
+  position: sticky;
+  top: 0;
   min-height: 100svh;
   display: grid;
   place-items: center;
@@ -2456,12 +2475,20 @@ body.home-route .site-footer {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background:
-    radial-gradient(circle at 59% 44%, rgba(205, 0, 120, 0.82) 0, rgba(133, 0, 91, 0.5) 32%, transparent 58%),
-    radial-gradient(circle at 87% 88%, rgba(237, 0, 131, 0.4) 0, transparent 42%),
-    linear-gradient(118deg, #270029 0%, #520041 52%, #330033 100%);
-  transform: scale(1.04);
-  animation: homeLandingBackground 9s ease-in-out infinite alternate;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--main-hero-gradient);
+}
+
+.home-star-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Fade the pattern at the edges, like the about hero's shaded background. */
+  -webkit-mask-image: radial-gradient(ellipse farthest-corner at 50% 50%, #000 30%, rgba(0, 0, 0, .65) 65%, transparent 100%);
+  mask-image: radial-gradient(ellipse farthest-corner at 50% 50%, #000 30%, rgba(0, 0, 0, .65) 65%, transparent 100%);
 }
 
 .home-landing__center {
@@ -2656,11 +2683,6 @@ body.home-route .site-footer {
   background: currentColor;
   transform: translateX(-50%);
   animation: homeMouseWheel 1.35s ease-in-out infinite;
-}
-
-@keyframes homeLandingBackground {
-  from { transform: scale(1.04) translate3d(-0.5%, 0, 0); }
-  to { transform: scale(1.09) translate3d(0.8%, -0.5%, 0); }
 }
 
 @keyframes homeLandingEnter {
@@ -3056,6 +3078,25 @@ body.home-route .site-footer {
   padding: 0 clamp(1.4rem, 3.2vw, 4rem);
 }
 
+.home-section-edge {
+  position: relative;
+  z-index: 3;
+  height: 0;
+  color: #000;
+  pointer-events: none;
+}
+
+.home-section-edge--audit { color: #1b1b1b; }
+
+.home-section-edge svg {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 82px;
+  overflow: visible;
+}
+
 .home-overview__inner {
   width: min(100%, 120rem);
   margin: 0 auto;
@@ -3192,9 +3233,9 @@ body.home-route .site-footer {
   background: var(--reveal-background, var(--orange));
   background-clip: padding-box;
   opacity: 0;
-  transform: translate3d(-50%, -46%, 0) scale(0.82);
-  transition: opacity 0.34s ease, transform 0.52s var(--ease);
-  will-change: transform, opacity;
+  transform: translate3d(-50%, -46%, 0) scale(0.96);
+  clip-path: polygon(0 0, 100% 0, 100% 0%, 87.5% 8%, 75% 14%, 62.5% 17%, 50% 18%, 37.5% 17%, 25% 14%, 12.5% 8%, 0 0%);
+  transition: opacity .45s ease, transform .45s var(--ease), clip-path .45s cubic-bezier(.25, .1, .25, 1);
   box-sizing: border-box;
   box-shadow: none;
   outline: 0;
@@ -3205,6 +3246,10 @@ body.home-route .site-footer {
   opacity: 1;
   transform: translate3d(-50%, -50%, 0) scale(1);
   pointer-events: auto;
+}
+
+.image-reveal__frame:is(.is-active, .is-intro) {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 87.5% 100%, 75% 100%, 62.5% 100%, 50% 100%, 37.5% 100%, 25% 100%, 12.5% 100%, 0 100%);
 }
 
 .image-reveal__frame a {
@@ -3220,6 +3265,12 @@ body.home-route .site-footer {
   object-fit: cover;
   border-radius: inherit;
   box-shadow: none;
+  transform: translateY(-5%) scale(1.1);
+  transition: transform .45s var(--ease);
+}
+
+.image-reveal__frame:is(.is-active, .is-intro) img {
+  transform: translateY(0) scale(1);
 }
 
 .home-overview__stats-screen {
@@ -3720,17 +3771,17 @@ body.home-route .site-footer {
   }
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .nav {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav {
   min-height: 4.5rem;
   padding: 1rem;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .nav::before {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav::before {
   opacity: 0;
   background: rgba(8, 8, 8, 0.58);
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .nav.scrolled::before {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav.scrolled::before {
   opacity: 1;
 }
 
@@ -3739,7 +3790,7 @@ body:is(.legal-route, .not-found-route) .nav::before {
   background: rgba(8, 8, 8, 0.94);
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .menu-btn {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-btn {
   top: 50%;
   left: 2rem;
   translate: 0 -50%;
@@ -3752,25 +3803,25 @@ body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-ro
   border-radius: .625rem;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .menu-btn__label,
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .menu-lucide {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-btn__label,
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-lucide {
   display: none;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .menu-icon {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-icon {
   width: 1.125rem;
   height: .8125rem;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .menu-icon span {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-icon span {
   height: .15625rem;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .menu-icon span:last-child {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-icon span:last-child {
   width: 100%;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .nav-talk {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav-talk {
   top: 50%;
   right: auto;
   left: 5.55rem;
@@ -3786,42 +3837,41 @@ body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-ro
   letter-spacing: 0;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .nav.scrolled .nav-talk {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav.scrolled .nav-talk {
   background: #ee9d59;
   color: #fff;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .nav-logo {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav-logo {
   top: 1.22rem;
   left: auto;
   right: 2.25rem;
   transform: none;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .nav-logo img {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav-logo img {
   width: 8.75rem;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .overlay {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .overlay {
   clip-path: circle(0 at 5.4rem 5rem);
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route) .overlay.open {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .overlay.open {
   clip-path: circle(170% at 5.4rem 5rem);
 }
 
-body:is(.portfolio-route, .about-route, .contact-route) .portfolio-showcase-hero,
-body:is(.portfolio-route, .about-route, .contact-route) .hero.section-purple.portfolio-showcase-hero {
+body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .portfolio-showcase-hero,
+body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .hero.section-purple.portfolio-showcase-hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background:
-    linear-gradient(40deg, rgb(32, 0, 31), rgb(112, 0, 69) 48%, rgb(47, 0, 49)) !important;
+  background: var(--main-hero-gradient) !important;
   background-color: #20001f !important;
 }
 
-body:is(.portfolio-route, .about-route, .contact-route) .portfolio-showcase-hero::before,
-body:is(.portfolio-route, .about-route, .contact-route) .portfolio-showcase-hero::after {
+body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .portfolio-showcase-hero::before,
+body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .portfolio-showcase-hero::after {
   content: "";
   position: absolute;
   inset: -28%;
@@ -3832,7 +3882,7 @@ body:is(.portfolio-route, .about-route, .contact-route) .portfolio-showcase-hero
   mix-blend-mode: hard-light;
 }
 
-body:is(.portfolio-route, .about-route, .contact-route) .portfolio-showcase-hero::before {
+body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .portfolio-showcase-hero::before {
   background:
     radial-gradient(circle at 48% 46%, rgba(145, 0, 88, 0.78) 0, transparent 30%),
     radial-gradient(circle at 72% 36%, rgba(177, 0, 98, 0.45) 0, transparent 27%),
@@ -3840,15 +3890,15 @@ body:is(.portfolio-route, .about-route, .contact-route) .portfolio-showcase-hero
   animation: homeGradientMoveInCircle 28s linear infinite;
 }
 
-body:is(.portfolio-route, .about-route, .contact-route) .portfolio-showcase-hero::after {
+body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .portfolio-showcase-hero::after {
   background:
     radial-gradient(circle at 44% 44%, rgba(120, 0, 73, 0.75) 0, transparent 32%),
     radial-gradient(circle at 60% 62%, rgba(155, 0, 89, 0.42) 0, transparent 24%);
   animation: homeGradientMoveHorizontal 34s ease infinite;
 }
 
-body:is(.portfolio-route, .about-route, .contact-route) .portfolio-showcase-hero .hero__inner,
-body:is(.portfolio-route, .about-route, .contact-route) .portfolio-showcase-hero .hero-copy {
+body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .portfolio-showcase-hero .hero__inner,
+body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .portfolio-showcase-hero .hero-copy {
   position: relative;
   z-index: 1;
 }
@@ -8264,7 +8314,8 @@ body.about-route .about-story__sticky {
   transition-delay: calc(var(--reveal-order, 0) * 70ms);
 }
 @media (prefers-reduced-motion: reduce) {
-  .image-reveal__frame { transition: none; }
+  .image-reveal__frame,
+  .image-reveal__frame img { transition: none; }
 }
 
 .home-services {
@@ -8675,4 +8726,135 @@ body.about-route .about-story__sticky {
   width: min(calc(100% - (var(--page-gutter) * 2)), 101.125rem);
   border-top: .1875rem dashed rgba(255, 255, 255, .9);
   pointer-events: none;
+}
+
+/* Matching polygon points allow smooth reversal from any intermediate hover state. */
+:root {
+  --unfold-closed: polygon(0 0, 100% 0, 100% -22%, 97.5% -19.855%, 95% -17.82%, 92.5% -15.895%, 90% -14.08%, 87.5% -12.375%, 85% -10.78%, 82.5% -9.295%, 80% -7.92%, 77.5% -6.655%, 75% -5.5%, 72.5% -4.455%, 70% -3.52%, 67.5% -2.695%, 65% -1.98%, 62.5% -1.375%, 60% -0.88%, 57.5% -0.495%, 55% -0.22%, 52.5% -0.055%, 50% 0%, 47.5% -0.055%, 45% -0.22%, 42.5% -0.495%, 40% -0.88%, 37.5% -1.375%, 35% -1.98%, 32.5% -2.695%, 30% -3.52%, 27.5% -4.455%, 25% -5.5%, 22.5% -6.655%, 20% -7.92%, 17.5% -9.295%, 15% -10.78%, 12.5% -12.375%, 10% -14.08%, 7.5% -15.895%, 5% -17.82%, 2.5% -19.855%, 0% -22%);
+  --unfold-open: polygon(0 0, 100% 0, 100% 100%, 97.5% 100%, 95% 100%, 92.5% 100%, 90% 100%, 87.5% 100%, 85% 100%, 82.5% 100%, 80% 100%, 77.5% 100%, 75% 100%, 72.5% 100%, 70% 100%, 67.5% 100%, 65% 100%, 62.5% 100%, 60% 100%, 57.5% 100%, 55% 100%, 52.5% 100%, 50% 100%, 47.5% 100%, 45% 100%, 42.5% 100%, 40% 100%, 37.5% 100%, 35% 100%, 32.5% 100%, 30% 100%, 27.5% 100%, 25% 100%, 22.5% 100%, 20% 100%, 17.5% 100%, 15% 100%, 12.5% 100%, 10% 100%, 7.5% 100%, 5% 100%, 2.5% 100%, 0% 100%);
+}
+
+
+
+.home-section-edge { visibility: hidden; }
+
+.home-overview__portrait-photo--color,
+.project-hall-card__art--color,
+.menu-preview-card::after {
+  clip-path: var(--unfold-closed);
+  transition: clip-path .45s cubic-bezier(.25, .1, .25, 1);
+}
+
+.home-overview__portrait-photo--color { opacity: 1; }
+
+.project-hall-card__art {
+  position: absolute;
+  inset: 0;
+}
+
+/* Keep the monochrome layer intact while a separate color layer unfolds. */
+.project-hall-card .project-hall-card__cover {
+  filter: grayscale(1) contrast(1.08) brightness(.58);
+}
+.project-hall-card .project-hall-card__logo {
+  filter: grayscale(1) brightness(1.35);
+}
+.project-hall-card .project-hall-card__art--color .project-hall-card__cover {
+  filter: contrast(1.04) brightness(.92);
+  opacity: 1;
+}
+.project-hall-card .project-hall-card__art--color .project-hall-card__logo {
+  filter: brightness(1.06);
+}
+.project-hall-card__art--color .project-hall-card__shade { opacity: .18; }
+
+.menu-preview-card::after,
+.menu-preview-card.is-active::after {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  transform: none;
+  filter: none;
+  opacity: .92;
+}
+
+.home-overview__portrait:is(:hover, :focus-visible) .home-overview__portrait-photo--color,
+.project-hall-card:is(:hover, :focus-visible) .project-hall-card__art--color,
+.menu-preview-card.is-active::after {
+  clip-path: var(--unfold-open);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-overview__portrait-photo--color,
+  .project-hall-card__art--color,
+  .menu-preview-card::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.image-reveal__frame { clip-path: var(--unfold-closed); }
+.image-reveal__frame:is(.is-active, .is-intro) {
+  clip-path: var(--unfold-open);
+}
+@media (prefers-reduced-motion: reduce) {
+  .image-reveal__frame { animation: none !important; }
+}
+
+/* Shared main-page hero palette and overlap behavior. */
+:root {
+  --main-hero-gradient: radial-gradient(circle farthest-corner at 39% 70%,
+    #aa0073 0%, #790052 24%, #420032 52%, #20001f 82%);
+}
+
+body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .hero-overlap-scroll > .hero.section-purple {
+  position: sticky;
+  top: 0;
+  background: var(--main-hero-gradient) !important;
+}
+
+body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .hero-overlap-scroll > .hero::before,
+body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .hero-overlap-scroll > .hero::after {
+  display: none;
+}
+
+.portfolio-showcase-content,
+.about-story-content,
+.contact-studio-page {
+  position: relative;
+  z-index: 2;
+}
+
+.featured-card__art {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+}
+
+.portfolio--showcase .featured-card__art--color {
+  clip-path: var(--unfold-closed);
+  transition: clip-path .45s cubic-bezier(.25, .1, .25, 1);
+}
+
+.portfolio--showcase .featured-card:is(:hover, :focus-visible) .featured-card__art--color {
+  clip-path: var(--unfold-open);
+}
+
+.portfolio--showcase .featured-card .featured-card__art:not(.featured-card__art--color) .featured-card__cover {
+  filter: grayscale(1) saturate(0) contrast(1.1) brightness(.62);
+}
+
+.portfolio--showcase .featured-card .featured-card__art:not(.featured-card__art--color) .featured-card__logo {
+  filter: grayscale(1) drop-shadow(0 .625rem 1.125rem rgba(0, 0, 0, .38));
+}
+
+.portfolio--showcase .featured-card .featured-card__art--color .featured-card__cover {
+  filter: saturate(1.06) contrast(1.03) brightness(.92);
+}
+
+.portfolio--showcase .featured-card__art--color .featured-card__wash { opacity: .14; }
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio--showcase .featured-card__art--color { transition: none; }
 }

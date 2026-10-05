@@ -36,7 +36,7 @@ type EditableProject = {
   images?: string[];
 };
 
-export function AdminPage() {
+export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
   const location = useLocation();
   const navigate = useNavigate();
   const editSlug = new URLSearchParams(location.search).get("project");
@@ -446,7 +446,7 @@ export function AdminPage() {
       <div className="section-container admin-shell">
         <div className="admin-heading">
           <p className="eyebrow">Beheer</p>
-          <h1>{editingProject ? "Project bewerken" : "Projecten toevoegen"}</h1>
+          <h1>{!token && loginTitle ? loginTitle : editingProject ? "Project bewerken" : "Projecten toevoegen"}</h1>
           
         </div>
 

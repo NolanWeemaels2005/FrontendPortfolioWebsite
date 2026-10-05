@@ -88,6 +88,7 @@ export function ProjectHallOfFame() {
                 return (
                   <Link className="project-hall-card" to={`/portfolio/${project.slug}/`} key={project.slug} onClick={rememberPortfolioScroll}>
                     <span className="project-hall-card__media" style={{ "--hall-accent": getProjectAccent(project) } as CSSProperties}>
+                      <span className="project-hall-card__art">
                       {cover ? (
                         <img
                           className="project-hall-card__cover"
@@ -113,6 +114,34 @@ export function ProjectHallOfFame() {
                           decoding="async"
                         />
                       ) : null}
+                      </span>
+                      <span className="project-hall-card__art project-hall-card__art--color" aria-hidden="true">
+                      {cover ? (
+                        <img
+                          className="project-hall-card__cover"
+                          src={cover}
+                          srcSet={responsiveImageSrcSet(cover, 640, 1280)}
+                          sizes="(max-width: 760px) calc(100vw - 2rem), 390px"
+                          alt=""
+                          width="1280"
+                          height="1600"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : null}
+                      <span className="project-hall-card__shade" />
+                      {project.logo ? (
+                        <img
+                          className="project-hall-card__logo"
+                          src={previewImageUrl(project.logo, 256)}
+                          alt={title}
+                          width="512"
+                          height="512"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : null}
+                      </span>
                     </span>
                     <span className="project-hall-card__label">
                       <ButtonTextStagger text={title} />

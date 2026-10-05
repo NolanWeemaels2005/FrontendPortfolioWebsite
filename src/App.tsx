@@ -16,8 +16,10 @@ const PortfolioPage = lazy(() => pageModuleLoaders.portfolio().then((module) => 
 const ProjectDetailPage = lazy(() => pageModuleLoaders.projectDetail().then((module) => ({ default: module.ProjectDetailPage })));
 const AboutPage = lazy(() => pageModuleLoaders.about().then((module) => ({ default: module.AboutPage })));
 const ContactPage = lazy(() => pageModuleLoaders.contact().then((module) => ({ default: module.ContactPage })));
-const AdminPage = lazy(() => pageModuleLoaders.admin().then((module) => ({ default: module.AdminPage })));
 const LegalPage = lazy(() => pageModuleLoaders.legal().then((module) => ({ default: module.LegalPage })));
+const BlogPage = lazy(() => pageModuleLoaders.blog().then(module => ({ default: module.BlogPage })));
+const BlogPostPage = lazy(() => pageModuleLoaders.blogPost().then(module => ({ default: module.BlogPostPage })));
+const BlogAdminPage = lazy(() => pageModuleLoaders.blogAdmin().then(module => ({ default: module.BlogAdminPage })));
 const notFoundProjectPool = featuredProjects.filter((project) => project.logo);
 const routeBodyClasses = [
   "home-route",
@@ -27,6 +29,7 @@ const routeBodyClasses = [
   "project-route",
   "legal-route",
   "admin-route",
+  "blog-route",
   "not-found-route",
 ] as const;
 const legalPaths = new Set(["/cookiebeleid", "/juridische-voorwaarden", "/privacybeleid"]);
@@ -43,7 +46,8 @@ function getRouteBodyClass(pathname: string) {
   if (normalizedPathname.startsWith("/portfolio/")) return "project-route";
   if (normalizedPathname === "/about") return "about-route";
   if (normalizedPathname === "/contact") return "contact-route";
-  if (normalizedPathname === "/beheer") return "admin-route";
+  if (normalizedPathname === "/blog" || normalizedPathname.startsWith("/blog/")) return "blog-route";
+  if (normalizedPathname === "/beheer" || normalizedPathname.startsWith("/beheer/")) return "admin-route";
   if (legalPaths.has(normalizedPathname)) return "legal-route";
 
   return "not-found-route";
@@ -170,13 +174,17 @@ export function App() {
             <Route path="/portfolio/:slug" element={<ProjectDetailPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
-            <Route path="/beheer" element={<AdminPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogPostPage />} />
+            <Route path="/beheer/blog" element={<BlogAdminPage />} />
+            <Route path="/beheer/blog/:id" element={<BlogAdminPage />} />
+            <Route path="/beheer" element={<BlogAdminPage />} />
             <Route path="/cookiebeleid" element={<LegalPage type="cookies" />} />
             <Route path="/juridische-voorwaarden" element={<LegalPage type="terms" />} />
             <Route path="/privacybeleid" element={<LegalPage type="privacy" />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
-          {location.pathname.replace(/\/+$/, "") !== "/contact" && <PageContactCta />}
+          {!location.pathname.startsWith("/beheer") && location.pathname.replace(/\/+$/, "") !== "/contact" && <PageContactCta />}
         </Suspense>
       </main>
       <WhatsAppPopup />

@@ -1,3 +1,4 @@
+import { ScrollSectionEdge } from "../components/ScrollSectionEdge";
 import { useForm, ValidationError } from "@formspree/react";
 import { BadgeCheck, CircleEllipsis, Instagram, Mail, Megaphone, Monitor, Palette, Phone, Send, Share2, Shirt } from "lucide-react";
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
@@ -50,12 +51,15 @@ export function ContactPage() {
 
   return (
     <>
-      <Hero
-        title={t("hero.contactTitle")}
-        script={t("hero.contactScript")}
-        scrollText={t("hero.scroll")}
-        className="portfolio-showcase-hero contact-studio-hero"
-      />
+      <div className="hero-overlap-scroll">
+        <Hero
+          title={t("hero.contactTitle")}
+          script={t("hero.contactScript")}
+          scrollText={t("hero.scroll")}
+          className="portfolio-showcase-hero contact-studio-hero"
+        />
+      </div>
+      <ScrollSectionEdge color="#1b1b1b" />
 
       <section className="contact-studio-page" id="page-content">
         <div className="contact-studio-page__inner">

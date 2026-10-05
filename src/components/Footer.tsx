@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import { ButtonTextStagger } from "./ButtonTextStagger";
-import { navItems } from "../data/nav";
+import { footerNavItems } from "../data/nav";
 import { useLanguage } from "../i18n/LanguageContext";
 import { KaaiModal } from "./KaaiModal";
 import { assetPath } from "../utils/asset";
@@ -64,7 +64,7 @@ export function Footer() {
             </div>
             <div className="footer-column footer-column--pages">
               <h3>{t("footer.pages")}</h3>
-              {navItems.map((item) => (
+              {footerNavItems.map((item) => (
                 <Link to={item.href} data-cursor="soft" key={item.href}>
                   <ButtonTextStagger text={t(item.labelKey)} />
                 </Link>

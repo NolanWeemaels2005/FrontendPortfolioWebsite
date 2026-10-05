@@ -4,3 +4,5 @@ export const navItems = [
   { labelKey: "nav.about", href: "/about/" },
   { labelKey: "nav.contact", href: "/contact/" },
 ];
+
+export const footerNavItems = [...navItems, { labelKey: "nav.blog", href: "/blog/" }];

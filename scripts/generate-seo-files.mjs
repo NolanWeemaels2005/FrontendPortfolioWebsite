@@ -279,7 +279,7 @@ function sitemapXml() {
 
 function llmsTxt() {
   const projectRoutes = routes.filter((route) => route.type === "project" && route.index);
-  const mainRoutes = routes.filter((route) => route.index && ["home", "portfolio", "about", "contact"].includes(route.type));
+  const mainRoutes = routes.filter((route) => route.index && ["home", "portfolio", "about", "contact", "blog"].includes(route.type));
   const services = siteServices();
   const lines = [
     "# Nolan Design",

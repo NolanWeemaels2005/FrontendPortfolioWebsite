@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import ImageReveal from "../components/lightswind/ImageReveal";
 import { SoftwareCarousel } from "../components/SoftwareCarousel";
+import { ScrollSectionEdge } from "../components/ScrollSectionEdge";
+import { StarBackground } from "../components/StarBackground";
 import { HomeServices } from "../components/HomeServices";
 import { ProjectHallOfFame } from "../components/ProjectHallOfFame";
 import { useCombinedProjectsQuery, useLatestProjectQuery } from "../data/projectQueries";
@@ -152,47 +154,51 @@ export function HomePage() {
 
   return (
     <>
-      <section className="home-landing" aria-labelledby="home-heading">
-        <div className="home-landing__background" aria-hidden="true" />
+      <div className="home-landing-scroll">
+        <section className="home-landing" aria-labelledby="home-heading">
+          <StarBackground />
 
-        <div className="home-landing__center">
-          <img src={assetPath("assets/logos/main-logo-white.webp")} alt="Nolan" width="2034" height="572" fetchPriority="high" decoding="async" />
-          <h1 id="home-heading">
-            <span>{t("hero.homeTitle")}</span>
-            <strong>{t("hero.homeScript")}</strong>
-          </h1>
-          <div className="home-landing__actions">
-            <Link to="/contact/" className="home-landing__action home-landing__action--primary" data-cursor="merge">
-              <ButtonTextStagger text={t("cta.letsTalk")} />
-            </Link>
-            <Link to="/portfolio/" className="home-landing__action home-landing__action--secondary" data-cursor="merge">
-              <ButtonTextStagger text={t("cta.portfolio")} />
-            </Link>
+          <div className="home-landing__center">
+            <img src={assetPath("assets/logos/main-logo-white.webp")} alt="Nolan" width="2034" height="572" fetchPriority="high" decoding="async" />
+            <h1 id="home-heading">
+              <span>{t("hero.homeTitle")}</span>
+              <strong>{t("hero.homeScript")}</strong>
+            </h1>
+            <div className="home-landing__actions">
+              <Link to="/contact/" className="home-landing__action home-landing__action--primary" data-cursor="merge">
+                <ButtonTextStagger text={t("cta.letsTalk")} />
+              </Link>
+              <Link to="/portfolio/" className="home-landing__action home-landing__action--secondary" data-cursor="merge">
+                <ButtonTextStagger text={t("cta.portfolio")} />
+              </Link>
+            </div>
           </div>
-        </div>
 
-        <aside className="home-landing__project" aria-label={t("home.latestProject")}>
-          {latestProject ? (
-            <Link
-              className="home-landing__project-link"
-              to={`/portfolio/${latestProject.slug}/`}
-              aria-label={`${t("home.viewProject")} ${latestProject.title}`}
-            />
-          ) : null}
-          <span className="home-landing__project-brand" aria-hidden="true" />
-          <span className="home-landing__project-divider" />
-          <strong>{t("home.latestProject")}</strong>
-          {latestProject?.logo ? (
-            <img src={latestProject.logo} alt={latestProject.title} width="512" height="512" loading="eager" decoding="async" />
-          ) : null}
-          <small>{latestProject?.title}</small>
-        </aside>
+          <aside className="home-landing__project" aria-label={t("home.latestProject")}>
+            {latestProject ? (
+              <Link
+                className="home-landing__project-link"
+                to={`/portfolio/${latestProject.slug}/`}
+                aria-label={`${t("home.viewProject")} ${latestProject.title}`}
+              />
+            ) : null}
+            <span className="home-landing__project-brand" aria-hidden="true" />
+            <span className="home-landing__project-divider" />
+            <strong>{t("home.latestProject")}</strong>
+            {latestProject?.logo ? (
+              <img src={latestProject.logo} alt={latestProject.title} width="512" height="512" loading="eager" decoding="async" />
+            ) : null}
+            <small>{latestProject?.title}</small>
+          </aside>
 
-        <button type="button" className="home-landing__scroll" onClick={scrollToAudit}>
-          <strong>{t("hero.scroll")}</strong>
-          <span aria-hidden="true" />
-        </button>
-      </section>
+          <button type="button" className="home-landing__scroll" onClick={scrollToAudit}>
+            <strong>{t("hero.scroll")}</strong>
+            <span aria-hidden="true" />
+          </button>
+        </section>
+      </div>
+
+      <ScrollSectionEdge audit={showIrresistibleOffer} />
 
       <section className="home-audit" aria-labelledby="home-audit-heading" ref={auditRef} hidden={!showIrresistibleOffer}>
         <div className="home-audit__inner">

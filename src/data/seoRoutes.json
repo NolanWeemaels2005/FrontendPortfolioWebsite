@@ -30,6 +30,15 @@
   },
   "routes": [
     {
+      "path": "/blog/",
+      "title": "Blog | Ontwerpproces en inzichten | Nolan Design",
+      "description": "Een kijkje in het ontwerpproces van Nolan Weemaels. Lees over experimenten, feedback en praktische lessen uit grafisch ontwerp en webdesign.",
+      "heading": "Mijn proces. Jouw inzicht.",
+      "intro": "Experimenten, feedback en bruikbare inzichten uit mijn ontwerpproces.",
+      "type": "blog",
+      "index": true
+    },
+    {
       "path": "/",
       "title": "Nolan Design | Grafisch ontwerp, branding en webdesign",
       "description": "Portfolio van Nolan Weemaels: branding, logo's, visuele identiteiten en webdesign voor ondernemers, verenigingen en merken.",

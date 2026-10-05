@@ -5,6 +5,9 @@ export const pageModuleLoaders = {
   about: () => import("../pages/AboutPage"),
   contact: () => import("../pages/ContactPage"),
   admin: () => import("../pages/AdminPage"),
+  blog: () => import("../pages/BlogPage"),
+  blogPost: () => import("../pages/BlogPostPage"),
+  blogAdmin: () => import("../pages/BlogAdminPage"),
   legal: () => import("../pages/LegalPage"),
 } as const;
 
@@ -17,6 +20,8 @@ export const publicPageModuleKeys: PageModuleKey[] = [
   "about",
   "contact",
   "legal",
+  "blog",
+  "blogPost",
 ];
 
 export function getPageModuleKey(pathname: string): PageModuleKey | null {
@@ -26,6 +31,9 @@ export function getPageModuleKey(pathname: string): PageModuleKey | null {
   if (path.startsWith("/portfolio/")) return "projectDetail";
   if (path === "/about") return "about";
   if (path === "/contact") return "contact";
+  if (path === "/blog") return "blog";
+  if (path.startsWith("/blog/")) return "blogPost";
+  if (path === "/beheer/blog" || path.startsWith("/beheer/blog/")) return "blogAdmin";
   if (path === "/beheer") return "admin";
   if (["/cookiebeleid", "/juridische-voorwaarden", "/privacybeleid"].includes(path)) return "legal";
   return null;

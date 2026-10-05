@@ -80,6 +80,9 @@ function routeSeo(pathname: string): SeoRoute & { known: boolean } {
   const configured = seoData.routes.find((route) => route.path === path);
   if (configured) return { ...configured, known: true };
 
+  if (path.startsWith("/beheer/")) return { path, title: "Blogbeheer | Nolan Design", description: "Beveiligd blogbeheer.", heading: "Blogbeheer", intro: "", type: "admin", index: false, known: true };
+  if (path.startsWith("/blog/")) return { path, title: "Blog | Nolan Design", description: "Verhalen en inzichten uit mijn ontwerpproces.", heading: "Blog", intro: "", type: "blog", index: false, known: true };
+
   if (path.startsWith("/portfolio/")) {
     const slug = path.replace(/^\/portfolio\//, "").replace(/\/$/, "");
     const project = getCombinedProjects().find((item) => item.slug === slug);
@@ -262,7 +265,7 @@ export function Seo() {
     document.documentElement.lang = language === "nl" ? "nl-BE" : language;
     document.title = seo.title;
     const updateTabTitle = () => {
-      document.title = document.hidden ? "Hey, nu al weg?" : seo.title;
+      if (!pathname.startsWith("/blog")) document.title = document.hidden ? "Hey, nu al weg?" : seo.title;
     };
     document.addEventListener("visibilitychange", updateTabTitle);
     setCanonical(canonicalUrl);
