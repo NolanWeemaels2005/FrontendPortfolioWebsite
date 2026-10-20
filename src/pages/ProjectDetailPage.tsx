@@ -167,8 +167,11 @@ export function ProjectDetailPage() {
 
       {galleryImages.length ? (
         <section className="section-container case-work" id="case-work" aria-labelledby="case-work-title">
-          <header className="case-work__heading"><h2 id="case-work-title">{t("case.work")}</h2></header>
-          <div className="project-detail__gallery">
+          <header className="case-work__heading">
+            <h2 id="case-work-title">{t("case.work")}</h2>
+            {galleryImages.length > 1 && <p className="case-work__swipe">{t("case.swipe")} <span aria-hidden="true">↔</span></p>}
+          </header>
+          <div className="project-detail__gallery" role="region" aria-label={t("case.gallery")} tabIndex={0}>
           {galleryImages.map((image, index) => (
             <figure className="case-work__item" key={image} data-reveal>
             <button
