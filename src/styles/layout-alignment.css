@@ -1,0 +1,57 @@
+/* One shared content edge for public pages, independent of section backgrounds. */
+html:root {
+  --page-max: 101.125rem;
+  --page-gutter: clamp(1rem, 3.2vw, 4rem);
+  --content-edge: max(var(--page-gutter), calc((100vw - var(--page-max)) / 2));
+  --section-corner: 1.375rem;
+}
+html body .section-container,
+html body .portfolio--showcase .section-container,
+html body .about-skills__inner,
+html body .blog-container,
+html body .logo-strip__inner,
+html body .footer-top,
+html body .footer-bottom,
+html body .home-overview__inner,
+html body .project-hall__inner,
+html body .contact-studio-page__inner,
+html body .not-found-page__inner {
+  width: min(calc(100% - var(--page-gutter) * 2), var(--page-max));
+  max-width: none;
+  margin-inline: auto;
+}
+html body .home-overview,
+html body .project-hall,
+html body .contact-studio-page,
+html body .not-found-page { padding-inline: 0; }
+html body .home-services,
+html body .home-overview__project-screen > .image-reveal { width: 100%; }
+html body #nav .menu-btn { left: var(--content-edge); }
+html body #nav .nav-talk { left: calc(var(--content-edge) + 3.55rem); }
+html body #nav .nav-logo { left: auto; right: var(--content-edge); }
+html body.home-route { --landing-gutter: var(--content-edge); }
+html body .about-story__intro { left: var(--content-edge); }
+html body .about-story__track { padding-inline: var(--content-edge); }
+html body .about-story__controls { padding-inline: var(--content-edge); }
+html body .case-story-band,
+html body .about-approach { border-top-left-radius: var(--section-corner); }
+html body .case-hero > img,
+html body .project-case .project-detail__gallery-button { border-radius: var(--section-corner) 0 var(--section-corner) 0; }
+@media (max-width: 40rem) {
+  html:root { --page-gutter: 1rem; }
+  html body .about-story__intro { width: calc(100% - var(--page-gutter) * 2); margin-inline: 0; }
+  html body .about-story__controls { width: 100%; margin-inline: 0; }
+}
+
+html body .about-story-cta { padding-inline: var(--content-edge); }
+
+/* Shared studio portrait: keep the face in the mobile crop. */
+html body .home-overview__portrait-photo,
+html body .about-skills__portrait { object-position: 50% 35%; }
+
+@media (max-width: 40rem) {
+  html body .about-skills__portrait-frame {
+    aspect-ratio: 4 / 5;
+    height: auto;
+  }
+}

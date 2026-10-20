@@ -2,7 +2,6 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { getCombinedProjects, invalidateProjectQueries } from "../data/projectQueries";
-import { fetchHomeOfferVisible, updateHomeOfferVisible } from "../data/siteSettings";
 import { apiUrl, readApiError } from "../utils/api";
 import { clearAdminToken, getAdminToken, setAdminToken } from "../utils/adminAuth";
 import { assetPath } from "../utils/asset";
@@ -56,9 +55,6 @@ export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [migrating, setMigrating] = useState(false);
-  const [homeOfferVisible, setHomeOfferVisible] = useState(false);
-  const [homeOfferLoading, setHomeOfferLoading] = useState(false);
-  const [homeOfferSaving, setHomeOfferSaving] = useState(false);
 
   const selectedImages = useMemo(() => project.images.map((file) => file.name).join(", "), [project.images]);
 
@@ -67,27 +63,6 @@ export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
     window.addEventListener("admin-auth-change", updateLoginState);
     return () => window.removeEventListener("admin-auth-change", updateLoginState);
   }, []);
-
-  useEffect(() => {
-    if (!token) {
-      setHomeOfferVisible(false);
-      return;
-    }
-
-    let cancelled = false;
-    setHomeOfferLoading(true);
-    void fetchHomeOfferVisible()
-      .then((visible) => {
-        if (!cancelled) setHomeOfferVisible(visible);
-      })
-      .finally(() => {
-        if (!cancelled) setHomeOfferLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [token]);
 
   useEffect(() => {
     if (!token || !editSlug) {
@@ -416,31 +391,6 @@ export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
     }
   }
 
-  async function handleHomeOfferToggle(nextVisible: boolean) {
-    if (!token) {
-      setError("Je bent niet ingelogd.");
-      return;
-    }
-
-    const previousVisible = homeOfferVisible;
-    setHomeOfferVisible(nextVisible);
-    setHomeOfferSaving(true);
-    setError("");
-    setStatus("");
-
-    try {
-      const savedVisible = await updateHomeOfferVisible(nextVisible, token);
-      setHomeOfferVisible(savedVisible);
-      invalidateProjectData();
-      setStatus(savedVisible ? "Offer sectie staat zichtbaar voor alle bezoekers." : "Offer sectie staat verborgen voor alle bezoekers.");
-    } catch (caught) {
-      setHomeOfferVisible(previousVisible);
-      setError(caught instanceof Error ? caught.message : "Offer instelling opslaan mislukt.");
-    } finally {
-      setHomeOfferSaving(false);
-    }
-  }
-
   return (
     <section className="admin-page section-black">
       <div className="section-container admin-shell">
@@ -499,22 +449,6 @@ export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
               </div>
             </div>
 
-            <section className="admin-settings" aria-labelledby="admin-settings-title">
-              <div>
-                <h2 id="admin-settings-title">Website instellingen</h2>
-                <p>Toon of verberg de gratis offer sectie op de homepage voor alle bezoekers.</p>
-              </div>
-              <label className="admin-toggle">
-                <input
-                  type="checkbox"
-                  checked={homeOfferVisible}
-                  disabled={homeOfferLoading || homeOfferSaving}
-                  onChange={(event) => void handleHomeOfferToggle(event.target.checked)}
-                />
-                <span aria-hidden="true" />
-                <strong>{homeOfferVisible ? "Offer zichtbaar" : "Offer verborgen"}</strong>
-              </label>
-            </section>
 
             <label>
               Naam

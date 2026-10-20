@@ -1,4 +1,5 @@
-import { useState } from "react";
+import "../styles/orange-sections.css";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -15,22 +16,62 @@ const services = [
 export function HomeServices() {
   const { t } = useLanguage();
   const [expandedService, setExpandedService] = useState<string | null>(null);
+  const [hoveredService, setHoveredService] = useState<string | null>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const activeService = hoveredService || expandedService;
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const rows = Array.from(list.querySelectorAll<HTMLAnchorElement>(".home-services__row"));
+    let frame = 0;
+    const syncScroll = () => {
+      frame = 0;
+      const triggerLine = window.innerHeight * .6;
+      const bounds = list.getBoundingClientRect();
+      if (bounds.top > triggerLine || bounds.bottom < 0) {
+        setExpandedService(null);
+        return;
+      }
+      // Compare row tops so expanding a row cannot move its own scroll trigger.
+      let activeIndex = 0;
+      rows.forEach((row, index) => {
+        if (row.getBoundingClientRect().top <= triggerLine) activeIndex = index;
+      });
+      setExpandedService(services[activeIndex].slug);
+    };
+    const requestSync = () => {
+      if (!frame) frame = window.requestAnimationFrame(syncScroll);
+    };
+    syncScroll();
+    window.addEventListener("scroll", requestSync, { passive: true });
+    window.addEventListener("resize", requestSync);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", requestSync);
+      window.removeEventListener("resize", requestSync);
+    };
+  }, []);
 
   return (
-    <section className="home-services" aria-labelledby="home-services-heading">
+    <section className="home-services home-services--orange" aria-labelledby="home-services-heading">
       <h2 id="home-services-heading" className="home-services__heading">
         <span>{t("home.services.heading")}</span>
         <strong>{t("home.services.title")}</strong>
       </h2>
-      <div className="home-services__list">
+      <div className="home-services__list" ref={listRef}>
         {services.map((service) => (
           <Link
             key={service.slug}
-            to={`/portfolio/${service.slug}/`}
-            className={`home-services__row${expandedService === service.slug ? " is-expanded" : ""}`}
+            data-cursor="project" to={`/portfolio/${service.slug}/`}
+            className={`home-services__row${activeService === service.slug ? " is-expanded" : ""}`}
+            onPointerEnter={(event) => {
+              if (event.pointerType === "mouse") setHoveredService(service.slug);
+            }}
+            onPointerLeave={() => setHoveredService(null)}
             onClick={(event) => {
               const isTouchLayout = window.matchMedia("(hover: none), (pointer: coarse)").matches;
-              if (isTouchLayout && event.detail !== 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && expandedService !== service.slug) {
+              if (isTouchLayout && event.detail !== 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && activeService !== service.slug) {
                 event.preventDefault();
                 setExpandedService(service.slug);
               }

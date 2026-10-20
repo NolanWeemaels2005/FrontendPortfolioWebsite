@@ -1,12 +1,14 @@
+import { getProjectCaseStudy } from "../data/projectCaseStudies";
+import { ProjectFilters } from "./ProjectFilters";
 import { ArrowRight } from "lucide-react";
-import type { CSSProperties } from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ButtonTextStagger } from "./ButtonTextStagger";
 import { useAllProjectsQuery, useFeaturedProjectsQuery } from "../data/projectQueries";
 import { useTilt } from "../hooks/useTilt";
 import { useLanguage } from "../i18n/LanguageContext";
-import { previewImageUrl, responsiveImageSrcSet } from "../utils/asset";
+import { previewImageUrl } from "../utils/asset";
+import { HallOfFameGrid } from "./HallOfFameGrid";
 
 function projectClassSlug(slug: string) {
   return slug.replace(/[^a-z0-9-]/gi, "");
@@ -20,14 +22,20 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
   const { t } = useLanguage();
   const { data: featuredProjects = [] } = useFeaturedProjectsQuery();
   const { data: allProjects = [] } = useAllProjectsQuery();
+  const allSection = useRef<HTMLDivElement>(null);
+  const [service, setService] = useState("");
+  const [year, setYear] = useState("");
+  const services = [...new Set(allProjects.flatMap((project) => getProjectCaseStudy(project.slug)?.services || []))].sort();
+  const years = [...new Set(allProjects.map((project) => getProjectCaseStudy(project.slug)?.year).filter((value): value is string => Boolean(value)))].sort().reverse();
+  const filteredProjects = allProjects.filter((project) => {
+    const facts = getProjectCaseStudy(project.slug);
+    return (!service || facts?.services.includes(service)) && (!year || facts?.year === year);
+  });
+  const filtering = Boolean(service || year);
   const [showAllMobileProjects, setShowAllMobileProjects] = useState(false);
-  const featuredTilt = useTilt({ max: 7, scale: 1.018 });
   const projectTilt = useTilt({ max: 9, scale: 1.02 });
   const isShowcase = variant === "showcase";
 
-  function rememberPortfolioScroll() {
-    window.sessionStorage.setItem("portfolio-scroll-y", String(window.scrollY));
-  }
 
   return (
     <section className={`portfolio ${isShowcase ? "portfolio--showcase" : ""}`} id="portfolio">
@@ -41,92 +49,9 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
           <h2 data-reveal>{t("portfolio.featured")}</h2>
         )}
 
-        <div className="featured-grid">
-          {featuredProjects.map((project, index) => (
-            (() => {
-              const classSlug = projectClassSlug(project.layoutSlug || project.slug);
-              const projectTitle = project.titleKey ? t(project.titleKey) : project.title;
+        <HallOfFameGrid projects={featuredProjects} />
 
-              return (
-                <div className={`featured-item featured-card--${classSlug}`} key={project.slug}>
-                  <Link
-                    to={`/portfolio/${project.slug}/`}
-                    className="featured-card"
-                    data-cursor="soft"
-                    data-reveal
-                    id={project.slug}
-                    onClick={rememberPortfolioScroll}
-                    style={{ "--accent": project.color, "--featured-delay": `${Math.min(index * 80, 520)}ms` } as CSSProperties}
-                    {...featuredTilt}
-                  >
-                    <span className="featured-card__art">
-                    {project.cover ? (
-                      <img
-                        className="featured-card__cover"
-                        src={project.cover}
-                        srcSet={responsiveImageSrcSet(project.cover, 640, 1280)}
-                        sizes="(max-width: 760px) calc(100vw - 2rem), (max-width: 1200px) 50vw, 580px"
-                        alt=""
-                        width="1280"
-                        height="1600"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : null}
-                    <span className="featured-card__wash" />
-                    {project.logo ? (
-                      <img
-                        className="featured-card__logo"
-                        src={previewImageUrl(project.logo, 256)}
-                        alt={projectTitle}
-                        width="512"
-                        height="512"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : null}
-                    </span>
-                    {variant === "showcase" ? (
-                      <span className="featured-card__art featured-card__art--color" aria-hidden="true">
-                    {project.cover ? (
-                      <img
-                        className="featured-card__cover"
-                        src={project.cover}
-                        srcSet={responsiveImageSrcSet(project.cover, 640, 1280)}
-                        sizes="(max-width: 760px) calc(100vw - 2rem), (max-width: 1200px) 50vw, 580px"
-                        alt=""
-                        width="1280"
-                        height="1600"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : null}
-                    <span className="featured-card__wash" />
-                    {project.logo ? (
-                      <img
-                        className="featured-card__logo"
-                        src={previewImageUrl(project.logo, 256)}
-                        alt={projectTitle}
-                        width="512"
-                        height="512"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : null}
-                      </span>
-                    ) : null}
-                  </Link>
-                  <Link className="featured-card__label" to={`/portfolio/${project.slug}/`} onClick={rememberPortfolioScroll}>
-                    <ButtonTextStagger text={projectTitle} />
-                    <ArrowRight aria-hidden="true" size={20} strokeWidth={3} />
-                  </Link>
-                </div>
-              );
-            })()
-          ))}
-        </div>
-
-        <div className={isShowcase ? "portfolio-showcase-all-section" : undefined}>
+        <div ref={allSection} className={isShowcase ? "portfolio-showcase-all-section" : undefined}>
           {isShowcase ? (
             <h2 className="all-projects-title portfolio-showcase-all-title" data-reveal>
               <span>{t("portfolio.all")}</span>
@@ -136,8 +61,11 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
             <h2 className="all-projects-title" data-reveal>{t("portfolio.all")}</h2>
           )}
 
-          <div className={`project-grid ${showAllMobileProjects ? "is-mobile-expanded" : ""}`}>
-            {allProjects.map((project) => (
+          <ProjectFilters sectionRef={allSection} services={services} years={years} service={service} year={year} count={filteredProjects.length} onService={setService} onYear={setYear} />
+          {filtering && <div className="project-filter-summary" aria-live="polite"><span>{service ? t(`portfolio.service.${service}`) : t("filter.all")} · {year || t("filter.all")} ({filteredProjects.length})</span><button type="button" onClick={() => { setService(""); setYear(""); }}>{t("filter.clear")}</button></div>}
+          {filteredProjects.length === 0 && <p role="status">{t("filter.empty")}</p>}
+          <div className={`project-grid ${showAllMobileProjects || filtering ? "is-mobile-expanded" : ""}`}>
+            {filteredProjects.map((project) => (
               (() => {
                 const classSlug = projectClassSlug(project.layoutSlug || project.slug);
 
@@ -145,16 +73,15 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
               <Link
                 to={`/portfolio/${project.slug}/`}
                 className={`project-card project-card--${classSlug} ${project.source === "backend" ? "project-card--backend" : ""}`}
-                data-cursor="soft"
-                data-reveal
+                data-cursor="project"
                 key={project.slug}
-                onClick={rememberPortfolioScroll}
+
                 {...projectTilt}
               >
                 <span className="project-card__logo-wrap" data-cursor-surface>
                   <img
                     className="project-card__logo"
-                    src={previewImageUrl(project.logo, 256)}
+                    src={previewImageUrl(project.logo, 800)}
                     alt={project.titleKey ? t(project.titleKey) : project.title}
                     width="512"
                     height="512"
@@ -171,7 +98,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
               })()
             ))}
           </div>
-          {isShowcase && allProjects.length > 6 ? (
+          {isShowcase && !filtering && allProjects.length > 6 ? (
             <button
               className="portfolio-showcase-show-more"
               type="button"

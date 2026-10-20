@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 /** A small SVG cap: only its edge bends, never the full-page content. */
-export function ScrollSectionEdge({ audit = false, color }: { audit?: boolean; color?: string }) {
+export function ScrollSectionEdge({ color }: { color?: string }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const fillRef = useRef<SVGPathElement>(null);
   const lineRef = useRef<SVGPathElement>(null);
@@ -15,10 +15,12 @@ export function ScrollSectionEdge({ audit = false, color }: { audit?: boolean; c
     const draw = () => {
       frame = 0;
       const progress = Math.max(0, Math.min(1, root.getBoundingClientRect().top / window.innerHeight));
-      const bend = motion.matches ? 0 : 64 * Math.sin(Math.PI * progress);
       root.style.visibility = window.scrollY > 1 ? "visible" : "hidden";
       // Use actual CSS pixels so resizing cannot stretch a circular arc into an ellipse.
       const width = Math.max(1, root.getBoundingClientRect().width);
+      // Keep the curve shallow on phones while retaining the desktop movement.
+      const maxBend = window.matchMedia("(max-width: 51.25rem)").matches ? 20 : 64;
+      const bend = motion.matches ? 0 : maxBend * Math.sin(Math.PI * progress);
       const radius = (width * width / 4 + bend * bend) / (2 * Math.max(bend, .001));
       const edge = bend < .01 ? `M0 80 L${width} 80` : `M0 80 A${radius} ${radius} 0 0 1 ${width} 80`;
       fillRef.current?.ownerSVGElement?.setAttribute("viewBox", `0 0 ${width} 82`);
@@ -47,7 +49,7 @@ export function ScrollSectionEdge({ audit = false, color }: { audit?: boolean; c
   }, []);
 
   return (
-    <div ref={rootRef} className={`home-section-edge${audit ? " home-section-edge--audit" : ""}`} style={color ? { color } : undefined} aria-hidden="true">
+    <div ref={rootRef} className="home-section-edge" style={color ? { color } : undefined} aria-hidden="true">
       <svg viewBox="0 0 1000 82" preserveAspectRatio="none" focusable="false">
         <path ref={fillRef} d="M0 80 Q500 80 1000 80 L1000 82 L0 82 Z" fill="currentColor" />
         <path ref={lineRef} d="M0 80 Q500 80 1000 80" fill="none" stroke="#fff" strokeWidth="2" vectorEffect="non-scaling-stroke" />

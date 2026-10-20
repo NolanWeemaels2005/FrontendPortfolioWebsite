@@ -1,16 +1,14 @@
 import { ScrollSectionEdge } from "../components/ScrollSectionEdge";
 import { useForm, ValidationError } from "@formspree/react";
-import { BadgeCheck, CircleEllipsis, Instagram, Mail, Megaphone, Monitor, Palette, Phone, Send, Share2, Shirt } from "lucide-react";
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { CircleEllipsis, Instagram, Mail, Megaphone, Monitor, Palette, Phone, Send, Share2, Shirt } from "lucide-react";
+import { useLayoutEffect, useState } from "react";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { Hero } from "../components/Hero";
-import { fetchHomeOfferVisible } from "../data/siteSettings";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../i18n/LanguageContext";
+import { assetPath } from "../utils/asset";
 
 const serviceOptions = [
-  { value: "free-audit", labelKey: "contact.service.freeAudit", icon: BadgeCheck },
   { value: "branding", labelKey: "contact.service.branding", icon: Palette },
   { value: "webdesign", labelKey: "contact.service.webdesign", icon: Monitor },
   { value: "promo", labelKey: "contact.service.promo", icon: Megaphone },
@@ -23,26 +21,7 @@ export function ContactPage() {
   useScrollReveal();
   const { t } = useLanguage();
   const [state, handleSubmit] = useForm("mbdwrepv");
-  const [searchParams] = useSearchParams();
-  const [showFreeAudit, setShowFreeAudit] = useState(true);
   const [selectedService, setSelectedService] = useState("");
-  const visibleServiceOptions = useMemo(
-    () => serviceOptions.filter((option) => showFreeAudit || option.value !== "free-audit"),
-    [showFreeAudit],
-  );
-
-  useEffect(() => {
-    let cancelled = false;
-    void fetchHomeOfferVisible().then((visible) => {
-      if (cancelled) return;
-      setShowFreeAudit(visible);
-      if (visible && searchParams.get("service") === "free-audit") setSelectedService("free-audit");
-      if (!visible) setSelectedService((current) => current === "free-audit" ? "" : current);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [searchParams]);
 
   useLayoutEffect(() => {
     document.body.classList.add("contact-route");
@@ -55,11 +34,22 @@ export function ContactPage() {
         <Hero
           title={t("hero.contactTitle")}
           script={t("hero.contactScript")}
-          scrollText={t("hero.scroll")}
           className="portfolio-showcase-hero contact-studio-hero"
+          visual={
+            <div className="contact-hero-media" aria-hidden="true">
+              <img
+                src={assetPath("assets/contact-hero/nolan-sketch.jpg")}
+                alt=""
+                width="1920"
+                height="1080"
+                fetchPriority="high"
+                decoding="async"
+              />
+            </div>
+          }
         />
       </div>
-      <ScrollSectionEdge color="#1b1b1b" />
+      <ScrollSectionEdge color="#000" />
 
       <section className="contact-studio-page" id="page-content">
         <div className="contact-studio-page__inner">
@@ -82,7 +72,7 @@ export function ContactPage() {
               <legend>{t("contact.serviceTitle")}</legend>
               <p>{t("contact.serviceHint")}</p>
               <div className="contact-service-picker__options">
-                {visibleServiceOptions.map(({ value, labelKey, icon: Icon }) => (
+                {serviceOptions.map(({ value, labelKey, icon: Icon }) => (
                   <label className="contact-service-option" key={value}>
                     <input
                       className="sr-only"

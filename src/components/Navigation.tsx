@@ -30,7 +30,7 @@ export function Navigation() {
 
   function closeMenu() {
     setOpen(false);
-    window.requestAnimationFrame(() => menuButtonRef.current?.focus());
+    window.requestAnimationFrame(() => menuButtonRef.current?.focus({ preventScroll: true }));
   }
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export function Navigation() {
           <span className="menu-btn__label">{t("nav.menu")}</span>
         </button>
 
-        <Link to="/" className="nav-logo" data-cursor="merge" aria-label={t("nav.homeLabel")} onPointerEnter={() => void preloadPageModule("/")} onFocus={() => void preloadPageModule("/")}>
+        <Link to="/" className="nav-logo" data-cursor="soft" aria-label={t("nav.homeLabel")} onPointerEnter={() => void preloadPageModule("/")} onFocus={() => void preloadPageModule("/")}>
           <img className="nav-logo__word" src={assetPath("assets/logos/main-logo-white.webp")} alt="Nolan" width="2034" height="572" decoding="async" />
           <img className="nav-logo__icon" src={assetPath("assets/logos/main-icon-white.webp")} alt="Nolan" width="1631" height="1474" decoding="async" />
         </Link>

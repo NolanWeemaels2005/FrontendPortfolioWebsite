@@ -1,15 +1,14 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { ArrowRight, BadgeEuro, Clock3, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
-import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import ImageReveal from "../components/lightswind/ImageReveal";
-import { SoftwareCarousel } from "../components/SoftwareCarousel";
 import { ScrollSectionEdge } from "../components/ScrollSectionEdge";
-import { StarBackground } from "../components/StarBackground";
+import { ProcessMedia } from "../components/ProcessMedia";
+import { HeroScrollCue } from "../components/HeroScrollCue";
+import "../styles/home-landing.css";
 import { HomeServices } from "../components/HomeServices";
 import { ProjectHallOfFame } from "../components/ProjectHallOfFame";
 import { useCombinedProjectsQuery, useLatestProjectQuery } from "../data/projectQueries";
-import { fetchHomeOfferVisible } from "../data/siteSettings";
+import { featuredProjects } from "../data/projects";
 import { useLanguage } from "../i18n/LanguageContext";
 import { assetPath, previewImageUrl } from "../utils/asset";
 
@@ -23,16 +22,7 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-const fixedRevealProjectSlugs = [
-  "brussel-noord-basket",
-  "erasmus-hogeschool",
-  "videjo",
-  "city-to-ocean",
-  "fc-eisbar",
-  "shift-festival-2026",
-  "ring-tv",
-  "mentalite-sportswear",
-];
+const fixedRevealProjectSlugs = featuredProjects.map((project) => project.slug);
 
 function getYearsActive(date: Date) {
   const anniversaryPassed = date.getMonth() > 8 || (date.getMonth() === 8 && date.getDate() >= 20);
@@ -82,16 +72,13 @@ function CountUpNumber({ start, value, children }: CountUpNumberProps) {
 
 export function HomePage() {
   const { t } = useLanguage();
-  const auditRef = useRef<HTMLElement>(null);
   const overviewRef = useRef<HTMLElement>(null);
   const [overviewStatsActive, setOverviewStatsActive] = useState(false);
-  // The offer is currently enabled in production. Starting with the same
-  // state prevents the rest of the page from being pushed down after the
-  // setting request finishes (the source of the large CLS in PageSpeed).
-  const [showIrresistibleOffer, setShowIrresistibleOffer] = useState(true);
   const { data: latestProject } = useLatestProjectQuery();
   const { data: projects = [] } = useCombinedProjectsQuery();
   const projectCount = Math.max(projects.length, 16);
+  const homeLine2 = t("hero.homeLine2");
+  const accentStart = homeLine2.lastIndexOf(" ") + 1;
   const today = new Date();
   const yearsActive = getYearsActive(today);
   const age = getAge(today);
@@ -120,16 +107,6 @@ export function HomePage() {
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    void fetchHomeOfferVisible().then((visible) => {
-      if (!cancelled) setShowIrresistibleOffer(visible);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
     const overview = overviewRef.current;
     if (!overview) return;
 
@@ -147,132 +124,102 @@ export function HomePage() {
     return () => observer.disconnect();
   }, []);
 
-  const scrollToAudit = () => {
-    const target = showIrresistibleOffer ? auditRef.current : overviewRef.current;
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+  useLayoutEffect(() => {
+    const heading = document.getElementById("home-heading");
+    const text = heading?.querySelector("span");
+    if (!heading || !text) return;
+    let active = true;
+    let lastWidth = 0;
+
+    // Change the font size uniformly; never stretch the glyphs or their spacing.
+    const fitHeading = () => {
+      if (!active) return;
+      heading.style.fontSize = "100px";
+      const accent = heading.querySelector<HTMLElement>(".home-landing__slogan-accent");
+      const context = document.createElement("canvas").getContext("2d");
+      if (accent && context) {
+        const mainStyle = getComputedStyle(heading);
+        const accentStyle = getComputedStyle(accent);
+        context.font = `${mainStyle.fontWeight} 100px ${mainStyle.fontFamily}`;
+        const mainHeight = context.measureText("H").actualBoundingBoxAscent;
+        // Align the visible first glyph, accounting for the font's side bearing.
+        const firstLetter = text.textContent?.trimStart().charAt(0) || "";
+        heading.style.setProperty(
+          "--home-slogan-offset",
+          `${context.measureText(firstLetter).actualBoundingBoxLeft / 100}em`,
+        );
+        context.font = `${accentStyle.fontWeight} 100px ${accentStyle.fontFamily}`;
+        const accentHeight = context.measureText("H").actualBoundingBoxAscent;
+        if (mainHeight && accentHeight) {
+          heading.style.setProperty("--home-accent-scale", String(mainHeight / accentHeight));
+        }
+      }
+      const mobile = window.matchMedia("(max-width: 40rem)").matches;
+      const titleSize = mobile
+        ? Math.max(41.6, Math.min(window.innerWidth * .1, 64))
+        : Math.max(48, Math.min(window.innerWidth * .06, 104));
+      const naturalWidth = Math.max(...Array.from(text.querySelectorAll(".home-landing__slogan-line"), (line) => line.getBoundingClientRect().width));
+      if (naturalWidth > 0) {
+        heading.style.fontSize = `${Math.min(titleSize, 100 * (heading.clientWidth - 1) / naturalWidth)}px`;
+      }
+      lastWidth = heading.clientWidth;
+    };
+    const observer = new ResizeObserver(() => {
+      if (heading.clientWidth !== lastWidth) fitHeading();
+    });
+    observer.observe(heading);
+    fitHeading();
+    void document.fonts.ready.then(fitHeading);
+    document.fonts.addEventListener("loadingdone", fitHeading);
+    return () => {
+      active = false;
+      observer.disconnect();
+      document.fonts.removeEventListener("loadingdone", fitHeading);
+    };
+  }, [t]);
 
   return (
     <>
       <div className="home-landing-scroll">
         <section className="home-landing" aria-labelledby="home-heading">
-          <StarBackground />
+          <ProcessMedia videoSrc={assetPath("assets/home/nolan-home-hero-2.mp4")} />
 
-          <div className="home-landing__center">
-            <img src={assetPath("assets/logos/main-logo-white.webp")} alt="Nolan" width="2034" height="572" fetchPriority="high" decoding="async" />
-            <h1 id="home-heading">
-              <span>{t("hero.homeTitle")}</span>
-              <strong>{t("hero.homeScript")}</strong>
-            </h1>
-            <div className="home-landing__actions">
-              <Link to="/contact/" className="home-landing__action home-landing__action--primary" data-cursor="merge">
-                <ButtonTextStagger text={t("cta.letsTalk")} />
-              </Link>
-              <Link to="/portfolio/" className="home-landing__action home-landing__action--secondary" data-cursor="merge">
-                <ButtonTextStagger text={t("cta.portfolio")} />
-              </Link>
-            </div>
-          </div>
+          <h1 id="home-heading" className="home-landing__slogan">
+            <span>
+              <span className="home-landing__slogan-line">{t("hero.homeLine1")}</span>{" "}
+              <span className="home-landing__slogan-line">{homeLine2.slice(0, accentStart)}<span className="home-landing__slogan-accent">{homeLine2.slice(accentStart)}</span></span>
+            </span>
+          </h1>
 
-          <aside className="home-landing__project" aria-label={t("home.latestProject")}>
-            {latestProject ? (
-              <Link
-                className="home-landing__project-link"
-                to={`/portfolio/${latestProject.slug}/`}
-                aria-label={`${t("home.viewProject")} ${latestProject.title}`}
-              />
-            ) : null}
-            <span className="home-landing__project-brand" aria-hidden="true" />
-            <span className="home-landing__project-divider" />
-            <strong>{t("home.latestProject")}</strong>
-            {latestProject?.logo ? (
-              <img src={latestProject.logo} alt={latestProject.title} width="512" height="512" loading="eager" decoding="async" />
-            ) : null}
-            <small>{latestProject?.title}</small>
-          </aside>
 
-          <button type="button" className="home-landing__scroll" onClick={scrollToAudit}>
-            <strong>{t("hero.scroll")}</strong>
-            <span aria-hidden="true" />
-          </button>
+          <HeroScrollCue target="home-overview" />
         </section>
       </div>
 
-      <ScrollSectionEdge audit={showIrresistibleOffer} />
+      <ScrollSectionEdge />
 
-      <section className="home-audit" aria-labelledby="home-audit-heading" ref={auditRef} hidden={!showIrresistibleOffer}>
-        <div className="home-audit__inner">
-          <div className="home-audit__content">
-            <h2 id="home-audit-heading">
-              <span>{t("home.audit.eyebrow")}</span> {t("home.audit.title")}
-            </h2>
-
-            <p className="home-audit__lead">
-              {t("home.audit.leadBefore")} <strong>{t("home.audit.value")}</strong>.
-            </p>
-            <p className="home-audit__body">{t("home.audit.body")}</p>
-            <p className="home-audit__promise">{t("home.audit.promise")}</p>
-
-            <ul className="home-audit__benefits" aria-label={t("home.audit.benefitsLabel")}>
-              <li>
-                <span><Clock3 aria-hidden="true" /></span>
-                <strong>{t("home.audit.benefitTime")}</strong>
-              </li>
-              <li>
-                <span><Lightbulb aria-hidden="true" /></span>
-                <strong>{t("home.audit.benefitAction")}</strong>
-              </li>
-              <li>
-                <span><BadgeEuro aria-hidden="true" /></span>
-                <strong>{t("home.audit.benefitValue")}</strong>
-                <small>{t("home.audit.benefitFree")}</small>
-              </li>
-            </ul>
-
-            <Link className="home-audit__cta" to="/contact/?service=free-audit" data-cursor="merge">
-              <ButtonTextStagger text={t("home.audit.cta")} />
-              <ArrowRight aria-hidden="true" size={24} strokeWidth={3} />
-            </Link>
-          </div>
-
-          <div className="home-audit__visual">
-            <img
-              src={assetPath("assets/home-audit/design-audit.webp")}
-              alt={t("home.audit.imageAlt")}
-              width="1400"
-              height="1867"
-              loading="lazy"
-              decoding="async"
-            />
-            <div className="home-audit__value" aria-label={`${t("home.audit.badge")} ${t("home.audit.value")}`}>
-              <span>{t("home.audit.badge")}</span>
-              <strong>{t("home.audit.value")}</strong>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="home-overview" aria-label={t("home.overviewAria")} ref={overviewRef}>
+      <section id="home-overview" className="home-overview" aria-label={t("home.overviewAria")} ref={overviewRef}>
         <div className="home-overview__inner">
           <div className="home-overview__project-screen" id="home-project-count">
             <ImageReveal images={projectRevealImages}>
               <CountUpNumber start={overviewStatsActive} value={projectCount}>
                 {(displayValue) => (
-                  <strong className="home-overview__project-number">
-                    {String(displayValue).length > 1 ? (
-                      <>
-                        <span className="home-overview__project-digit home-overview__project-digit--first">{String(displayValue).slice(0, -1)}</span>
-                        <span className="home-overview__project-digit home-overview__project-digit--last">
-                          {String(displayValue).slice(-1)}
-                          <span className="home-overview__project-label">{t("home.projects")}</span>
+                  <strong className="home-overview__project-number" aria-label={`${projectCount} ${t("home.projects")}`}>
+                    {String(projectCount).split("").map((digit, index, digits) => (
+                      <span
+                        key={index}
+                        className={`home-overview__project-digit home-overview__project-digit--${index === digits.length - 1 ? "last" : "first"}`}
+                        aria-hidden="true"
+                      >
+                        <span className="home-overview__project-digit-space">{digit}</span>
+                        <span className="home-overview__project-digit-value">
+                          {String(displayValue).padStart(digits.length, " ")[index]}
                         </span>
-                      </>
-                    ) : (
-                      <span className="home-overview__project-digit home-overview__project-digit--last">
-                        {displayValue}
-                        <span className="home-overview__project-label">{t("home.projects")}</span>
+                        {index === digits.length - 1 && (
+                          <span className="home-overview__project-label">{t("home.projects")}</span>
+                        )}
                       </span>
-                    )}
+                    ))}
                   </strong>
                 )}
               </CountUpNumber>
@@ -291,41 +238,21 @@ export function HomePage() {
 
             <div className="home-overview__content">
               <div className="home-overview__profile">
-                <div className="home-overview__portrait" tabIndex={0}>
+                <div className="home-overview__portrait">
                   <img
                     className="home-overview__portrait-photo"
-                    src={assetPath("assets/home-overview/portrait-bw-960.jpg")}
-                    srcSet={`${assetPath("assets/home-overview/portrait-bw-480.jpg")} 480w, ${assetPath("assets/home-overview/portrait-bw-960.jpg")} 960w`}
-                    sizes="(max-width: 700px) 90vw, 42vw"
+                    src={assetPath("assets/home-overview/portrait-studio-1600.jpg")}
+                    srcSet={`${assetPath("assets/home-overview/portrait-studio-800.jpg")} 450w, ${assetPath("assets/home-overview/portrait-studio-1600.jpg")} 900w`}
+                    sizes="(max-width: 68.75rem) min(40rem, calc(100vw - 2rem)), (max-width: 80rem) 36vw, min(42.5rem, 34vw)"
                     alt="Nolan Weemaels"
-                    width="960"
-                    height="1366"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <img
-                    className="home-overview__portrait-photo home-overview__portrait-photo--color"
-                    src={assetPath("assets/home-overview/portrait-color-960.jpg")}
-                    srcSet={`${assetPath("assets/home-overview/portrait-color-480.jpg")} 480w, ${assetPath("assets/home-overview/portrait-color-960.jpg")} 960w`}
-                    sizes="(max-width: 700px) 90vw, 42vw"
-                    alt=""
-                    aria-hidden="true"
-                    width="960"
-                    height="1366"
+                    width="900"
+                    height="1600"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
               </div>
-              <div className="home-overview__profile home-overview__profile-caption">
-                <h3>{t("home.role")}</h3>
-                <p>
-                  <span className="sr-only">{t("home.since")}</span>
-                  <svg className="home-overview__year-lockup" viewBox="0 0 1000 190" aria-hidden="true">
-                    <text x="0" y="166" textLength="1000" lengthAdjust="spacingAndGlyphs">{t("home.since")}</text>
-                  </svg>
-                </p>
-              </div>
+
 
               <dl className="home-overview__stats">
                 <div className="home-overview__stat">
@@ -344,14 +271,22 @@ export function HomePage() {
                   <dt>{t("home.latestProject")}<span>{latestProject?.title}</span></dt>
                   <dd>
                     {latestProject?.logo ? (
-                      <Link to={`/portfolio/${latestProject.slug}/`} aria-label={`${t("home.viewProject")} ${latestProject.title}`}>
+                      <Link data-cursor="project" to={`/portfolio/${latestProject.slug}/`} aria-label={`${t("home.viewProject")} ${latestProject.title}`}>
                         <img src={latestProject.logo} alt={latestProject.title} width="512" height="512" loading="lazy" decoding="async" />
                       </Link>
                     ) : null}
                   </dd>
                 </div>
               </dl>
-              <SoftwareCarousel />
+              <div className="home-overview__profile home-overview__profile-caption">
+                <h3>{t("home.role")}</h3>
+                <p>
+                  <span className="sr-only">{t("home.since")}</span>
+                  <svg className="home-overview__year-lockup" viewBox="0 0 1000 190" aria-hidden="true">
+                    <text x="0" y="166" textLength="1000" lengthAdjust="spacingAndGlyphs">{t("home.since")}</text>
+                  </svg>
+                </p>
+              </div>
             </div>
           </div>
         </div>

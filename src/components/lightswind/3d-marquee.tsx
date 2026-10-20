@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { previewImageUrl, responsiveImageSrcSet } from "../../utils/asset";
 
 export type MarqueeImage = {
@@ -47,13 +47,30 @@ function splitColumns(images: MarqueeImage[], columnCount: number, itemsPerColum
 }
 
 export function ThreeDMarquee({ images, className = "", onImageClick }: ThreeDMarqueeProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    let visible = false;
+    const update = () => root.style.setProperty("--marquee-play-state", visible && !document.hidden ? "running" : "paused");
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      update();
+    });
+    observer.observe(root);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", update);
+    };
+  }, []);
   const isCompact = useCompactMarquee();
   const columnCount = isCompact ? 3 : 5;
   const itemsPerColumn = isCompact ? 6 : 8;
   const columns = splitColumns(images, columnCount, itemsPerColumn);
 
   return (
-    <div className={`three-d-marquee ${className}`} aria-hidden={onImageClick ? undefined : true}>
+    <div ref={rootRef} className={`three-d-marquee ${className}`} aria-hidden={onImageClick ? undefined : true}>
       <div className="three-d-marquee__scene">
         {columns.map((columnImages, columnIndex) => (
           <div className="three-d-marquee__column" key={columnIndex}>
@@ -74,7 +91,7 @@ export function ThreeDMarquee({ images, className = "", onImageClick }: ThreeDMa
                           alt={image.alt}
                           width="640"
                           height="800"
-                          loading="eager"
+                          loading={groupIndex === 0 ? "eager" : "lazy"}
                           decoding="async"
                           fetchPriority={isPriorityImage ? "high" : "low"}
                           data-loader-skip="true"
@@ -87,7 +104,7 @@ export function ThreeDMarquee({ images, className = "", onImageClick }: ThreeDMa
                               alt=""
                               width="256"
                               height="256"
-                              loading="eager"
+                              loading={groupIndex === 0 ? "eager" : "lazy"}
                               decoding="async"
                               fetchPriority={isPriorityImage ? "high" : "low"}
                               data-loader-skip="true"

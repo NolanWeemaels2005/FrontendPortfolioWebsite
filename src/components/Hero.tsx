@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 import { ButtonTextStagger } from "./ButtonTextStagger";
 import { useLanguage } from "../i18n/LanguageContext";
+import { HeroScrollCue } from "./HeroScrollCue";
 
 type HeroProps = {
   title: string;
   script: string;
-  scrollText?: string;
   scrollTarget?: string;
   showActions?: boolean;
   showStrip?: boolean;
@@ -17,7 +17,6 @@ type HeroProps = {
 export function Hero({
   title,
   script,
-  scrollText,
   scrollTarget = "page-content",
   showActions = false,
   showStrip = false,
@@ -25,7 +24,6 @@ export function Hero({
   visual,
 }: HeroProps) {
   const { t } = useLanguage();
-  const resolvedScrollText = scrollText ?? t("hero.scroll");
 
   return (
     <section className={`hero section-purple ${showStrip ? "hero--with-strip" : ""} ${className}`}>
@@ -53,10 +51,7 @@ export function Hero({
 
         </div>
 
-        <a href={`#${scrollTarget}`} className="scroll-indicator" data-cursor="merge" aria-label={scrollText}>
-          <span>{resolvedScrollText}</span>
-          <span className="mouse-icon" aria-hidden="true" />
-        </a>
+        <HeroScrollCue target={scrollTarget} />
 
         {showStrip ? <span className="home-project-anchor" aria-hidden="true" /> : null}
       </div>

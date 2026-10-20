@@ -37,68 +37,28 @@ function waitForRouteMarkup() {
   });
 }
 
-function extractBackgroundUrls(root: Element) {
-  const urls = new Set<string>();
-  const elements = [
-    root,
-    ...Array.from(root.querySelectorAll("[class*='hero'], [class*='landing'], [class*='media'], [class*='cover']")),
-  ];
-
-  elements.forEach((element) => {
-    const backgroundImage = window.getComputedStyle(element).backgroundImage;
-    const matches = backgroundImage.matchAll(/url\(["']?([^"')]+)["']?\)/g);
-    for (const match of matches) {
-      if (match[1] && !match[1].startsWith("data:")) urls.add(match[1]);
-    }
-  });
-
-  return urls;
-}
-
-function preloadImage(url: string) {
-  return new Promise<void>((resolve) => {
-    const image = new Image();
-    const finish = () => resolve();
-    image.onload = finish;
-    image.onerror = finish;
-    image.src = url;
-    if (image.complete) finish();
-  });
-}
-
 async function waitForPageAssets() {
   const root = document.querySelector(".page-shell");
   if (!root) return;
 
-  const imageUrls = new Set<string>();
-  root.querySelectorAll<HTMLImageElement>("img:not([loading='lazy']):not([data-loader-skip='true'])").forEach((image) => {
-    const url = image.currentSrc || image.src;
-    if (url) imageUrls.add(url);
-  });
-  extractBackgroundUrls(root).forEach((url) => imageUrls.add(url));
-
-  const videos = Array.from(root.querySelectorAll<HTMLVideoElement>("video:not([preload='none'])"));
-  const videoPromises = videos.map(
-    (video) =>
-      new Promise<void>((resolve) => {
-        if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-          resolve();
-          return;
-        }
-        const finish = () => resolve();
-        video.addEventListener("loadeddata", finish, { once: true });
-        video.addEventListener("error", finish, { once: true });
-        window.setTimeout(finish, 6000);
-        video.load();
-      }),
-  );
-
-  await Promise.allSettled([...Array.from(imageUrls, preloadImage), ...videoPromises]);
-}
-
-async function waitForDocumentLoad() {
-  if (document.readyState === "complete") return;
-  await new Promise<void>((resolve) => window.addEventListener("load", () => resolve(), { once: true }));
+  // Only wait for visible, eager images. Offscreen galleries and videos load independently.
+  const images = Array.from(root.querySelectorAll<HTMLImageElement>("img:not([loading='lazy']):not([data-loader-skip='true'])"))
+    .filter((image) => {
+      const rect = image.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0 && rect.top < window.innerHeight && rect.bottom > 0;
+    });
+  await Promise.allSettled(images.map((image) => new Promise<void>((resolve) => {
+    if (image.complete) { resolve(); return; }
+    const finish = () => {
+      clearTimeout(timeout);
+      image.removeEventListener("load", finish);
+      image.removeEventListener("error", finish);
+      resolve();
+    };
+    const timeout = window.setTimeout(finish, initialLoadTimeout);
+    image.addEventListener("load", finish, { once: true });
+    image.addEventListener("error", finish, { once: true });
+  })));
 }
 
 export function InitialLoader({ pathname: _pathname }: { pathname: string }) {
@@ -114,7 +74,7 @@ export function InitialLoader({ pathname: _pathname }: { pathname: string }) {
 
     const loadInitialPage = async () => {
       await waitForRouteMarkup();
-      await waitForDocumentLoad();
+      if (cancelled) return;
       await new Promise<void>((resolve) => window.requestAnimationFrame(() => window.requestAnimationFrame(() => resolve())));
       await waitForPageAssets();
     };

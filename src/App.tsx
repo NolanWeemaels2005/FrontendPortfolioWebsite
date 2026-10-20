@@ -1,8 +1,9 @@
 import { Link, Route, Routes, useLocation } from "react-router-dom";
-import { lazy, Suspense, useEffect, useLayoutEffect, useMemo } from "react";
+import { lazy, Suspense, useLayoutEffect, useMemo } from "react";
 import { PageContactCta } from "./components/PageContactCta";
 import { Footer } from "./components/Footer";
 import { Navigation } from "./components/Navigation";
+import { CustomCursor } from "./components/CustomCursor";
 import { Seo } from "./components/Seo";
 import { WhatsAppPopup } from "./components/WhatsAppPopup";
 import { InitialLoader } from "./components/InitialLoader";
@@ -54,44 +55,12 @@ function getRouteBodyClass(pathname: string) {
 }
 
 function ScrollToTop() {
-  const { hash, pathname } = useLocation();
-
-  useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
-    }
-  }, []);
+  const { pathname } = useLocation();
 
   useLayoutEffect(() => {
-    if (hash) {
-      const scrollToHash = () => document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView({ block: "start" });
-      const frame = window.requestAnimationFrame(scrollToHash);
-      const timeout = window.setTimeout(scrollToHash, 120);
-      const settledTimeout = window.setTimeout(scrollToHash, 700);
-
-      return () => {
-        window.cancelAnimationFrame(frame);
-        window.clearTimeout(timeout);
-        window.clearTimeout(settledTimeout);
-      };
-    }
-    if (pathname === "/portfolio" && window.sessionStorage.getItem("portfolio-scroll-y")) return;
-
-    const scrollTop = () => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    };
-
-    scrollTop();
-    const frame = window.requestAnimationFrame(scrollTop);
-    const timeout = window.setTimeout(scrollTop, 80);
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.clearTimeout(timeout);
-    };
-  }, [hash, pathname]);
+    // Route changes start immediately at the top; in-page anchor clicks remain usable.
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [pathname]);
 
   return null;
 }
@@ -166,6 +135,7 @@ export function App() {
       <Seo />
       <ScrollToTop />
       <Navigation />
+      <CustomCursor />
       <main className="page-shell" key={location.pathname}>
         <Suspense fallback={null}>
           <Routes location={location}>

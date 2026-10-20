@@ -1,3 +1,5 @@
+import "../styles/about-hero.css";
+import "../styles/orange-sections.css";
 import { ScrollSectionEdge } from "../components/ScrollSectionEdge";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -147,11 +149,22 @@ export function AboutPage() {
         <Hero
           title={t("hero.aboutTitle")}
           script={t("hero.aboutScript")}
-          scrollText={t("hero.scroll")}
-          className="portfolio-showcase-hero about-story-hero"
+          className="portfolio-showcase-hero about-story-hero about-photo-hero"
+          visual={<div className="about-photo-hero__media" aria-hidden="true">
+            <img
+              src={assetPath("assets/about-hero/header-about-2400.jpg")}
+              srcSet={`${assetPath("assets/about-hero/header-about-1200.jpg")} 1200w, ${assetPath("assets/about-hero/header-about-2400.jpg")} 2400w`}
+              sizes="100vw"
+              alt=""
+              width="2400"
+              height="1600"
+              fetchPriority="high"
+              decoding="async"
+            />
+          </div>}
         />
       </div>
-      <ScrollSectionEdge color="#fff" />
+      <ScrollSectionEdge color="#000" />
 
       <div id="page-content" className="about-story-content">
         <section className="about-skills" data-reveal>
@@ -165,12 +178,12 @@ export function AboutPage() {
               <div className="about-skills__portrait-frame">
                 <img
                   className="about-skills__portrait"
-                  src={assetPath("assets/home-overview/portrait-bw-960.jpg")}
-                  srcSet={`${assetPath("assets/home-overview/portrait-bw-480.jpg")} 480w, ${assetPath("assets/home-overview/portrait-bw-960.jpg")} 960w`}
+                  src={assetPath("assets/home-overview/portrait-studio-1600.jpg")}
+                  srcSet={`${assetPath("assets/home-overview/portrait-studio-800.jpg")} 450w, ${assetPath("assets/home-overview/portrait-studio-1600.jpg")} 900w`}
                   sizes="(max-width: 61.25rem) min(calc(100vw - 2rem), 26.25rem), min(27.5rem, 38vw)"
                   alt={t("about.portraitAlt")}
-                  width="960"
-                  height="1366"
+                  width="900"
+                  height="1600"
                   loading="lazy"
                   decoding="async"
                 />
@@ -196,6 +209,26 @@ export function AboutPage() {
                   <ButtonTextStagger text={t("cta.letsTalk")} />
                 </Link>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="about-approach" aria-labelledby="about-approach-heading">
+          <div className="section-container about-approach__inner">
+            <header>
+              <p className="about-approach__eyebrow">{t("about.approach.eyebrow")}</p>
+              <h2 id="about-approach-heading">{t("about.approach.title")}</h2>
+            </header>
+            <div className="about-approach__steps">
+              {["understand", "design", "deliver"].map((step) => (
+                <article key={step}>
+                  <h3>{t(`about.approach.${step}.title`)}</h3>
+                  <p>{t(`about.approach.${step}.copy`)}</p>
+                </article>
+              ))}
+              <Link to="/contact/" className="about-approach__contact" data-cursor="soft">
+                <ButtonTextStagger text={t("cta.letsTalk")} /><ArrowRight size={22} aria-hidden="true" />
+              </Link>
             </div>
           </div>
         </section>

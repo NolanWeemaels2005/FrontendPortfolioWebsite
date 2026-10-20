@@ -4,46 +4,42 @@ import { Hero } from "../components/Hero";
 import { ThreeDMarquee } from "../components/lightswind/3d-marquee";
 import { LogoStrip } from "../components/LogoStrip";
 import { Portfolio } from "../components/Portfolio";
-import { useFeaturedProjectsQuery } from "../data/projectQueries";
+import { useCombinedProjectsQuery } from "../data/projectQueries";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../i18n/LanguageContext";
+import { assetPath } from "../utils/asset";
+
+// The landing keeps its original photos independently of the curated Hall of Fame.
+const landingProjects = [
+  { slug: "brussel-noord-basket", cover: "BNB", title: "Brussel Noord Basket" },
+  { slug: "erasmus-hogeschool", cover: "EHB", title: "Erasmushogeschool Brussel" },
+  { slug: "videjo", cover: "VIDEJO", title: "Videjo" },
+  { slug: "city-to-ocean", cover: "CTO", title: "City To Ocean" },
+  { slug: "fc-eisbar", cover: "FCEISBAR", title: "FC Eisbär" },
+  { slug: "shift-festival-2026", cover: "SHIFT", title: "Shift Festival 2026" },
+  { slug: "ring-tv", cover: "RING", title: "Ring TV" },
+  { slug: "mentalite-sportswear", cover: "MENTALITE", title: "Mentalité Sportswear" },
+];
 
 export function PortfolioPage() {
   useScrollReveal();
   const { t } = useLanguage();
-  const { data: featuredProjects = [] } = useFeaturedProjectsQuery();
-  const marqueeImages = featuredProjects
-    .filter((project) => project.cover || project.heroImage)
-    .map((project) => ({
-      src: project.cover || project.heroImage || "",
-      alt: project.titleKey ? t(project.titleKey) : project.title,
-      logoSrc: project.logo || project.clientLogoSvg || undefined,
-      href: `/portfolio/${project.slug}/`,
-    }));
+  const { data: projects = [] } = useCombinedProjectsQuery();
+  const marqueeImages = landingProjects.map((landing) => {
+    const project = projects.find((item) => item.slug === landing.slug || item.slug.startsWith(`${landing.slug}-`));
+    return {
+      src: assetPath(`assets/project-covers/cover${landing.cover}.webp`),
+      alt: project?.titleKey ? t(project.titleKey) : project?.title || landing.title,
+      logoSrc: project?.logo || undefined,
+      href: `/portfolio/${project?.slug || landing.slug}/`,
+    };
+  });
 
   useLayoutEffect(() => {
     document.body.classList.add("portfolio-route");
     return () => document.body.classList.remove("portfolio-route");
   }, []);
 
-  useLayoutEffect(() => {
-    const savedScrollY = window.sessionStorage.getItem("portfolio-scroll-y");
-    if (!savedScrollY) return;
-
-    window.sessionStorage.removeItem("portfolio-scroll-y");
-    const scrollY = Number(savedScrollY);
-    if (!Number.isFinite(scrollY)) return;
-
-    const restore = () => window.scrollTo(0, scrollY);
-    restore();
-    const frame = window.requestAnimationFrame(restore);
-    const timeout = window.setTimeout(restore, 120);
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.clearTimeout(timeout);
-    };
-  }, []);
 
   return (
     <>
@@ -51,7 +47,6 @@ export function PortfolioPage() {
         <Hero
           title={t("hero.portfolioTitle")}
           script={t("hero.portfolioScript")}
-          scrollText={t("hero.scroll")}
           className="portfolio-showcase-hero"
           visual={<ThreeDMarquee images={marqueeImages} className="portfolio-hero-marquee" />}
         />

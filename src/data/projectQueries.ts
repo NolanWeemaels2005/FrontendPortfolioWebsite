@@ -53,7 +53,7 @@ type BackendProject = {
   images: string[];
 };
 
-const projectDataVersion = "v13";
+const projectDataVersion = "v15";
 const fallbackLatestProjectSlug = "shift-festival-2026";
 const projectOrder = [
   "find your light",
@@ -189,50 +189,65 @@ function sortProjects(projects: Project[]) {
   });
 }
 
-function featuredOrderIndex(project: Project) {
-  const normalizedSlug = normalizeTitle(project.slug.replace(/-/g, " "));
-  const normalizedTitle = normalizeTitle(project.title);
-  const index = featuredProjects.findIndex((featuredProject) => {
-    const featuredSlug = normalizeTitle(featuredProject.slug.replace(/-/g, " "));
-    const featuredTitle = normalizeTitle(featuredProject.title);
+const projectAliases: Record<string, string[]> = {
+  "brussel-noord-basket": ["brussel noord basket", "bnb", "b.n.b."],
+  "shift-festival-2026": ["shift festival 2026", "shift festival", "shift"],
+  "city-to-ocean": ["city to ocean", "city 2 ocean", "cto"],
+  videjo: ["videjo"],
+  ferraaawri: ["ferraaawri", "ferraawri", "ferrawri"],
+  "erasmus-hogeschool": ["erasmus hogeschool", "erasmushogeschool", "erasmushogeschool brussel", "erasmus hogeschool brussel", "ehb"],
+  "fc-eisbar": ["fc eisbar", "eisbar"],
+  "la-maison-des-trois-garcons": ["la maison des trois garcons", "la maison des 3 garcons", "lmd3g"],
+};
 
-    return (
-      featuredProject.slug === project.slug ||
-      normalizedSlug === featuredSlug ||
-      normalizedTitle === featuredTitle ||
-      normalizedSlug.startsWith(`${featuredSlug} `) ||
-      normalizedTitle.startsWith(`${featuredTitle} `)
-    );
-  });
-
-  return index === -1 ? Number.POSITIVE_INFINITY : index;
+function projectNameKey(value: string) {
+  return normalizeTitle(value).replace(/[^a-z0-9]/g, "");
 }
 
-function sortFeaturedProjects(projects: Project[]) {
-  return [...projects].sort((projectA, projectB) => {
-    const orderA = featuredOrderIndex(projectA);
-    const orderB = featuredOrderIndex(projectB);
-    if (orderA !== orderB) return orderA - orderB;
-    return sortProjects([projectA, projectB])[0] === projectA ? -1 : 1;
-  });
+// Prefer canonical routes, then known alternate names. Prefix matches only apply
+// to full local names so short aliases cannot absorb an unrelated project.
+function projectMatchRank(project: Pick<Project, "slug" | "title">, localProject: Project) {
+  if (project.slug === localProject.slug) return 0;
+
+  const localNames = [localProject.slug, localProject.title, ...(projectAliases[localProject.slug] || [])];
+  const localKeys = localNames.map(projectNameKey);
+  if (localKeys.includes(projectNameKey(project.slug))) return 1;
+  if (localKeys.includes(projectNameKey(project.title))) return 2;
+  if (project.slug.startsWith(`${localProject.slug}-`)) return 3;
+  if (normalizeTitle(project.title).startsWith(`${normalizeTitle(localProject.title)} `)) return 4;
+  return Number.POSITIVE_INFINITY;
 }
 
 function findLocalProject(project: Pick<Project, "slug" | "title">) {
-  const normalizedBackendTitle = normalizeTitle(project.title);
+  return getCombinedProjects()
+    .map((localProject) => ({ localProject, rank: projectMatchRank(project, localProject) }))
+    .filter(({ rank }) => Number.isFinite(rank))
+    .sort((a, b) => a.rank - b.rank)[0]?.localProject;
+}
 
-  return getCombinedProjects().find(
-    (localProject) => {
-      const normalizedLocalTitle = normalizeTitle(localProject.title);
+function preserveFeaturedPresentation(backendProject: Project, localProject: Project): Project {
+  return {
+    ...backendProject,
+    title: localProject.title,
+    titleKey: localProject.titleKey,
+    logo: localProject.logo || backendProject.logo,
+    cover: localProject.cover || backendProject.cover,
+    color: localProject.color,
+    featured: true,
+    hallOfFame: localProject.hallOfFame,
+  };
+}
 
-      return (
-        localProject.slug === project.slug ||
-        project.slug.startsWith(`${localProject.slug}-`) ||
-        normalizedLocalTitle === normalizedBackendTitle ||
-        normalizedLocalTitle.includes(normalizedBackendTitle) ||
-        normalizedBackendTitle.includes(normalizedLocalTitle)
-      );
-    },
-  );
+// Build from the curated list, rather than filtering the API list: aliases and
+// old revisions must never add a ninth card or duplicate a client in the rail.
+export function selectFeaturedProjects(backendProjects: Project[]) {
+  return featuredProjects.map((localProject) => {
+    const backendProject = backendProjects
+      .map((project) => ({ project, rank: projectMatchRank(project, localProject) }))
+      .filter(({ rank }) => Number.isFinite(rank))
+      .sort((a, b) => a.rank - b.rank)[0]?.project;
+    return backendProject ? preserveFeaturedPresentation(backendProject, localProject) : localProject;
+  });
 }
 
 function firstText(...values: Array<string | undefined | null>) {
@@ -243,11 +258,9 @@ function mapBackendProject(project: BackendProject): Project {
   const localProject = findLocalProject(project);
   const isLocalFeaturedProject = Boolean(localProject?.featured);
   const backendHeroImage = webpImageUrl(project.heroImage, 1600);
-  const backendLogo = webpImageUrl(project.clientLogoSvg, 900);
+  const backendLogo = webpImageUrl(project.clientLogoSvg, 1600);
   const cover = isLocalFeaturedProject ? localProject?.cover || backendHeroImage : undefined;
-  const logo = isLocalFeaturedProject
-    ? backendLogo || localProject?.logo || backendHeroImage
-    : localProject?.logo || backendLogo || "";
+  const logo = localProject?.logo || backendLogo || "";
   const summaryTranslations = {
     nl: firstText(project.summaryNl, project.summaryNL, project.summary_nl, project.translations?.nl?.summary),
     fr: firstText(project.summaryFr, project.summaryFR, project.summary_fr, project.translations?.fr?.summary),
@@ -288,13 +301,14 @@ function mapBackendProject(project: BackendProject): Project {
 
   return {
     id: project._id,
-    title: project.title,
+    title: isLocalFeaturedProject ? localProject!.title : project.title,
     slug: project.slug,
     layoutSlug: localProject?.layoutSlug || localProject?.slug,
     logo,
     cover,
     color: localProject?.color || "#000",
     featured: localProject?.featured,
+    hallOfFame: localProject?.hallOfFame,
     titleKey: localProject?.titleKey,
     summaryKey: localProject?.summaryKey,
     summary: project.text,
@@ -309,12 +323,11 @@ function mapBackendProject(project: BackendProject): Project {
 }
 
 function mergeBackendProjects(backendProjects: Project[], localProjects: Project[]) {
-  const backendSlugs = new Set(backendProjects.map((project) => project.slug));
-  const backendTitles = new Set(backendProjects.map((project) => normalizeTitle(project.title)));
-
   return sortProjects([
     ...backendProjects,
-    ...localProjects.filter((project) => !backendSlugs.has(project.slug) && !backendTitles.has(normalizeTitle(project.title))),
+    ...localProjects.filter((localProject) => !backendProjects.some(
+      (project) => Number.isFinite(projectMatchRank(project, localProject)),
+    )),
   ]);
 }
 
@@ -370,10 +383,7 @@ export function useFeaturedProjectsQuery() {
     cacheKey(["featured"]),
     async () => {
       const backendProjects = await fetchBackendProjects();
-      const mergedProjects = mergeBackendProjects(backendProjects, featuredProjects);
-      return sortFeaturedProjects(
-        mergedProjects.filter((project) => project.featured || featuredProjects.some((featuredProject) => featuredProject.slug === project.slug)),
-      );
+      return selectFeaturedProjects(backendProjects);
     },
     featuredProjects,
   );
@@ -431,7 +441,7 @@ export function useProjectQuery(slug: string | undefined) {
       const backendProjectFromList = backendProjects.find(
         (project) =>
           project.slug === slug ||
-          (localProject && normalizeTitle(project.title) === normalizeTitle(localProject.title)),
+          (localProject && Number.isFinite(projectMatchRank(project, localProject))),
       );
 
       return backendProjectFromList || localProject;

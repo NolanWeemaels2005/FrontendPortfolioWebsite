@@ -12,6 +12,12 @@ export type Project = {
   cover?: string;
   color: string;
   featured?: boolean;
+  hallOfFame?: {
+    key: string;
+    services: string[];
+    video?: string;
+    slides?: string[];
+  };
   summary?: string;
   summaryTranslations?: ProjectTranslation;
   summaryKey?: string;

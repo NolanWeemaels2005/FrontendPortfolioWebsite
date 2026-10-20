@@ -22,7 +22,8 @@ export default function ImageReveal({ images = [], children }: ImageRevealProps)
   useLayoutEffect(() => {
     const root = rootRef.current;
     const number = root?.querySelector(".home-overview__project-number");
-    if (!root || !number) return;
+    const label = root?.querySelector(".home-overview__project-label");
+    if (!root || !number || !label) return;
 
     const measure = () => {
       const label = root.querySelector(".home-overview__project-label");
@@ -50,7 +51,8 @@ export default function ImageReveal({ images = [], children }: ImageRevealProps)
     resizeObserver.observe(root);
     resizeObserver.observe(number);
     const mutationObserver = new MutationObserver(measure);
-    mutationObserver.observe(number, { childList: true, characterData: true, subtree: true });
+    // Only label translations affect the exclusion area; counter frames do not.
+    mutationObserver.observe(label, { childList: true, characterData: true, subtree: true });
     document.fonts.addEventListener("loadingdone", measure);
     window.addEventListener("resize", measure);
     measure();
@@ -143,7 +145,7 @@ export default function ImageReveal({ images = [], children }: ImageRevealProps)
 
           return (
             <figure className={`image-reveal__frame ${activeIndex === index ? "is-active" : ""} ${!hasInteracted && introIndex >= 0 && !expiredIntroHrefs.includes(image.href) ? "is-intro" : ""}`} key={image.href} style={frameStyle}>
-              <Link to={image.href} aria-label={`${t("home.viewProject")} ${image.alt}`} onFocus={() => {
+              <Link data-cursor="project" to={image.href} aria-label={`${t("home.viewProject")} ${image.alt}`} onFocus={() => {
                 setHasInteracted(true);
                 setActiveIndex(index);
               }}>

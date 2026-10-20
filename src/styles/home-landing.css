@@ -1,0 +1,110 @@
+body.home-route {
+  --landing-gutter: clamp(.75rem, 1.1vw, 2rem);
+  --landing-title-top: calc(4.75rem + env(safe-area-inset-top));
+}
+
+.home-landing {
+  background: #292923;
+}
+
+.home-landing__media,
+.home-landing__media::after,
+.home-landing__media > img,
+.home-landing__media > video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.home-landing__media {
+  z-index: -1;
+  pointer-events: none;
+}
+
+.home-landing__media > img,
+.home-landing__media > video {
+  object-fit: cover;
+  object-position: 50% 48%;
+}
+
+.home-landing__media::after {
+  content: "";
+  background: rgb(0 0 0 / 58%);
+}
+
+.home-landing__slogan {
+  position: absolute;
+  top: var(--landing-title-top);
+  left: var(--landing-gutter);
+  right: var(--landing-gutter);
+  margin: 0;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.home-landing__slogan {
+  font-family: var(--font-main);
+  font-size: 6.1vw;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.045em;
+  white-space: nowrap;
+}
+
+.home-landing__slogan > span {
+  display: inline-block;
+  position: relative;
+  left: var(--home-slogan-offset, 0em);
+}
+
+.home-landing .home-landing__project {
+  left: var(--landing-gutter);
+  background: rgb(0 0 0 / 35%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.home-landing .home-landing__project:has(.home-landing__project-link):hover {
+  background: rgb(0 0 0 / 50%);
+}
+
+@media (max-width: 51.25rem) {
+  .home-landing__slogan {
+    font-size: 12vw;
+    line-height: .94;
+  }
+
+  .home-landing__slogan-line {
+    display: block;
+    width: max-content;
+  }
+
+  .home-landing__media > img,
+  .home-landing__media > video {
+    object-position: 52% 48%;
+  }
+}
+
+@media (max-width: 40rem) {
+  body.home-route .home-overview__project-screen {
+    min-height: 0;
+    padding: 1rem 0;
+  }
+
+  body.home-route .home-overview__project-screen > .image-reveal {
+    height: clamp(22rem, 100vw, 32rem);
+  }
+
+  body.home-route .home-services {
+    padding-top: 1.5rem;
+  }
+}
+
+.home-landing__slogan-accent {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: calc(1em * var(--home-accent-scale, 1));
+  line-height: 0;
+  color: var(--orange);
+}

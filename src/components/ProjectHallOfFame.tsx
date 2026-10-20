@@ -1,13 +1,11 @@
 import { ArrowRight } from "lucide-react";
-import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ButtonTextStagger } from "./ButtonTextStagger";
-import { featuredProjects } from "../data/projects";
 import { useFeaturedProjectsQuery } from "../data/projectQueries";
 import { useLanguage } from "../i18n/LanguageContext";
 import type { Project } from "../types/project";
-import { previewImageUrl, responsiveImageSrcSet } from "../utils/asset";
+import { HallOfFameCard } from "./HallOfFameGrid";
 
 function splitColumns(projects: Project[]) {
   const columns: Project[][] = [[], [], []];
@@ -17,23 +15,11 @@ function splitColumns(projects: Project[]) {
   return columns;
 }
 
-const featuredCoverBySlug = new Map(featuredProjects.map((project) => [project.slug.replace(/\.$/, ""), project.cover]));
-const featuredColorBySlug = new Map(featuredProjects.map((project) => [project.slug.replace(/\.$/, ""), project.color]));
-
-function getProjectCover(project: Project) {
-  return project.cover || project.heroImage || featuredCoverBySlug.get(project.slug.replace(/\.$/, ""));
-}
-
-function getProjectAccent(project: Project) {
-  const color = featuredColorBySlug.get(project.slug.replace(/\.$/, "")) || project.color;
-  return color === "#000" ? "#ee9d59" : color;
-}
-
 export function ProjectHallOfFame() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const { data: projects = [] } = useFeaturedProjectsQuery();
-  const columns = useMemo(() => splitColumns(projects.filter((project) => project.logo || getProjectCover(project))), [projects]);
+  const columns = useMemo(() => splitColumns(projects), [projects]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -66,88 +52,30 @@ export function ProjectHallOfFame() {
     };
   }, []);
 
-  function rememberPortfolioScroll() {
-    window.sessionStorage.setItem("portfolio-scroll-y", String(window.scrollY));
-  }
-
   return (
-    <section className="project-hall" ref={sectionRef}>
+    <section className="project-hall project-hall--classic" ref={sectionRef} aria-labelledby="home-hall-heading">
       <div className="project-hall__inner">
         <header className="project-hall__heading">
-          <span>{t("portfolio.hallEyebrow")}</span>
-          <strong>{t("portfolio.hallTitle")}</strong>
+          <h2 id="home-hall-heading">
+            <span>{t("portfolio.hallEyebrow")}</span>
+            <strong>{t("portfolio.hallTitle")}</strong>
+          </h2>
         </header>
 
         <div className="project-hall__grid">
           {columns.map((column, columnIndex) => (
             <div className={`project-hall__column project-hall__column--${columnIndex + 1}`} key={columnIndex}>
               {column.map((project) => {
-                const cover = getProjectCover(project);
                 const title = project.titleKey ? t(project.titleKey) : project.title;
 
                 return (
-                  <Link className="project-hall-card" to={`/portfolio/${project.slug}/`} key={project.slug} onClick={rememberPortfolioScroll}>
-                    <span className="project-hall-card__media" style={{ "--hall-accent": getProjectAccent(project) } as CSSProperties}>
-                      <span className="project-hall-card__art">
-                      {cover ? (
-                        <img
-                          className="project-hall-card__cover"
-                          src={cover}
-                          srcSet={responsiveImageSrcSet(cover, 640, 1280)}
-                          sizes="(max-width: 760px) calc(100vw - 2rem), 390px"
-                          alt=""
-                          width="1280"
-                          height="1600"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      ) : null}
-                      <span className="project-hall-card__shade" />
-                      {project.logo ? (
-                        <img
-                          className="project-hall-card__logo"
-                          src={previewImageUrl(project.logo, 256)}
-                          alt={title}
-                          width="512"
-                          height="512"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      ) : null}
-                      </span>
-                      <span className="project-hall-card__art project-hall-card__art--color" aria-hidden="true">
-                      {cover ? (
-                        <img
-                          className="project-hall-card__cover"
-                          src={cover}
-                          srcSet={responsiveImageSrcSet(cover, 640, 1280)}
-                          sizes="(max-width: 760px) calc(100vw - 2rem), 390px"
-                          alt=""
-                          width="1280"
-                          height="1600"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      ) : null}
-                      <span className="project-hall-card__shade" />
-                      {project.logo ? (
-                        <img
-                          className="project-hall-card__logo"
-                          src={previewImageUrl(project.logo, 256)}
-                          alt={title}
-                          width="512"
-                          height="512"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      ) : null}
-                      </span>
-                    </span>
-                    <span className="project-hall-card__label">
-                      <ButtonTextStagger text={title} />
+                  <div className="project-hall-card" key={project.slug}>
+                    <HallOfFameCard project={project} variant="home" />
+                    <Link className="project-hall-card__label" to={`/portfolio/${project.slug}/`}>
+                      <ButtonTextStagger text={title} wrap />
                       <ArrowRight aria-hidden="true" size={24} strokeWidth={3} />
-                    </span>
-                  </Link>
+                    </Link>
+                  </div>
                 );
               })}
             </div>

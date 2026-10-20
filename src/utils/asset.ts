@@ -5,6 +5,8 @@ export function assetPath(path: string) {
 }
 
 export function webpImageUrl(url: string | null | undefined, maxWidth = 1600) {
+  // Preserve vector logos instead of rasterizing them at a fixed resolution.
+  if (url && /\.svg(?:[?#]|$)/i.test(url)) return url;
   if (!url || !url.includes("res.cloudinary.com") || !url.includes("/image/upload/")) return url || "";
   const transformation = `f_webp,q_auto,w_${maxWidth},c_limit`;
   return url.replace(
