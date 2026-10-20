@@ -39,8 +39,17 @@ html body .case-hero > img,
 html body .project-case .project-detail__gallery-button { border-radius: var(--section-corner) 0 var(--section-corner) 0; }
 @media (max-width: 40rem) {
   html:root { --page-gutter: 1rem; }
-  html body .about-story__intro { width: calc(100% - var(--page-gutter) * 2); margin-inline: 0; }
   html body .about-story__controls { width: 100%; margin-inline: 0; }
+}
+
+@media (max-width: 64rem) {
+  html body.about-route .about-story__intro {
+    left: auto;
+    right: auto;
+    width: calc(100% - var(--page-gutter) * 2);
+    margin-inline: auto;
+    text-align: center;
+  }
 }
 
 html body .about-story-cta { padding-inline: var(--content-edge); }
