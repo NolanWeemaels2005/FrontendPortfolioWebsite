@@ -99,3 +99,23 @@ body.blog-route .page-shell > .about-story-cta {
   position: relative;
   z-index: 2;
 }
+
+/* Photography and orange editorial band follow the main pages' rhythm. */
+.blog-photo-hero__media { position: absolute; inset: 0; pointer-events: none; }
+.blog-photo-hero__media img { width: 100%; height: 100%; object-fit: cover; object-position: 58% 45%; }
+.blog-photo-hero__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgb(0 0 0 / 75%), rgb(0 0 0 / 10%) 75%); }
+.blog-editorial-intro { background: var(--orange); color: #111; padding-block: clamp(3rem, 7vw, 7rem); }
+.blog-editorial-intro__inner { display: grid; grid-template-columns: 1.2fr 1fr; align-items: end; gap: clamp(2rem, 6vw, 6rem); }
+.blog-editorial-intro .eyebrow { color: #111; margin-bottom: 1.5rem; }
+.blog-editorial-intro h2 { max-width: 12ch; font-family: var(--font-display); font-size: clamp(3rem, 6.5vw, 6.5rem); line-height: .98; text-transform: uppercase; letter-spacing: -.035em; }
+.blog-editorial-intro .blog-intro { margin: 0; max-width: 36ch; font-size: clamp(1.1rem, 1.6vw, 1.35rem); }
+.blog-list-section .blog-grid { gap: clamp(1.5rem, 3vw, 3rem); }
+.blog-list-section .blog-card { border: 0; border-top: 2px solid var(--orange); border-radius: 0; padding: 1.5rem 0; background: transparent; }
+.blog-list-section .blog-card h3 { font-family: var(--font-display); font-size: clamp(1.8rem, 2.8vw, 2.8rem); letter-spacing: -.025em; }
+.blog-list-section .blog-card h3 a:hover { color: var(--orange); }
+.blog-list-section .blog-read { border-bottom: 1px solid #67594f; padding-bottom: 1rem; }
+@media (max-width: 40rem) {
+  .blog-editorial-intro__inner { grid-template-columns: 1fr; }
+  .blog-editorial-intro h2 { max-width: 13ch; }
+  .blog-photo-hero__media img { object-position: 62% 50%; }
+}

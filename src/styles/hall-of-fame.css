@@ -153,34 +153,27 @@
 
 .project-hall--classic .project-hall__heading h2 { margin: 0; }
 
+/* A compact editorial mosaic, including narrow phones. */
 @media (max-width: 37.5rem) {
   .hall-grid {
     aspect-ratio: auto;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(6, minmax(0, 1fr));
-    grid-auto-rows: auto;
+    grid-template-rows: repeat(9, clamp(5rem, 23vw, 8.5rem));
+    gap: .625rem;
   }
-  .hall-tile { min-height: 12rem; }
-  .hall-tile--bnb { grid-area: 1 / 1 / 3 / 2; }
-  .hall-tile--shift { grid-area: 1 / 2 / 2 / 3; }
-  .hall-tile--videjo { grid-area: 2 / 2 / 3 / 3; }
-  .hall-tile--cto { grid-area: 3 / 1 / 4 / 2; }
-  .hall-tile--ferraawri { grid-area: 3 / 2 / 5 / 3; }
-  .hall-tile--maison { grid-area: 4 / 1 / 5 / 2; }
-  .hall-tile--erasmus { grid-area: 5 / 1 / 7 / 2; }
-  .hall-tile--eisbar { grid-area: 5 / 2 / 7 / 3; }
-  .hall-tile__services { font-size: .6875rem; }
-}
-
-@media (max-width: 30rem) {
-  .hall-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; gap: .875rem; }
-  .hall-tile { grid-area: auto; min-height: 0; aspect-ratio: 4 / 3; }
-  .hall-tile--bnb { aspect-ratio: 1.1; }
-  .hall-tile--shift, .hall-tile--eisbar { aspect-ratio: 1.65; }
-  .hall-tile--videjo { aspect-ratio: 1.9; }
-  .hall-tile--ferraawri, .hall-tile--erasmus { aspect-ratio: 4 / 5; }
-  .hall-tile--maison { aspect-ratio: 1; }
-  .hall-tile__services { top: .6rem; right: .6rem; font-size: .75rem; }
+  .hall-grid > .hall-tile { min-height: 0; aspect-ratio: auto; }
+  .hall-tile--bnb { grid-area: 1 / 1 / 4 / 2; }
+  .hall-tile--shift { grid-area: 1 / 2 / 3 / 3; }
+  .hall-tile--videjo { grid-area: 3 / 2 / 4 / 3; }
+  .hall-tile--cto { grid-area: 4 / 1 / 6 / 3; }
+  .hall-tile--ferraawri { grid-area: 6 / 2 / 9 / 3; }
+  .hall-tile--maison { grid-area: 6 / 1 / 7 / 2; }
+  .hall-tile--erasmus { grid-area: 7 / 1 / 10 / 2; }
+  .hall-tile--eisbar { grid-area: 9 / 2 / 10 / 3; }
+  .hall-grid .hall-tile__caption { right: .5rem; gap: .25rem; font-size: .6875rem; }
+  .hall-grid .hall-tile__caption > svg { width: 18px; height: 18px; }
+  .hall-grid .hall-tile__caption > span { opacity: 1; translate: none; }
+  .hall-grid .hall-tile__services { font-size: .625rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

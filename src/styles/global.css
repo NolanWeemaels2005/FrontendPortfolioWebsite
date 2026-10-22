@@ -4666,76 +4666,85 @@ body.about-route .about-story__sticky {
 
 .legal-page {
   min-height: 100vh;
-  background: var(--white);
-  color: var(--black);
+  background: #000;
+  color: #f7f5f0;
   padding: calc(8rem + env(safe-area-inset-top)) 0 7rem;
 }
 
-.legal-page__inner {
-  max-width: 57.5rem;
+.legal-page__header {
+  padding: clamp(1.5rem, 4vw, 4rem);
+  border-radius: var(--section-corner, 1.375rem) 0 var(--section-corner, 1.375rem) 0;
+  background: var(--orange);
+  color: #111;
 }
 
 .legal-page__eyebrow {
-  width: fit-content;
-  border-radius: 62.4375rem;
-  background: var(--orange);
-  color: var(--black);
-  padding: 0.55rem 1rem;
+  font-size: .85rem;
   font-weight: 800;
+  letter-spacing: .06em;
   text-transform: uppercase;
 }
 
 .legal-page h1 {
+  max-width: 18ch;
   margin-top: 1.6rem;
-  color: var(--purple);
-  font-size: clamp(3rem, 7vw, 6.6rem);
+  font-family: var(--font-display);
+  font-size: clamp(2.7rem, 6.5vw, 6.5rem);
   font-weight: 800;
-  line-height: 0.92;
+  line-height: .98;
+  letter-spacing: -.035em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .legal-page__intro {
-  max-width: 47.5rem;
-  margin-top: 1.4rem;
-  color: var(--purple);
-  font-size: clamp(1.15rem, 2vw, 1.5rem);
-  font-weight: 800;
-  line-height: 1.2;
+  max-width: 48ch;
+  margin-top: 1.5rem;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  line-height: 1.65;
 }
 
 .legal-page__updated {
-  margin-top: 1rem;
-  color: rgba(0, 0, 0, 0.56);
-  font-weight: 700;
+  margin-top: 1.5rem;
+  color: #3e3024;
+  font-size: .9rem;
 }
 
 .legal-page__sections {
-  margin-top: 3rem;
+  margin-top: clamp(2.5rem, 5vw, 5rem);
+  max-width: 57.5rem;
   display: grid;
-  gap: 1rem;
 }
 
 .legal-page__section {
-  border-radius: 1.125rem;
-  background: var(--black);
-  color: var(--white);
-  padding: clamp(1.25rem, 3vw, 2rem);
+  border-top: 1px solid #67594f;
+  padding-block: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .legal-page__section h2 {
   color: var(--orange);
-  font-size: clamp(1.35rem, 2vw, 2rem);
-  line-height: 1;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.5vw, 2.3rem);
+  line-height: 1.15;
+  letter-spacing: -.025em;
 }
 
 .legal-page__section p {
-  margin-top: 0.85rem;
-  font-size: 1.02rem;
-  font-weight: 700;
-  line-height: 1.45;
+  max-width: 72ch;
+  margin-top: 1rem;
+  color: #ddd7d2;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.8;
 }
 
 .legal-page__cta {
   margin-top: 2rem;
+}
+
+.legal-page__cta:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 5px;
 }
 
 .not-found-page {

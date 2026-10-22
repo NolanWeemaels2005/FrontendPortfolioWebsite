@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { blogApi } from "../data/blogApi";
 import { blogDate, type BlogList } from "../utils/blog";
+import { assetPath } from "../utils/asset";
 import { BlogMeta } from "../components/blog/BlogMeta";
 
 export function BlogPage() {
@@ -24,14 +25,22 @@ export function BlogPage() {
   return <div className="blog-page" lang={language}>
     <BlogMeta title={page > 1 ? `Blog — ${t("blog.page")} ${page}` : "Blog"} description={t("blog.description")} index={!error && (!data || page <= Math.max(1, data.pages))} />
     <div className="hero-overlap-scroll">
-      <Hero title={t("blog.heroTitle")} script={t("blog.heroScript")} className="portfolio-showcase-hero" scrollTarget="blog-posts" />
+      <Hero title={t("blog.heroTitle")} script={t("blog.heroScript")} className="portfolio-showcase-hero blog-photo-hero" scrollTarget="blog-posts"
+        visual={<div className="blog-photo-hero__media" aria-hidden="true">
+          <img src={assetPath("assets/blog-hero/nolan-sketch-1920.jpg")} srcSet={`${assetPath("assets/blog-hero/nolan-sketch-960.jpg")} 960w, ${assetPath("assets/blog-hero/nolan-sketch-1920.jpg")} 1920w`} sizes="100vw" alt="" width="1920" height="1080" fetchPriority="high" decoding="async" />
+        </div>}
+      />
     </div>
-    <ScrollSectionEdge color="#000" />
+    <ScrollSectionEdge color="#ee9d59" />
     <div id="blog-posts" className="blog-list-content">
 
+    <header className="blog-editorial-intro">
+      <div className="blog-container blog-editorial-intro__inner">
+        <div><p className="eyebrow">Blog</p><h2 id="blog-posts-title">{t("blog.heading")}</h2></div>
+        <p className="blog-intro">{t("blog.intro")}</p>
+      </div>
+    </header>
     <section className="blog-container blog-list-section" aria-labelledby="blog-posts-title" aria-busy={!data && !error}>
-      <p className="eyebrow">Blog</p><h2 id="blog-posts-title">{t("blog.heading")}</h2>
-      <p className="blog-intro">{t("blog.intro")}</p>
       {error ? <div className="blog-notice" role="alert"><p>{t("blog.error")}</p><button className="blog-button" onClick={() => setRetry(value => value + 1)}>{t("blog.retry")}</button></div> : !data ? <p role="status">{t("blog.loading")}</p> : <>
         {!data.posts.length ? <div className="blog-notice"><p>{page > 1 ? t("blog.emptyPage") : t("blog.empty")}</p>{page > 1 && <Link to="/blog/">{t("blog.first")}</Link>}</div> : <div className="blog-grid">{data.posts.map(post => <article className="blog-card" key={post._id}>
           {post.publishedAt && <time dateTime={post.publishedAt}>{blogDate(post.publishedAt, language)}</time>}

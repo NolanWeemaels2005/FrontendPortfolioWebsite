@@ -157,10 +157,12 @@ export function LegalPage({ type }: LegalPageProps) {
   return (
     <section className="legal-page">
       <div className="section-container legal-page__inner" data-reveal>
+        <header className="legal-page__header">
         <p className="legal-page__eyebrow">{content.eyebrow}</p>
         <h1>{content.title}</h1>
         <p className="legal-page__intro">{content.intro}</p>
         <p className="legal-page__updated">{content.updated}</p>
+        </header>
 
         <div className="legal-page__sections">
           {content.sections.map((section) => (
