@@ -29,6 +29,7 @@ body.home-route {
 }
 
 .home-landing__media::after {
+  z-index: 2;
   content: "";
   background: rgb(0 0 0 / 58%);
 }

@@ -108,7 +108,7 @@ body.blog-route .page-shell > .about-story-cta {
 .blog-editorial-intro__inner { display: grid; grid-template-columns: 1.2fr 1fr; align-items: end; gap: clamp(2rem, 6vw, 6rem); }
 .blog-editorial-intro .eyebrow { color: #111; margin-bottom: 1.5rem; }
 .blog-editorial-intro h2 { max-width: 12ch; font-family: var(--font-display); font-size: clamp(3rem, 6.5vw, 6.5rem); line-height: .98; text-transform: uppercase; letter-spacing: -.035em; }
-.blog-editorial-intro .blog-intro { margin: 0; max-width: 36ch; font-size: clamp(1.1rem, 1.6vw, 1.35rem); }
+.blog-editorial-intro .blog-intro { margin: 0; max-width: 36ch; font-size: clamp(1.1rem, 1.6vw, 1.35rem); font-weight: 700; line-height: 1.8; }
 .blog-list-section .blog-grid { gap: clamp(1.5rem, 3vw, 3rem); }
 .blog-list-section .blog-card { border: 0; border-top: 2px solid var(--orange); border-radius: 0; padding: 1.5rem 0; background: transparent; }
 .blog-list-section .blog-card h3 { font-family: var(--font-display); font-size: clamp(1.8rem, 2.8vw, 2.8rem); letter-spacing: -.025em; }
@@ -118,4 +118,60 @@ body.blog-route .page-shell > .about-story-cta {
   .blog-editorial-intro__inner { grid-template-columns: 1fr; }
   .blog-editorial-intro h2 { max-width: 13ch; }
   .blog-photo-hero__media img { object-position: 62% 50%; }
+}
+
+/* Article pages share the project pages' typography, spacing and orange panels. */
+.blog-post { --blog-rule: #383838; }
+.blog-post-header { padding-block: 9.375rem clamp(3rem, 6vw, 6rem); }
+.blog-post-header > .back-link { margin-bottom: clamp(3rem, 6vw, 6rem); }
+.blog-post-header__meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 1rem 2rem; margin-bottom: 1.5rem; }
+.blog-post-header__meta .eyebrow { color: var(--orange); }
+.blog-post-header__meta time { color: #bcbcbc; font-size: .9rem; }
+.blog-post-header h1, .blog-post.blog-state h1 {
+  max-width: 21ch;
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 8.5vw, 8.5rem);
+  font-weight: 900;
+  line-height: .95;
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.blog-post-header .blog-post-summary { max-width: 48ch; margin-top: clamp(2rem, 4vw, 4rem); font-size: clamp(1.35rem, 2.2vw, 2.2rem); line-height: 1.4; letter-spacing: -.02em; color: #d4d4d4; }
+.blog-post .blog-article { padding-top: 0; padding-bottom: clamp(4rem, 8vw, 8rem); }
+.blog-post .blog-chapter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  margin: 0;
+  padding-block: clamp(3rem, 6vw, 6rem);
+  border-top: 1px solid var(--blog-rule);
+}
+.blog-post .blog-chapter h2 { margin: 0; font-family: var(--font-display); font-size: clamp(2.2rem, 4vw, 4.5rem); line-height: 1; letter-spacing: -.035em; text-transform: uppercase; overflow-wrap: anywhere; }
+.blog-chapter__body { min-width: 0; }
+.blog-post .blog-chapter__body > h3:first-child { margin-top: 0; }
+.blog-post .blog-prose { color: #d4d4d4; font-size: clamp(1rem, 1.3vw, 1.15rem); line-height: 1.8; }
+.blog-post-header .blog-post-summary { font-size: clamp(1.35rem, 2.2vw, 2.2rem); line-height: 1.4; }
+.blog-post .blog-chapter--learning {
+  padding-inline: clamp(1.5rem, 4vw, 4rem);
+  margin-bottom: clamp(1rem, 3vw, 3rem);
+  border: 0;
+  border-radius: var(--section-corner) 0 var(--section-corner) 0;
+  background: var(--orange);
+  color: #111;
+}
+.blog-post .blog-chapter--learning :is(h2, .blog-prose) { color: #111; }
+.blog-post .blog-gallery { gap: 1.5rem; margin-top: 2.5rem; }
+.blog-post .blog-media { padding: 0; border: 0; border-radius: 0; background: transparent; }
+.blog-post .blog-media :is(img, video) { border-radius: var(--section-corner) 0 var(--section-corner) 0; }
+.blog-post .blog-media figcaption { color: #bcbcbc; font-size: .95rem; }
+.blog-post .blog-badge { padding: .35rem 0; border-radius: 0; background: transparent; color: var(--orange); font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; }
+.blog-post .blog-article > .btn { gap: .75rem; margin-top: 1rem; }
+@media (max-width: 60rem) {
+  .blog-post .blog-chapter { grid-template-columns: 1fr; gap: 2rem; }
+}
+@media (max-width: 40rem) {
+  .blog-post-header { padding-top: 8rem; }
+  .blog-post-header h1, .blog-post.blog-state h1 { font-size: clamp(2.8rem, 12vw, 5rem); }
 }

@@ -1,3 +1,5 @@
+import { ArrowLeft } from "lucide-react";
+import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { useLanguage } from "../i18n/LanguageContext";
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -15,7 +17,7 @@ function Sources({ text }: { text: string }) {
   })}</p>;
 }
 function Chapter({ title, children, highlight = false }: { title: string; children: ReactNode; highlight?: boolean }) {
-  return <section className={`blog-chapter${highlight ? " blog-chapter--learning" : ""}`}><h2>{title}</h2>{children}</section>;
+  return <section className={`blog-chapter${highlight ? " blog-chapter--learning" : ""}`}><h2>{title}</h2><div className="blog-chapter__body">{children}</div></section>;
 }
 export function BlogPostPage() {
   const { language, t } = useLanguage();
@@ -33,17 +35,27 @@ export function BlogPostPage() {
     });
     return () => controller.abort();
   }, [slug, retry]);
-  if (!post) return <section className="blog-page blog-container blog-state" lang={language}>
+  if (!post) return <section className="blog-page blog-post blog-container blog-state" lang={language}>
     <BlogMeta title={notFound ? t("blog.notFound") : "Blog"} description={t("blog.description")} index={false} />
     <h1>{notFound ? t("blog.notFound") : error ? t("blog.unavailable") : t("blog.loadingPost")}</h1>
     {error && <p role="alert">{notFound ? t("blog.missing") : t("blog.error")}</p>}
     {!error && <p role="status">{t("blog.wait")}</p>}
     {error && !notFound && <button className="blog-button" onClick={() => setRetry(value => value + 1)}>{t("blog.retry")}</button>}
-    <Link to="/blog/">← {t("blog.all")}</Link>
+    <Link className="back-link" to="/blog/" data-cursor="soft"><ArrowLeft size={22} aria-hidden="true" /><ButtonTextStagger text={t("blog.all")} /></Link>
   </section>;
-  return <article className="blog-page" lang={language}>
+  return <article className="blog-page blog-post" lang={language}>
     <BlogMeta title={post.title} description={post.summary} />
-    <header className="blog-hero blog-hero--post"><div className="blog-container"><Link to="/blog/">← {t("blog.all")}</Link>{post.publishedAt && <time dateTime={post.publishedAt}>{blogDate(post.publishedAt, language)}</time>}<h1>{post.title}</h1><p className="blog-prose">{post.summary}</p></div></header>
+    <header className="blog-post-header blog-container">
+      <Link className="back-link" to="/blog/" data-cursor="soft">
+        <ArrowLeft size={22} aria-hidden="true" /><ButtonTextStagger text={t("blog.all")} />
+      </Link>
+      <div className="blog-post-header__meta">
+        <p className="eyebrow">Blog</p>
+        {post.publishedAt && <time dateTime={post.publishedAt}>{blogDate(post.publishedAt, language)}</time>}
+      </div>
+      <h1>{post.title}</h1>
+      <p className="blog-prose blog-post-summary">{post.summary}</p>
+    </header>
     <div className="blog-container blog-article">
       <Chapter title={t("blog.context")}><p className="blog-prose">{post.context}</p></Chapter>
       <Chapter title={t("blog.process")}><p className="blog-prose">{post.process}</p>{post.media.length > 0 && <BlogMediaGallery media={post.media} />}</Chapter>
@@ -52,7 +64,7 @@ export function BlogPostPage() {
       {post.aiUsed && <Chapter title={t("blog.ai")}><h3>{t("blog.aiContribution")}</h3><p className="blog-prose">{post.aiContribution}</p><h3>{t("blog.humanContribution")}</h3><p className="blog-prose">{post.humanContribution}</p></Chapter>}
       {post.planning.trim() && <Chapter title={t("blog.planning")}><p className="blog-prose">{post.planning}</p></Chapter>}
       <Chapter title={t("blog.sources")}><Sources text={post.sources} /></Chapter>
-      <Link className="blog-button" to="/blog/">← {t("blog.all")}</Link>
+      <Link className="btn btn--primary" to="/blog/" data-cursor="merge"><ArrowLeft size={20} aria-hidden="true" /><ButtonTextStagger text={t("blog.all")} /></Link>
     </div>
   </article>;
 }
