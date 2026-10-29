@@ -8,19 +8,20 @@ import { Seo } from "./components/Seo";
 import { WhatsAppPopup } from "./components/WhatsAppPopup";
 import { InitialLoader } from "./components/InitialLoader";
 import { ButtonTextStagger } from "./components/ButtonTextStagger";
+import { loadPageWithRecovery } from "./utils/assetRecovery";
 import { pageModuleLoaders } from "./utils/pageModules";
 import { featuredProjects } from "./data/projects";
 import { useLanguage } from "./i18n/LanguageContext";
 
-const HomePage = lazy(() => pageModuleLoaders.home().then((module) => ({ default: module.HomePage })));
-const PortfolioPage = lazy(() => pageModuleLoaders.portfolio().then((module) => ({ default: module.PortfolioPage })));
-const ProjectDetailPage = lazy(() => pageModuleLoaders.projectDetail().then((module) => ({ default: module.ProjectDetailPage })));
-const AboutPage = lazy(() => pageModuleLoaders.about().then((module) => ({ default: module.AboutPage })));
-const ContactPage = lazy(() => pageModuleLoaders.contact().then((module) => ({ default: module.ContactPage })));
-const LegalPage = lazy(() => pageModuleLoaders.legal().then((module) => ({ default: module.LegalPage })));
-const BlogPage = lazy(() => pageModuleLoaders.blog().then(module => ({ default: module.BlogPage })));
-const BlogPostPage = lazy(() => pageModuleLoaders.blogPost().then(module => ({ default: module.BlogPostPage })));
-const BlogAdminPage = lazy(() => pageModuleLoaders.blogAdmin().then(module => ({ default: module.BlogAdminPage })));
+const HomePage = lazy(() => loadPageWithRecovery(pageModuleLoaders.home).then((module) => ({ default: module.HomePage })));
+const PortfolioPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.portfolio).then((module) => ({ default: module.PortfolioPage })));
+const ProjectDetailPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.projectDetail).then((module) => ({ default: module.ProjectDetailPage })));
+const AboutPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.about).then((module) => ({ default: module.AboutPage })));
+const ContactPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.contact).then((module) => ({ default: module.ContactPage })));
+const LegalPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.legal).then((module) => ({ default: module.LegalPage })));
+const BlogPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.blog).then(module => ({ default: module.BlogPage })));
+const BlogPostPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.blogPost).then(module => ({ default: module.BlogPostPage })));
+const BlogAdminPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.blogAdmin).then(module => ({ default: module.BlogAdminPage })));
 const notFoundProjectPool = featuredProjects.filter((project) => project.logo);
 const routeBodyClasses = [
   "home-route",

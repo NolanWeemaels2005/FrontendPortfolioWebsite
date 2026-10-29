@@ -1,0 +1,1692 @@
+{
+  "boit-bobby": {
+    "1": {
+      "source": "images for projects/Boit Bobby/image1.png",
+      "sha256": "31daa6c8bfec0496eb56ef8c861469b157cd0a17970fb0400c771a78924fb0a0",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/boit-bobby/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/boit-bobby/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/boit-bobby/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/Boit Bobby/image2.png",
+      "sha256": "656b68304f78d06abe18c8baf82427f21bd6641f780e2713e41c73672866e7f0",
+      "width": 4500,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/boit-bobby/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/boit-bobby/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/boit-bobby/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/Boit Bobby/image3.png",
+      "sha256": "5c55a1aee535c3c99c315a7b81413272c24d40ec866b6ca83cb2c1aa76cc952f",
+      "width": 6000,
+      "height": 4000,
+      "variants": [
+        {
+          "src": "assets/project-details/boit-bobby/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/boit-bobby/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/boit-bobby/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "videjo": {
+    "motion": {
+      "source": "images for projects/videjo/videjoAnimatie.webm",
+      "sha256": "9beb15d480e1518f1dd6602909c695e7b76fb8edae37a04c9ebfa82fa08bf129",
+      "src": "assets/project-details/videjo/motion.webm"
+    },
+    "1": {
+      "source": "images for projects/videjo/image1.png",
+      "sha256": "01ba09353962b8dac788145e6afebb51794c4102ade17649864708fc6fe18f1e",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/videjo/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/videjo/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/videjo/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/videjo/image2.png",
+      "sha256": "d4a2e53a9e9d34d8ce74be5082ac355d62417660edb7ea229ab40c2f6291d063",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/videjo/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/videjo/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/videjo/image2-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/videjo/image3.png",
+      "sha256": "0b8fc37d1a14f83a86d1bf3769e5d3b62c227b2ec1a177d5fb25e82215065a39",
+      "width": 5000,
+      "height": 3333,
+      "variants": [
+        {
+          "src": "assets/project-details/videjo/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/videjo/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/videjo/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "la-maison-des-trois-garcons": {
+    "4": {
+      "source": "images for projects/La Maison Des Trois Garc\u2560\u00baons/image4.png",
+      "sha256": "d03b4b50b4b607a138e9055e428f9364912e75da5b338ccdf14fa5fd775cde68",
+      "width": 5640,
+      "height": 3760,
+      "variants": [
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image4-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image4-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "5": {
+      "source": "images for projects/La Maison Des Trois Garc\u2560\u00baons/image5.png",
+      "sha256": "0069e8c61e9245e052e78393e92f6ce167b778a7d754063647ab7359aaec1af3",
+      "width": 2048,
+      "height": 1424,
+      "variants": [
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image5-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image5-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image5-2048.webp",
+          "width": 2048
+        }
+      ]
+    },
+    "1": {
+      "source": "images for projects/La Maison Des Trois Garc\u2560\u00baons/image1.png",
+      "sha256": "f6a0fe1e6defd3df57a0910bd2b837f7d0ad45b341d87efbf3832e65cd4c3c77",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/La Maison Des Trois Garc\u2560\u00baons/image2.png",
+      "sha256": "67d43e5ff81621b21977760d8b76569e6d4c33ced14932fe10698fc9e7366cc9",
+      "width": 4500,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/La Maison Des Trois Garc\u2560\u00baons/image3.png",
+      "sha256": "dd31cdc595fa73dc82f8d7078eebedc085b91a310224e729a2bda9751a56418a",
+      "width": 4800,
+      "height": 3584,
+      "variants": [
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/la-maison-des-trois-garcons/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "basisschool-nieuwland": {
+    "1": {
+      "source": "images for projects/Nieuwland/image1.png",
+      "sha256": "27464d84beeb2f199d76f3b9dd272ff33b97fd8fe61e4592880e8d6bff0a9c16",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/basisschool-nieuwland/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/basisschool-nieuwland/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/basisschool-nieuwland/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/Nieuwland/image2.png",
+      "sha256": "a5d91a5182ab074b2bcd98691a3f507bbcd1a73f6222c590e81581c17ac9f465",
+      "width": 4500,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/basisschool-nieuwland/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/basisschool-nieuwland/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/basisschool-nieuwland/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/Nieuwland/image3.png",
+      "sha256": "ac74aff26bcc506185dd98504ec6fd6fb02216038078b0650a267d01c9ad6eb1",
+      "width": 4183,
+      "height": 2627,
+      "variants": [
+        {
+          "src": "assets/project-details/basisschool-nieuwland/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/basisschool-nieuwland/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/basisschool-nieuwland/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "shift-festival-2026": {
+    "7": {
+      "source": "images for projects/Shift Festival/image7.png",
+      "sha256": "033cf2b6830732af44def409d83949d79ae275cb82fff2efda96f26564ca8b3c",
+      "width": 5000,
+      "height": 3333,
+      "variants": [
+        {
+          "src": "assets/project-details/shift-festival-2026/image7-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image7-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image7-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "6": {
+      "source": "images for projects/Shift Festival/image6.png",
+      "sha256": "f795b3773678014a5e2b735e3b216bad07f1d3086a25b94c36cb77650280460f",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/shift-festival-2026/image6-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image6-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image6-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "4": {
+      "source": "images for projects/Shift Festival/image4.png",
+      "sha256": "52e8d5a508418ff1ee2b3f19528c911d98c0cd367c66cae8f767971466acfda1",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/shift-festival-2026/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image4-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image4-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "5": {
+      "source": "images for projects/Shift Festival/image5.png",
+      "sha256": "588128167aaf5b64cf43e17c9e849fdf886ac6091349befe0937a19a0db542ef",
+      "width": 3000,
+      "height": 4500,
+      "variants": [
+        {
+          "src": "assets/project-details/shift-festival-2026/image5-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image5-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image5-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "1": {
+      "source": "images for projects/Shift Festival/image1.png",
+      "sha256": "c765f6a122524d0fc6cf8b0858fec0aae98a22c62cae129796c51e0286541a10",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/shift-festival-2026/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/Shift Festival/image2.png",
+      "sha256": "03c923d214f6b590f28da7f6b022c41478a2118365e8cc8bb7a62c2b1936c5ac",
+      "width": 6000,
+      "height": 4000,
+      "variants": [
+        {
+          "src": "assets/project-details/shift-festival-2026/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/Shift Festival/image3.jpg",
+      "sha256": "217e82b287e7edfb302a2777dac76e5f37a4e5e18656e720af16a4ffd3637c45",
+      "width": 5841,
+      "height": 3894,
+      "variants": [
+        {
+          "src": "assets/project-details/shift-festival-2026/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/shift-festival-2026/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "studio-by-cas": {
+    "4": {
+      "source": "images for projects/Studio By Cas/image4.png",
+      "sha256": "a7b5c8006c53a8796122f2e26daf2cb9d721dee3f019c6ea31f7aaf3de2d8337",
+      "width": 6000,
+      "height": 4171,
+      "variants": [
+        {
+          "src": "assets/project-details/studio-by-cas/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/studio-by-cas/image4-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/studio-by-cas/image4-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "5": {
+      "source": "images for projects/Studio By Cas/image5.png",
+      "sha256": "6265428b172ec94d0e080748a6ee16c39933fd636409b89882f60c7620529a6f",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/studio-by-cas/image5-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/studio-by-cas/image5-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/studio-by-cas/image5-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "1": {
+      "source": "images for projects/Studio By Cas/image1.png",
+      "sha256": "cb97882e706febd7b91c7162795f7e61fee460dcca756c881346692835ad368f",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/studio-by-cas/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/studio-by-cas/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/studio-by-cas/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/Studio By Cas/image2.png",
+      "sha256": "48077b96f1f32ab2486e04fbe644f232d34adc26279db7c46dba950deb11963f",
+      "width": 6000,
+      "height": 4171,
+      "variants": [
+        {
+          "src": "assets/project-details/studio-by-cas/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/studio-by-cas/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/studio-by-cas/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/Studio By Cas/image3.png",
+      "sha256": "d96084e2fa4b22fe3c44b9b7e26e5dd8ed0120b5f37e5fc1f3efda1b174b5775",
+      "width": 5000,
+      "height": 3333,
+      "variants": [
+        {
+          "src": "assets/project-details/studio-by-cas/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/studio-by-cas/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/studio-by-cas/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "fc-eisbar": {
+    "4": {
+      "source": "images for projects/FC EISBA\u2560\u00eaR/image4.png",
+      "sha256": "424ab2ca3e586d3becb0caa3275f1c0bd97111ac8f560b6656f5ba56a6befea1",
+      "width": 2048,
+      "height": 1424,
+      "variants": [
+        {
+          "src": "assets/project-details/fc-eisbar/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/fc-eisbar/image4-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/fc-eisbar/image4-2048.webp",
+          "width": 2048
+        }
+      ]
+    },
+    "5": {
+      "source": "images for projects/FC EISBA\u2560\u00eaR/image5.png",
+      "sha256": "3d0df727ff03efd21ecf1499c1f9c5d8d5eaffc90877858823f3e2a557003158",
+      "width": 6000,
+      "height": 4171,
+      "variants": [
+        {
+          "src": "assets/project-details/fc-eisbar/image5-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/fc-eisbar/image5-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/fc-eisbar/image5-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "1": {
+      "source": "images for projects/FC EISBA\u2560\u00eaR/image1.png",
+      "sha256": "f5c4c39e622f12e05d98b7e76eac2823daea6f0a5eed9a07a40291b18d751b68",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/fc-eisbar/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/fc-eisbar/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/fc-eisbar/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/FC EISBA\u2560\u00eaR/image2.png",
+      "sha256": "338b284518b270a866d72465482eb8167a656c069c98c22783c7db406f956f06",
+      "width": 5500,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/fc-eisbar/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/fc-eisbar/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/fc-eisbar/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/FC EISBA\u2560\u00eaR/image3.png",
+      "sha256": "6be38fc8cf3c19d99b9b30bc53df75ab1570b75909cd330b65a89304933ac122",
+      "width": 4240,
+      "height": 2826,
+      "variants": [
+        {
+          "src": "assets/project-details/fc-eisbar/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/fc-eisbar/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/fc-eisbar/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "n-wah": {
+    "4": {
+      "source": "images for projects/N:WAH/image4.png",
+      "sha256": "2ff2abfcd165d9b3d1c1a3999c2859ad1ea7aaa8f0631a4af32bf42cd7d0a77d",
+      "width": 6000,
+      "height": 4171,
+      "variants": [
+        {
+          "src": "assets/project-details/n-wah/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/n-wah/image4-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/n-wah/image4-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "5": {
+      "source": "images for projects/N:WAH/image5.png",
+      "sha256": "cf7c94bda15436d5719e7befe356e79f7861b1ba2b07bbc4ed7a67bcdb0ce5c3",
+      "width": 6000,
+      "height": 4171,
+      "variants": [
+        {
+          "src": "assets/project-details/n-wah/image5-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/n-wah/image5-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/n-wah/image5-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "1": {
+      "source": "images for projects/N:WAH/image1.png",
+      "sha256": "32ba40eadd8495b45f80ce0707e28ec7ec624d049037a0fbcf64ddda9597ebb8",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/n-wah/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/n-wah/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/n-wah/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/N:WAH/image2.png",
+      "sha256": "626fe77c4e584e6fd486d0df2bd6e11e3b595c666c25203fbe4a5d781e92470c",
+      "width": 4500,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/n-wah/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/n-wah/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/n-wah/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/N:WAH/image3.png",
+      "sha256": "6576bf7684e7b1f046531c6da1347b1d535ce5c843217b6acf1338142c0528e8",
+      "width": 6033,
+      "height": 4194,
+      "variants": [
+        {
+          "src": "assets/project-details/n-wah/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/n-wah/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/n-wah/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "ring-tv": {
+    "motion": {
+      "source": "images for projects/RingTV/ring-tv.webm",
+      "sha256": "5b5e0e8683c73f3bab8263613d908eddffdce6f1c8b0f731c7c3b61efae17fd9",
+      "src": "assets/project-details/ring-tv/motion.webm"
+    },
+    "1": {
+      "source": "images for projects/RingTV/image1.png",
+      "sha256": "4ea33beab08c0750f208a6c03f4720f73fad1011ba0039470c9df5e7f1b6fc63",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/ring-tv/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/ring-tv/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/ring-tv/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/RingTV/image2.png",
+      "sha256": "297397f060969468837a3dd69e25d507ceb8324a3bec7d247a1b51e2ea178678",
+      "width": 5000,
+      "height": 3333,
+      "variants": [
+        {
+          "src": "assets/project-details/ring-tv/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/ring-tv/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/ring-tv/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/RingTV/image3.png",
+      "sha256": "a22446823c5dec61686e59ed6dd480d883db738c61c1d8d29639c900704166c0",
+      "width": 2048,
+      "height": 1424,
+      "variants": [
+        {
+          "src": "assets/project-details/ring-tv/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/ring-tv/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/ring-tv/image3-2048.webp",
+          "width": 2048
+        }
+      ]
+    }
+  },
+  "ferraaawri": {
+    "8": {
+      "source": "images for projects/Feraaawri/image8.png",
+      "sha256": "2bb54b2dc84b9b750db97faebf173eb78d0a5c943608270561049a89b835a211",
+      "width": 1344,
+      "height": 896,
+      "variants": [
+        {
+          "src": "assets/project-details/ferraaawri/image8-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image8-1344.webp",
+          "width": 1344
+        }
+      ]
+    },
+    "7": {
+      "source": "images for projects/Feraaawri/image7.png",
+      "sha256": "8f45896354dee263a14fdefdd183a63d2ec73b9ddea7ab26f98ef3a94c75f9ba",
+      "width": 4500,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/ferraaawri/image7-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image7-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image7-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "6": {
+      "source": "images for projects/Feraaawri/image6.png",
+      "sha256": "f17e4ae1606ce35bcbc34c9ce29efc4692b5d80e5a425232e4de571eb8619810",
+      "width": 6000,
+      "height": 4500,
+      "variants": [
+        {
+          "src": "assets/project-details/ferraaawri/image6-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image6-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image6-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "4": {
+      "source": "images for projects/Feraaawri/image4.png",
+      "sha256": "331630024ce259a3f7c6fa140e254ea3e724f7a8bc0e72cd97993920110dc098",
+      "width": 8000,
+      "height": 5500,
+      "variants": [
+        {
+          "src": "assets/project-details/ferraaawri/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image4-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image4-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "5": {
+      "source": "images for projects/Feraaawri/image5.jpg",
+      "sha256": "c3bbfda44f95e1ac28161bf4126041b0c525e488c5203325369f205ffc7f9c16",
+      "width": 6000,
+      "height": 4500,
+      "variants": [
+        {
+          "src": "assets/project-details/ferraaawri/image5-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image5-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image5-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "1": {
+      "source": "images for projects/Feraaawri/image1.png",
+      "sha256": "c29ad3196952e1aa9a5c0428ff05294065a59a38b9f4c3366a28a5885d6d2e63",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/ferraaawri/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/Feraaawri/image2.png",
+      "sha256": "8c4117cd9ad86165167dd1a604a91a500857927d0aaadb33c9467f177c3859b7",
+      "width": 2557,
+      "height": 2000,
+      "variants": [
+        {
+          "src": "assets/project-details/ferraaawri/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/Feraaawri/image3.png",
+      "sha256": "82a629731cc9a0c609c64b5020e53b14f45d8c09d69a20df62f5947edf7b5812",
+      "width": 1600,
+      "height": 2400,
+      "variants": [
+        {
+          "src": "assets/project-details/ferraaawri/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/ferraaawri/image3-1600.webp",
+          "width": 1600
+        }
+      ]
+    }
+  },
+  "find-your-light": {
+    "4": {
+      "source": "images for projects/Find Your Light/image4.png",
+      "sha256": "5623bfb1466f9489162cca0bbfaa2a398c8c54cd15e6f4bc0b58f9f4e72c073a",
+      "width": 3680,
+      "height": 2760,
+      "variants": [
+        {
+          "src": "assets/project-details/find-your-light/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/find-your-light/image4-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/find-your-light/image4-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "5": {
+      "source": "images for projects/Find Your Light/image5.png",
+      "sha256": "f43025a90dc448326475314185990253773a06bdc640757beee7a250d78c1c6c",
+      "width": 6000,
+      "height": 4171,
+      "variants": [
+        {
+          "src": "assets/project-details/find-your-light/image5-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/find-your-light/image5-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/find-your-light/image5-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "1": {
+      "source": "images for projects/Find Your Light/image1.png",
+      "sha256": "dbae9765aa8bc194aa65854eb7905dbb7f5b302936ce90a222fc573fbfb78ca5",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/find-your-light/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/find-your-light/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/find-your-light/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/Find Your Light/image2.png",
+      "sha256": "835deb17d43185d83603f752833e197bcddea61dc08d25037239fe6feaed561d",
+      "width": 5000,
+      "height": 3333,
+      "variants": [
+        {
+          "src": "assets/project-details/find-your-light/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/find-your-light/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/find-your-light/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/Find Your Light/image3.png",
+      "sha256": "74afd51b52ed3c36a1b2b01f283d293b992be69b4b641ff784376d60c2a31c64",
+      "width": 6000,
+      "height": 4171,
+      "variants": [
+        {
+          "src": "assets/project-details/find-your-light/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/find-your-light/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/find-your-light/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "city-to-ocean": {
+    "8": {
+      "source": "images for projects/City To Ocean/image8.png",
+      "sha256": "7cd8ff1a519dd05497566bf3e650c54cdb051723e4e1f8fe68a9deab3e52c264",
+      "width": 6000,
+      "height": 4500,
+      "variants": [
+        {
+          "src": "assets/project-details/city-to-ocean/image8-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image8-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image8-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "9": {
+      "source": "images for projects/City To Ocean/image9.png",
+      "sha256": "e3f8ca7443a9965e140936773571022aea74f4fc3d90c455fa64d89e376044a7",
+      "width": 3000,
+      "height": 4000,
+      "variants": [
+        {
+          "src": "assets/project-details/city-to-ocean/image9-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image9-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image9-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "7": {
+      "source": "images for projects/City To Ocean/image7.png",
+      "sha256": "d527176eef8a07987d64645e35ea663583ad532318e660c6f53db2e8a37fe266",
+      "width": 2907,
+      "height": 3877,
+      "variants": [
+        {
+          "src": "assets/project-details/city-to-ocean/image7-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image7-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image7-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "4": {
+      "source": "images for projects/City To Ocean/image4.png",
+      "sha256": "e921d3d1e7ac538eb7fc8281b45a371bc5809268c5622ee5047ffd96f3fbea81",
+      "width": 6000,
+      "height": 4500,
+      "variants": [
+        {
+          "src": "assets/project-details/city-to-ocean/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image4-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image4-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "5": {
+      "source": "images for projects/City To Ocean/image5.png",
+      "sha256": "ec5d23f9c299abe792cd895ff8ad018e96803ae9f18d70648a4cac3cfadf9d7c",
+      "width": 3680,
+      "height": 2760,
+      "variants": [
+        {
+          "src": "assets/project-details/city-to-ocean/image5-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image5-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image5-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "1": {
+      "source": "images for projects/City To Ocean/image1.png",
+      "sha256": "3047809b7fd393aef16d9427dec32259ec6ed6fb419387539eed3f5df6f08fd1",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/city-to-ocean/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/City To Ocean/image2.png",
+      "sha256": "83e6384369e4f26b4d3f2851bfff0b11ab91ec7dedf4ca2e5d1579b531ded064",
+      "width": 4000,
+      "height": 3032,
+      "variants": [
+        {
+          "src": "assets/project-details/city-to-ocean/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/City To Ocean/image3.png",
+      "sha256": "15fdbf20f480cea2ba3c337439fc9f65ea5ad0e308344cb8fc1310e6051395a4",
+      "width": 6000,
+      "height": 4500,
+      "variants": [
+        {
+          "src": "assets/project-details/city-to-ocean/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/city-to-ocean/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "erasmus-hogeschool": {
+    "1": {
+      "source": "images for projects/ErasmusHogeschool Brussel/image1.png",
+      "sha256": "8867963abac3f1af4d83d71b8200ddf2a6dba3d26f752367244b7746d62d5b96",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/erasmus-hogeschool/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/erasmus-hogeschool/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/erasmus-hogeschool/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/ErasmusHogeschool Brussel/image2.png",
+      "sha256": "f6d27b226a450e4ba87fe28059bd6cec9d64dcdb094e7b5d546aad5592bf0dde",
+      "width": 6000,
+      "height": 4000,
+      "variants": [
+        {
+          "src": "assets/project-details/erasmus-hogeschool/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/erasmus-hogeschool/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/erasmus-hogeschool/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "brussel-noord-basket": {
+    "6": {
+      "source": "images for projects/BNB/image6.png",
+      "sha256": "01676e8084e668415db65209bc3106c313d2d825f633447b620a936b3d6fd18c",
+      "width": 6000,
+      "height": 4171,
+      "variants": [
+        {
+          "src": "assets/project-details/brussel-noord-basket/image6-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image6-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image6-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "4": {
+      "source": "images for projects/BNB/image4.png",
+      "sha256": "a2f22868d0de3dad0e7b1a0e761ba284a21484ba8eaee99fc8a7f310f9fed2fe",
+      "width": 842,
+      "height": 596,
+      "variants": [
+        {
+          "src": "assets/project-details/brussel-noord-basket/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image4-842.webp",
+          "width": 842
+        }
+      ]
+    },
+    "5": {
+      "source": "images for projects/BNB/image5.png",
+      "sha256": "57d315c461dedd62107aaa0e55e1f03513655c8d930eb41c78cf00e4a4ba7412",
+      "width": 6000,
+      "height": 4171,
+      "variants": [
+        {
+          "src": "assets/project-details/brussel-noord-basket/image5-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image5-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image5-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "1": {
+      "source": "images for projects/BNB/image1.png",
+      "sha256": "b7bab6866f9f60357b9f411816c1a6f99847d076364cc8da5cbc8ce697d077e9",
+      "width": 842,
+      "height": 596,
+      "variants": [
+        {
+          "src": "assets/project-details/brussel-noord-basket/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image1-842.webp",
+          "width": 842
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/BNB/image2.png",
+      "sha256": "5d7e101f79e23ce95f9d1c7e1859a515b7e8e499710385750aa74eba41586812",
+      "width": 5000,
+      "height": 4000,
+      "variants": [
+        {
+          "src": "assets/project-details/brussel-noord-basket/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/BNB/image3.png",
+      "sha256": "f7490a232e5595e323b4526fee3d8f668819353668d123c2e6841c8a13697667",
+      "width": 6030,
+      "height": 4000,
+      "variants": [
+        {
+          "src": "assets/project-details/brussel-noord-basket/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "poutrel": {
+    "1": {
+      "source": "images for projects/Poutrel/image1.png",
+      "sha256": "9130ad3ff50fd4a90b7685cb9962c51d9d90ea8e7068cb55133ef078481d03cc",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/poutrel/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/poutrel/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/poutrel/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/Poutrel/image2.png",
+      "sha256": "07b3017176c30e04fca0176099c8def0e4f0ffcf904a9a8769d042cdd05f075b",
+      "width": 3000,
+      "height": 2000,
+      "variants": [
+        {
+          "src": "assets/project-details/poutrel/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/poutrel/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/poutrel/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/Poutrel/image3.png",
+      "sha256": "fe05508db673a61b22f9498376be8bbcf1b1e60392d225e88203a7a796ce4755",
+      "width": 2500,
+      "height": 1667,
+      "variants": [
+        {
+          "src": "assets/project-details/poutrel/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/poutrel/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/poutrel/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "happy-dancers": {
+    "1": {
+      "source": "images for projects/Happy Dancers/image1.png",
+      "sha256": "14f7bab14d82e7166f10a46b8c413313e3296b0763042083d18169066986a6d0",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/happy-dancers/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/happy-dancers/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/happy-dancers/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/Happy Dancers/image2.png",
+      "sha256": "21f687ab2862949977f7eb8dc9707b121c486f7480cb9bb8a7421572d5faf412",
+      "width": 4500,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/happy-dancers/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/happy-dancers/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/happy-dancers/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/Happy Dancers/image3.png",
+      "sha256": "44b8d88a5809869302bc54359e07494b741c12cdcd827ba00649e1ed9ffd0a24",
+      "width": 6000,
+      "height": 4000,
+      "variants": [
+        {
+          "src": "assets/project-details/happy-dancers/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/happy-dancers/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/happy-dancers/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "mentalite-sportswear": {
+    "4": {
+      "source": "images for projects/Mentalite\u2560\u00fc/image4.png",
+      "sha256": "3e237329820bcd0d699adf04aba966839aa28b88840fe3f84621aeea34f97507",
+      "width": 4500,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/mentalite-sportswear/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/mentalite-sportswear/image4-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/mentalite-sportswear/image4-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "1": {
+      "source": "images for projects/Mentalite\u2560\u00fc/image1.png",
+      "sha256": "d2442965ff4a3a15991c6b25fbaa23930fd11ed1d3343e813a786d94e61a1a00",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/mentalite-sportswear/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/mentalite-sportswear/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/mentalite-sportswear/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/Mentalite\u2560\u00fc/image2.png",
+      "sha256": "f1aae2eb48e9460912a29331493ac68278b20d0f8e38c57b2c0283073137c559",
+      "width": 4500,
+      "height": 3129,
+      "variants": [
+        {
+          "src": "assets/project-details/mentalite-sportswear/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/mentalite-sportswear/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/mentalite-sportswear/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/Mentalite\u2560\u00fc/image3.png",
+      "sha256": "70d20acd35e6d79076012123e5bb9a7358978abfc65627f40ade2394b8738e8e",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/mentalite-sportswear/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/mentalite-sportswear/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/mentalite-sportswear/image3-1920.webp",
+          "width": 1920
+        }
+      ]
+    }
+  },
+  "kaai": {
+    "4": {
+      "source": "images for projects/Kaai/image4.png",
+      "sha256": "cd284f50c06c53253a6d9f340758bf3f458085fe0cab3df6ff6efd5163e00803",
+      "width": 4500,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/kaai/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/kaai/image4-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/kaai/image4-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "5": {
+      "source": "images for projects/Kaai/image5.png",
+      "sha256": "3fa01d29500b2475e4d885dde36ce69c1386930471a3ea55fe5153243b0c0993",
+      "width": 5056,
+      "height": 3392,
+      "variants": [
+        {
+          "src": "assets/project-details/kaai/image5-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/kaai/image5-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/kaai/image5-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "1": {
+      "source": "images for projects/Kaai/image1.png",
+      "sha256": "d971c9e699d0fb634d173d684538e08bd26a494bf60b2e66bf498487eeaa0a83",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "src": "assets/project-details/kaai/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/kaai/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/kaai/image1-1920.webp",
+          "width": 1920
+        }
+      ]
+    },
+    "2": {
+      "source": "images for projects/Kaai/image2.png",
+      "sha256": "8d130c4cd4e41724bec87c1a5061e239925929c4982d5818d7fe41940b507321",
+      "width": 4500,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/kaai/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/kaai/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/kaai/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "images for projects/Kaai/image3.png",
+      "sha256": "8bd172680b2dbd02719b25ed4d4afa425125a6148a1ea90c55a413071b16c015",
+      "width": 5000,
+      "height": 3333,
+      "variants": [
+        {
+          "src": "assets/project-details/kaai/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/kaai/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/kaai/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  }
+}

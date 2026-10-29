@@ -194,7 +194,7 @@ export function AboutPage() {
                   {softwareTools.map((tool) => (
                     <div className="tool-item" key={tool.label}>
                       <span>
-                        <img src={assetPath(`assets/about-story/${tool.icon.replace(/\.webp$/, "-64.webp")}`)} alt="" width="64" height="64" loading="lazy" decoding="async" />
+                        <img src={assetPath(`assets/about-story/${tool.icon}`)} alt="" width="64" height="64" loading="lazy" decoding="async" />
                       </span>
                       <strong>{tool.label}</strong>
                     </div>
@@ -226,7 +226,7 @@ export function AboutPage() {
                   <p>{t(`about.approach.${step}.copy`)}</p>
                 </article>
               ))}
-              <Link to="/contact/" className="about-approach__contact" data-cursor="soft">
+              <Link to="/contact/" className="btn about-approach__contact" data-cursor="merge">
                 <ButtonTextStagger text={t("cta.letsTalk")} /><ArrowRight size={22} aria-hidden="true" />
               </Link>
             </div>

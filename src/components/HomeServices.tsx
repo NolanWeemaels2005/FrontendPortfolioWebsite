@@ -30,7 +30,7 @@ export function HomeServices() {
         {services.map((service) => (
           <Link
             key={service.slug}
-            data-cursor="project" to={`/portfolio/${service.slug}/`}
+            data-cursor="project" data-cursor-label={t("cursor.viewExample")} to={`/portfolio/${service.slug}/`}
             className={`home-services__row${activeService === service.slug ? " is-expanded" : ""}`}
             onPointerEnter={(event) => {
               if (event.pointerType === "mouse") setHoveredService(service.slug);

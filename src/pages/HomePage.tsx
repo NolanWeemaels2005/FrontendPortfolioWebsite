@@ -182,7 +182,7 @@ export function HomePage() {
     <>
       <div className="home-landing-scroll">
         <section className="home-landing" aria-labelledby="home-heading">
-          <ProcessMedia videoSrc={assetPath("assets/home/nolan-home-hero-final.mp4")} />
+          <ProcessMedia videoSrc={assetPath("assets/home/nolan-home-hero-web.mp4")} />
 
           <h1 id="home-heading" className="home-landing__slogan">
             <span>

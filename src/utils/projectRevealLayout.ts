@@ -9,13 +9,11 @@ function layoutCells(count: number, width: number, height: number) {
   const maxColumns = Math.ceil(count / rows);
   const cardWidth = Math.min(272, width / maxColumns - gap, (cellHeight - gap) * aspectRatio);
   const positions = [];
-  let index = 0;
   for (let row = 0; row < rows; row += 1) {
-    const rowCount = Math.ceil((count - index) / (rows - row));
-    const cellWidth = width / rowCount;
+    const rowCount = maxColumns;
+    const cellWidth = width / maxColumns;
     for (let column = 0; column < rowCount; column += 1) {
       positions.push({ x: cellWidth * (column + 0.5), y: cellHeight * (row + 0.5), width: cardWidth });
-      index += 1;
     }
   }
   return positions;
@@ -26,7 +24,7 @@ export type RevealExclusion = { left: number; right: number; top: number; bottom
 
 /** Reserve the label's full painted bounds for both hover and intro previews. */
 export function projectRevealLayout(count: number, width: number, height: number, exclusion?: RevealExclusion) {
-  if (!exclusion) return layoutCells(count, width, height);
+  if (!exclusion) return layoutCells(count, width, height).slice(0, count);
   let safePositions: ReturnType<typeof layoutCells> = [];
   for (let slots = count; slots <= count * 4 && count > 0; slots += 1) {
     safePositions = layoutCells(slots, width, height).filter(({ x, y, width: cardWidth }) => {

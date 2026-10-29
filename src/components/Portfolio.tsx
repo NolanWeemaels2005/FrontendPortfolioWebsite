@@ -1,7 +1,8 @@
 import { getProjectCaseStudy } from "../data/projectCaseStudies";
 import { ProjectFilters } from "./ProjectFilters";
+import { PortfolioHoverImage } from "./PortfolioHoverImage";
 import { ArrowRight } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ButtonTextStagger } from "./ButtonTextStagger";
 import { useAllProjectsQuery, useFeaturedProjectsQuery } from "../data/projectQueries";
@@ -9,6 +10,8 @@ import { useTilt } from "../hooks/useTilt";
 import { useLanguage } from "../i18n/LanguageContext";
 import { previewImageUrl } from "../utils/asset";
 import { HallOfFameGrid } from "./HallOfFameGrid";
+import { portfolioHoverImages } from "../data/portfolioHoverImages";
+import "../styles/portfolio-hover.css";
 
 function projectClassSlug(slug: string) {
   return slug.replace(/[^a-z0-9-]/gi, "");
@@ -22,7 +25,6 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
   const { t } = useLanguage();
   const { data: featuredProjects = [] } = useFeaturedProjectsQuery();
   const { data: allProjects = [] } = useAllProjectsQuery();
-  const allSection = useRef<HTMLDivElement>(null);
   const [service, setService] = useState("");
   const [year, setYear] = useState("");
   const services = [...new Set(allProjects.flatMap((project) => getProjectCaseStudy(project.slug)?.services || []))].sort();
@@ -51,7 +53,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
 
         <HallOfFameGrid projects={featuredProjects} />
 
-        <div ref={allSection} className={isShowcase ? "portfolio-showcase-all-section" : undefined}>
+        <div className={isShowcase ? "portfolio-showcase-all-section" : undefined}>
           {isShowcase ? (
             <h2 className="all-projects-title portfolio-showcase-all-title" data-reveal>
               <span>{t("portfolio.all")}</span>
@@ -61,22 +63,24 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
             <h2 className="all-projects-title" data-reveal>{t("portfolio.all")}</h2>
           )}
 
-          <ProjectFilters sectionRef={allSection} services={services} years={years} service={service} year={year} count={filteredProjects.length} onService={setService} onYear={setYear} />
-          {filtering && <div className="project-filter-summary" aria-live="polite"><span>{service ? t(`portfolio.service.${service}`) : t("filter.all")} · {year || t("filter.all")} ({filteredProjects.length})</span><button type="button" onClick={() => { setService(""); setYear(""); }}>{t("filter.clear")}</button></div>}
+          <ProjectFilters services={services} years={years} service={service} year={year} count={filteredProjects.length} onService={setService} onYear={setYear} />
+
           {filteredProjects.length === 0 && <p role="status">{t("filter.empty")}</p>}
           <div className={`project-grid ${showAllMobileProjects || filtering ? "is-mobile-expanded" : ""}`}>
             {filteredProjects.map((project) => (
               (() => {
                 const classSlug = projectClassSlug(project.layoutSlug || project.slug);
+                const facts = getProjectCaseStudy(project.slug);
+                const hoverImage = isShowcase ? portfolioHoverImages[facts?.heroImage || ""] : undefined;
 
                 return (
               <Link
                 to={`/portfolio/${project.slug}/`}
-                className={`project-card project-card--${classSlug} ${project.source === "backend" ? "project-card--backend" : ""}`}
+                className={`project-card project-card--${classSlug}${hoverImage ? " project-card--image-hover" : ""} ${project.source === "backend" ? "project-card--backend" : ""}`}
                 data-cursor="project"
                 key={project.slug}
 
-                {...projectTilt}
+                {...(isShowcase ? {} : projectTilt)}
               >
                 <span className="project-card__logo-wrap" data-cursor-surface>
                   <img
@@ -88,6 +92,10 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                     loading="lazy"
                     decoding="async"
                   />
+                  {hoverImage && <PortfolioHoverImage {...hoverImage} />}
+                  {isShowcase && <span className="project-card__services">
+                    {facts?.services.map((service) => <span key={service}>{t(`portfolio.service.${service}`)}</span>)}
+                  </span>}
                 </span>
                 <span className="project-card__label">
                   <ButtonTextStagger text={project.titleKey ? t(project.titleKey) : project.title} />

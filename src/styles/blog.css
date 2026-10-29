@@ -175,3 +175,6 @@ body.blog-route .page-shell > .about-story-cta {
   .blog-post-header { padding-top: 8rem; }
   .blog-post-header h1, .blog-post.blog-state h1 { font-size: clamp(2.8rem, 12vw, 5rem); }
 }
+
+.blog-read { align-items: center; gap: 1rem; }
+.blog-read > svg { flex-shrink: 0; }

@@ -59,17 +59,6 @@ body.home-route {
   left: var(--home-slogan-offset, 0em);
 }
 
-.home-landing .home-landing__project {
-  left: var(--landing-gutter);
-  background: rgb(0 0 0 / 35%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.home-landing .home-landing__project:has(.home-landing__project-link):hover {
-  background: rgb(0 0 0 / 50%);
-}
-
 @media (max-width: 51.25rem) {
   .home-landing__slogan {
     font-size: 12vw;
@@ -108,4 +97,24 @@ body.home-route {
   font-size: calc(1em * var(--home-accent-scale, 1));
   line-height: 0;
   color: var(--orange);
+}
+
+/* Hints share the exact coordinates of their project previews. */
+.home-overview__project-screen .image-reveal__hint-grid {
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.home-overview__project-screen .image-reveal__hover-hint {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  color: #fff;
+  opacity: .28;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .home-overview__project-screen .image-reveal__hint-grid { display: block; }
 }

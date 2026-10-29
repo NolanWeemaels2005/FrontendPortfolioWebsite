@@ -132,6 +132,22 @@ export default function ImageReveal({ images = [], children }: ImageRevealProps)
     >
       {children}
       <div className="image-reveal__stage">
+        <div className="image-reveal__hint-grid" aria-hidden="true">
+        {positionedImages.map((image) => (
+          <svg
+            key={`hint-${image.href}`}
+            className="image-reveal__hover-hint"
+            style={{ left: image.position.x, top: image.position.y }}
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M12 0C13.5 8.5 15.5 10.5 24 12C15.5 13.5 13.5 15.5 12 24C10.5 15.5 8.5 13.5 0 12C8.5 10.5 10.5 8.5 12 0Z" fill="currentColor" />
+          </svg>
+        ))}
+        </div>
         {positionedImages.map((image, index) => {
           const introIndex = introHrefs.indexOf(image.href);
           const position = image.position;

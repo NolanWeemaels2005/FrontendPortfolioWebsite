@@ -10,6 +10,19 @@ for (const [width, height] of viewports) {
   for (const count of [6, 17, 18, 25]) {
     const positions = projectRevealLayout(count, width, height);
     assert.equal(positions.length, count);
+    // Every row must use the same column centres, including incomplete rows.
+    const columns = [...new Set(positions.map(p => p.x))].sort((a, b) => a - b);
+    if (columns.length > 2) {
+      const step = columns[1] - columns[0];
+      for (let i = 2; i < columns.length; i++) assert(Math.abs(columns[i] - columns[i - 1] - step) < 0.001);
+    }
+    const exclusion = { left: width * .48, right: width * .94, top: height * .82, bottom: height * .98 };
+    const reserved = projectRevealLayout(count, width, height, exclusion);
+    assert.equal(reserved.length, count);
+    for (const p of reserved) {
+      const halfWidth = p.width / 2, halfHeight = p.width / .82 * .54;
+      assert(p.x + halfWidth <= exclusion.left || p.x - halfWidth >= exclusion.right || p.y + halfHeight <= exclusion.top || p.y - halfHeight >= exclusion.bottom);
+    }
     const boxes = positions.map(p => ({ left: p.x - p.width / 2, right: p.x + p.width / 2, top: p.y - p.width / 0.82 / 2, bottom: p.y + p.width / 0.82 / 2 }));
     for (const [index, box] of boxes.entries()) {
       assert(box.left >= 0 && box.top >= 0 && box.right <= width && box.bottom <= height, `Card outside ${width}×${height}`);

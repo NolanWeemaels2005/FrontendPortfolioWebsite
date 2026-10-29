@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { App } from "./App";
+import { RouteErrorPage } from "./components/RouteErrorPage";
 import { LanguageProvider } from "./i18n/LanguageContext";
 import { preloadProjectData } from "./data/projectQueries";
 import "./styles/global.css";
@@ -33,7 +34,7 @@ if (window.location.pathname.startsWith("/portfolio")) {
 }
 
 const router = createBrowserRouter([
-  { path: "*", element: <LanguageProvider><App /></LanguageProvider> },
+  { path: "*", element: <LanguageProvider><App /></LanguageProvider>, errorElement: <RouteErrorPage /> },
 ], { basename: import.meta.env.BASE_URL });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

@@ -1,3 +1,4 @@
+import { ArrowUpRight } from "lucide-react";
 import { useLanguage } from "../i18n/LanguageContext";
 import { Hero } from "../components/Hero";
 import { ScrollSectionEdge } from "../components/ScrollSectionEdge";
@@ -45,7 +46,7 @@ export function BlogPage() {
         {!data.posts.length ? <div className="blog-notice"><p>{page > 1 ? t("blog.emptyPage") : t("blog.empty")}</p>{page > 1 && <Link to="/blog/">{t("blog.first")}</Link>}</div> : <div className="blog-grid">{data.posts.map(post => <article className="blog-card" key={post._id}>
           {post.publishedAt && <time dateTime={post.publishedAt}>{blogDate(post.publishedAt, language)}</time>}
           <h3><Link to={`/blog/${encodeURIComponent(post.slug)}/`}>{post.title}</Link></h3><p>{post.summary}</p>
-          <Link className="blog-read" to={`/blog/${encodeURIComponent(post.slug)}/`} aria-label={`${t("blog.readLabel")} ${post.title}`}>{t("blog.read")} <span aria-hidden="true">↗</span></Link>
+          <Link className="blog-read" to={`/blog/${encodeURIComponent(post.slug)}/`} aria-label={`${t("blog.readLabel")} ${post.title}`}>{t("blog.read")} <ArrowUpRight size={24} strokeWidth={3} aria-hidden="true" /></Link>
         </article>)}</div>}
         {data.pages > 1 && <nav className="blog-pagination" aria-label={t("blog.pagination")}>
           {page > 1 && <Link to={`/blog/?page=${Math.min(page - 1, data.pages)}`} rel="prev">← {t("blog.previous")}</Link>}

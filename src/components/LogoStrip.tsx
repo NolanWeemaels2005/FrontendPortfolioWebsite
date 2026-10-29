@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useFeaturedProjectsQuery } from "../data/projectQueries";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -8,6 +9,17 @@ function projectClassSlug(slug: string) {
 }
 
 export function LogoStrip() {
+  const railRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    let visible = false;
+    const sync = () => { rail.style.animationPlayState = visible && !document.hidden ? "running" : "paused"; };
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
+    observer.observe(rail);
+    document.addEventListener("visibilitychange", sync);
+    return () => { observer.disconnect(); document.removeEventListener("visibilitychange", sync); };
+  }, []);
   const { t } = useLanguage();
   const { data: featuredProjects = [] } = useFeaturedProjectsQuery();
 
@@ -15,7 +27,7 @@ export function LogoStrip() {
     <section className="logo-strip" aria-label={t("portfolio.clients")}>
       <div className="logo-strip__inner">
         <p>{t("portfolio.clients")}</p>
-        <div className="logo-rail">
+        <div ref={railRef} className="logo-rail" style={{ animationPlayState: "paused" }}>
           {[...featuredProjects, ...featuredProjects].filter((project) => project.logo).map((project, index) => (
             <Link
               to={`/portfolio/${project.slug}/`}

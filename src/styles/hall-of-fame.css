@@ -58,11 +58,13 @@
 
 .hall-tile--bnb { background: #7bce00; }
 .hall-tile--eisbar { background: radial-gradient(ellipse at 42% 105%, #28136e, #09031e 48%, #000 76%); }
-/* Blend at the media layer so opaque black WebM frames also work in Safari. */
+/* Blend each frame against the media background, including opaque Safari video frames. */
 .hall-tile--bnb .hall-tile__link,
 .hall-tile--eisbar .hall-tile__link { background: inherit; }
-.hall-tile--bnb .hall-tile__media,
-.hall-tile--eisbar .hall-tile__media { mix-blend-mode: screen; }
+.hall-tile--bnb .hall-tile__media { background: #7bce00; }
+.hall-tile--eisbar .hall-tile__media { background: radial-gradient(ellipse at 42% 105%, #28136e, #09031e 48%, #000 76%); }
+.hall-tile--bnb :is(.hall-tile__image, .hall-tile__video),
+.hall-tile--eisbar :is(.hall-tile__image, .hall-tile__video) { mix-blend-mode: screen; }
 .hall-tile--bnb :is(.hall-tile__image, .hall-tile__video) { object-fit: contain; padding: 12%; }
 .hall-tile--eisbar :is(.hall-tile__image, .hall-tile__video) { object-fit: contain; padding: 12%; }
 .hall-tile__logo {

@@ -19,6 +19,14 @@ export function CustomCursor() {
     let x = 0;
     let y = 0;
     let pressed = false;
+    let projectLabelWidth = 0;
+    let previousLabel = "";
+    const appliedStyles = new Map<string, string>();
+    const setStyle = (property: string, value: string) => {
+      if (appliedStyles.get(property) === value) return;
+      cursor.style.setProperty(property, value);
+      appliedStyles.set(property, value);
+    };
 
     let magnet: { element: HTMLElement; animation: Animation; dx: number; dy: number } | null = null;
     const returning = new Map<HTMLElement, Animation>();
@@ -58,11 +66,16 @@ export function CustomCursor() {
       }
       const control = target.closest<HTMLElement>(interactiveSelector);
       const enabled = control && !control.matches(':disabled, [aria-disabled="true"]');
-      let rect = enabled ? control.getBoundingClientRect() : null;
       const project = enabled && (control.dataset.cursor === "project" || control.dataset.cursor === "image");
+      let rect = enabled && !project ? control.getBoundingClientRect() : null;
       if (labelRef.current) {
-        const label = t(control?.dataset.cursor === "image" ? "cursor.viewImage" : "cursor.viewMore");
-        if (labelRef.current.textContent !== label) labelRef.current.textContent = label;
+        const label = control?.dataset.cursorLabel || t(control?.dataset.cursor === "image" ? "cursor.viewImage" : "cursor.viewProject");
+        if (previousLabel !== label) {
+          labelRef.current.textContent = label;
+          previousLabel = label;
+          projectLabelWidth = 0;
+        }
+        if (project && !projectLabelWidth) projectLabelWidth = labelRef.current.offsetWidth;
       }
       const merge = !project && rect && (control?.dataset.cursor === "merge" || (!control?.dataset.cursor && control?.matches("button, [role=button]"))) && rect.width <= 320 && rect.height <= 100;
       if (merge && control && rect && !reducedMotion.matches) {
@@ -91,18 +104,18 @@ export function CustomCursor() {
       } else {
         releaseMagnet();
       }
-      const width = project ? (labelRef.current?.offsetWidth ?? 72) + 32 : merge && rect ? rect.width : enabled ? 32 : 24;
+      const width = project ? (projectLabelWidth || 72) + 32 : merge && rect ? rect.width : enabled ? 32 : 24;
       const height = project ? 40 : merge && rect ? rect.height : width;
       const centerX = merge && rect ? rect.left + rect.width / 2 : x;
       const centerY = merge && rect ? rect.top + rect.height / 2 : y;
-      cursor.style.width = `${width}px`;
-      cursor.style.height = `${height}px`;
+      setStyle("width", `${width}px`);
+      setStyle("height", `${height}px`);
       const shape = merge && control ? window.getComputedStyle(control) : null;
-      cursor.style.borderTopLeftRadius = shape?.borderTopLeftRadius ?? (project ? "999px" : "50%");
-      cursor.style.borderTopRightRadius = shape?.borderTopRightRadius ?? (project ? "999px" : "50%");
-      cursor.style.borderBottomRightRadius = shape?.borderBottomRightRadius ?? (project ? "999px" : "50%");
-      cursor.style.borderBottomLeftRadius = shape?.borderBottomLeftRadius ?? (project ? "999px" : "50%");
-      cursor.style.clipPath = shape?.clipPath ?? "none";
+      setStyle("border-top-left-radius", shape?.borderTopLeftRadius ?? (project ? "999px" : "50%"));
+      setStyle("border-top-right-radius", shape?.borderTopRightRadius ?? (project ? "999px" : "50%"));
+      setStyle("border-bottom-right-radius", shape?.borderBottomRightRadius ?? (project ? "999px" : "50%"));
+      setStyle("border-bottom-left-radius", shape?.borderBottomLeftRadius ?? (project ? "999px" : "50%"));
+      setStyle("clip-path", shape?.clipPath ?? "none");
       // Anchor the center so resizing never shifts the highlight off the button.
       cursor.style.transform = `translate3d(${centerX}px, ${centerY}px, 0) translate(-50%, -50%) scale(${pressed && !merge ? .86 : 1})`;
       cursor.classList.toggle("is-project", Boolean(project));
@@ -173,7 +186,7 @@ export function CustomCursor() {
 
   return (
     <div ref={cursorRef} className="custom-cursor" aria-hidden="true">
-      <span ref={labelRef} className="custom-cursor__label">{t("cursor.viewMore")}</span>
+      <span ref={labelRef} className="custom-cursor__label">{t("cursor.viewProject")}</span>
     </div>
   );
 }

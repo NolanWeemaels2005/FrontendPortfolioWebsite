@@ -78,13 +78,6 @@ html body .home-landing__media::after {
   background: linear-gradient(0deg, rgb(0 0 0 / 75%), rgb(0 0 0 / 10%) 70%);
 }
 
-html body .home-landing .home-landing__project {
-  top: 6rem;
-  right: var(--content-edge);
-  bottom: auto;
-  left: auto;
-}
-
 .hero-scroll-cue {
   position: absolute;
   z-index: 3;

@@ -76,14 +76,14 @@ export const featuredProjects: Project[] = [
     summaryKey: "project.videjo.summary",
   },
   {
-    title: "Ferraawri",
+    title: "Ferraaawri",
     slug: "ferraaawri",
     logo: `${logoPath}FerraaawriWhite.svg`,
     cover: `${hallOfFamePath}ferraawri.webp`,
     color: "#ed1818",
     featured: true,
     hallOfFame: { key: "ferraawri", services: ["Branding", "Campagne", "Webdesign"] },
-    summary: "Branding, campagnebeelden en webdesign voor Ferraawri.",
+    summary: "Branding, campagnebeelden en webdesign voor Ferraaawri.",
   },
   {
     title: "Erasmushogeschool Brussel",

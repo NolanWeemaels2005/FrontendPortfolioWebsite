@@ -1,17 +1,17 @@
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, X } from "lucide-react";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { useCombinedProjectsQuery, useProjectQuery } from "../data/projectQueries";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../i18n/LanguageContext";
-import type { Project } from "../types/project";
 import { getAdminToken } from "../utils/adminAuth";
 import { getProjectDescription } from "../utils/projectText";
 import { getProjectCaseStudy } from "../data/projectCaseStudies";
 import { backendProjectTranslations } from "../data/backendProjectTranslations";
-import { assetPath } from "../utils/asset";
+import { projectStories, type ProjectStoryImage, type ProjectSpread } from "../data/projectStories";
+import { CaseMotion } from "../components/CaseMotion";
 import "../styles/project-case.css";
 
 const projectSlugAliases: Record<string, string> = {
@@ -30,7 +30,11 @@ export function ProjectDetailPage() {
   const { data: combinedProjects = [] } = useCombinedProjectsQuery();
   const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(getAdminToken()));
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
-  const galleryImages = project?.images || [];
+  const story = projectStories[getProjectCaseStudy(project?.slug || "")?.heroImage || ""];
+  const storyImages = story?.images || [];
+  const galleryImages = storyImages.map(image => image.src);
+  const [recommendationSeed] = useState(() => Math.random().toString(36).slice(2));
+  const lightboxRef = useRef<HTMLDivElement>(null);
   const activeImage = activeImageIndex === null ? null : galleryImages[activeImageIndex];
 
   useLayoutEffect(() => {
@@ -61,7 +65,15 @@ export function ProjectDetailPage() {
   useEffect(() => {
     if (activeImageIndex === null) return;
 
+    const opener = document.activeElement as HTMLElement | null;
+    lightboxRef.current?.querySelector<HTMLButtonElement>(".project-lightbox__close")?.focus();
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Tab") {
+        const buttons = Array.from(lightboxRef.current?.querySelectorAll<HTMLButtonElement>("button:not(.project-lightbox__backdrop)") || []);
+        const first = buttons[0], last = buttons[buttons.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+      }
       if (event.key === "Escape") setActiveImageIndex(null);
       if (event.key === "ArrowLeft") showPreviousImage();
       if (event.key === "ArrowRight") showNextImage();
@@ -73,8 +85,11 @@ export function ProjectDetailPage() {
     return () => {
       document.documentElement.classList.remove("project-lightbox-open");
       window.removeEventListener("keydown", handleKeyDown);
+      opener?.focus();
     };
-  }, [activeImageIndex, galleryImages.length]);
+  }, [activeImageIndex !== null, galleryImages.length]);
+
+  useEffect(() => { setActiveImageIndex(null); }, [canonicalSlug]);
 
   if (slug && canonicalSlug !== slug) {
     return <Navigate to={`/portfolio/${canonicalSlug}/`} replace />;
@@ -102,8 +117,6 @@ export function ProjectDetailPage() {
   const projectApproach = (project.source !== "backend" && backendProjectTranslations[project.slug]?.[language])
     || getProjectDescription(project, language, t);
   const paragraphs = projectApproach.split(/\n\s*\n/).filter(Boolean);
-  const customHero = facts?.heroImage ? assetPath(`assets/project-heroes/${facts.heroImage}`) : undefined;
-  const heroImage = customHero ? `${customHero}-1800.jpg` : project.heroImage || project.cover || galleryImages[0];
   const intro = projectApproach.match(/^.*?[.!?](?:\s|$)/)?.[0]?.trim() || projectApproach;
   // The opening already shows this sentence; continue the story without repeating it.
   const storyParagraphs = paragraphs.map((paragraph, index) =>
@@ -111,11 +124,31 @@ export function ProjectDetailPage() {
       ? paragraph.slice(intro.length).trim()
       : paragraph,
   ).filter(Boolean);
-  const relatedProjects = getRelatedProjects(combinedProjects, project.slug);
+  const relatedProjects = [...new Map(combinedProjects.map(item => [item.slug, item])).values()]
+    .filter(item => {
+      const key = getProjectCaseStudy(item.slug)?.heroImage || "";
+      return projectStories[key] && key !== facts?.heroImage;
+    })
+    .map(item => ({ item, score: recommendationScore(`${recommendationSeed}:${project.slug}:${item.slug}`) }))
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 4)
+    .map(({ item }) => item);
+
+  const renderStoryArtwork = (image: ProjectStoryImage, index: number, layout: ProjectSpread["layout"] = "full") => (
+    <figure className="case-feature__image" key={image.src}>
+      <button type="button" className="project-detail__gallery-button" data-cursor="image"
+        onClick={() => setActiveImageIndex(index)} aria-label={`${t("case.openImage")} ${index + 1}: ${projectTitle}`}>
+        <img src={image.src} srcSet={image.srcSet}
+          sizes={(layout === "full" || layout === "inset") ? "(max-width: 768px) calc(100vw - 2rem), 92vw" : "(max-width: 768px) calc(100vw - 2rem), 60vw"}
+          alt={image.alt} width={image.width} height={image.height}
+          loading={index === 0 ? "eager" : "lazy"} fetchPriority={index === 0 ? "high" : "auto"} decoding="async" />
+      </button>
+    </figure>
+  );
 
   return (
     <section className="project-detail project-case section-black">
-      <div className="section-container project-detail__hero case-header" data-reveal>
+      <div className="section-container project-detail__hero case-header">
         <div className="project-detail__topbar">
           <Link to="/portfolio/" className="back-link" data-cursor="soft">
             <ArrowLeft aria-hidden="true" size={22} />
@@ -131,15 +164,12 @@ export function ProjectDetailPage() {
         <div className="project-detail__title">
           <p className="eyebrow">{facts ? t(`case.${facts.context}`) : t("project.eyebrow")}</p>
           <h1>{projectTitle}</h1>
+          <p className="case-intro">{intro.length <= 360 ? intro : t(`case.${facts?.role || 'story'}`)}</p>
         </div>
       </div>
 
-      <div className="section-container case-opening">
-        <figure className="case-hero" data-reveal>
-          <img src={heroImage || project.logo} alt={projectTitle} srcSet={customHero ? `${customHero}-900.jpg 900w, ${customHero}-1800.jpg 1800w` : undefined} sizes="(max-width: 640px) calc(100vw - 2rem), 55vw" width={customHero ? 1800 : 1600} height={customHero ? 2400 : 1000} fetchPriority="high" decoding="async" className={!heroImage ? "case-hero__logo" : undefined} />
-        </figure>
-        <div className="case-opening__info" data-reveal>
-          <p className="case-intro">{intro.length <= 360 ? intro : t(`case.${facts?.role || 'story'}`)}</p>
+      {story && <div className="section-container case-feature__opening">{renderStoryArtwork(storyImages[0], 0)}</div>}
+      <div className="section-container case-opening__info" data-reveal>
         <div className="case-meta">
           {facts ? <>
             <div><span>{t("case.role")}</span><strong>{facts.services.map((service) => t(`portfolio.service.${service}`)).join(", ")}</strong></div>
@@ -150,9 +180,8 @@ export function ProjectDetailPage() {
         </div>
         <nav className="case-jump" aria-label={t("case.overview")}>
           {storyParagraphs.length > 0 && <a href="#case-story" data-cursor="soft">{t("case.story")} <ArrowRight size={16} aria-hidden="true" /></a>}
-          {galleryImages.length > 0 ? <a href="#case-work" data-cursor="soft">{t("case.viewWork")} <ArrowRight size={16} aria-hidden="true" /></a> : null}
+          {galleryImages.length > 1 ? <a href="#case-work" data-cursor="soft">{t("case.viewWork")} <ArrowRight size={16} aria-hidden="true" /></a> : null}
         </nav>
-        </div>
       </div>
 
       {storyParagraphs.length > 0 && <div className="case-story-band"><section className="section-container case-story" id="case-story" aria-labelledby="case-story-title">
@@ -165,62 +194,35 @@ export function ProjectDetailPage() {
         </div>
       </section></div>}
 
-      {galleryImages.length ? (
-        <section className="section-container case-work" id="case-work" aria-labelledby="case-work-title">
-          <header className="case-work__heading">
-            <h2 id="case-work-title">{t("case.work")}</h2>
-            {galleryImages.length > 1 && <p className="case-work__swipe">{t("case.swipe")} <span aria-hidden="true">↔</span></p>}
-          </header>
-          <div className="project-detail__gallery" role="region" aria-label={t("case.gallery")} tabIndex={0}>
-          {galleryImages.map((image, index) => (
-            <figure className="case-work__item" key={image} data-reveal>
-            <button
-              type="button"
-              className="project-detail__gallery-button"
-              data-cursor="image"
-              onClick={() => setActiveImageIndex(index)}
-              aria-label={`${t("case.openImage")} ${index + 1}: ${projectTitle}`}
-            >
-              <img src={image} alt={`${projectTitle} — ${t("case.image")} ${index + 1}`} width="1600" height="1200" loading="lazy" decoding="async" onLoad={(event) => {
-                const img = event.currentTarget;
-                const figure = img.closest("figure");
-                if (figure) figure.dataset.format = img.naturalWidth / img.naturalHeight > 1.3 ? "wide" : "portrait";
-              }} />
-            </button>
-            </figure>
-          ))}
-          </div>
-        </section>
-      ) : null}
+      {story && <section className="section-container case-gallery" id="case-work" aria-label={t("case.gallery")}>
+        {story.spreads.map((spread, spreadIndex) => <div key={spreadIndex} className={`case-spread case-spread--${spread.layout}`}
+          style={{ "--case-columns": spread.images.map(index => `${storyImages[index].width / storyImages[index].height}fr`).join(" ") } as CSSProperties}>
+          {spread.images.map(index => renderStoryArtwork(storyImages[index], index, spread.layout))}
+        </div>)}
+        {story.video && <CaseMotion src={story.video} poster={story.poster} title={`${projectTitle} — ${t("case.identity")}`} />}
+      </section>}
 
-      {relatedProjects.length ? (
-        <section className="section-container related-projects" data-reveal>
-          <h2>{t("case.related")}</h2>
-          <div className="related-projects__grid">
-            {relatedProjects.map((relatedProject) => {
-              const relatedTitle = relatedProject.titleKey ? t(relatedProject.titleKey) : relatedProject.title;
-
-              return (
-                <Link to={`/portfolio/${relatedProject.slug}/`} className="related-project-card" data-cursor="project" key={relatedProject.slug}>
-                  <span className="related-project-card__logo-wrap">
-                    <img src={relatedProject.logo} alt={relatedTitle} width="512" height="512" loading="lazy" decoding="async" />
-                  </span>
-                  <span className="related-project-card__label">
-                    <ButtonTextStagger text={relatedTitle} wrap />
-                    <ArrowRight aria-hidden="true" size={22} strokeWidth={3} />
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-      ) : null}
+      {relatedProjects.length > 0 && <section className="section-container case-related" aria-labelledby="case-related-title">
+        <h2 id="case-related-title">{t("case.related")}</h2>
+        <div className="case-related__grid">
+          {relatedProjects.map(item => {
+            const image = projectStories[getProjectCaseStudy(item.slug)!.heroImage!].recommendationImage;
+            const title = item.titleKey ? t(item.titleKey) : item.title;
+            return <Link key={item.slug} to={`/portfolio/${item.slug}/`} className="case-related__card" data-cursor="project">
+              <img src={image.src} srcSet={image.srcSet} sizes="(max-width: 768px) calc(100vw - 2rem), (max-width: 1024px) 46vw, 23vw"
+                width={image.width} height={image.height} alt="" loading="lazy" decoding="async" />
+              <span className="case-related__label"><ButtonTextStagger text={title} wrap /><ArrowRight aria-hidden="true" size={24} /></span>
+            </Link>;
+          })}
+        </div>
+      </section>}
 
       {activeImage && typeof document !== "undefined" ? createPortal(
-        <div className="project-lightbox" role="dialog" aria-modal="true" aria-label={`${projectTitle} — ${t("case.gallery")}`}>
+        <div ref={lightboxRef} className="project-lightbox" role="dialog" aria-modal="true" aria-label={`${projectTitle} — ${t("case.gallery")}`}>
           <button
             type="button"
             className="project-lightbox__backdrop"
+            tabIndex={-1}
             onClick={() => setActiveImageIndex(null)}
             aria-label={t("case.close")}
           />
@@ -258,23 +260,11 @@ export function ProjectDetailPage() {
   );
 }
 
-function seededProjectScore(seed: string, value: string) {
-  const input = `${seed}:${value}`;
-  let hash = 0;
-
-  for (let index = 0; index < input.length; index += 1) {
-    hash = (hash * 31 + input.charCodeAt(index)) >>> 0;
-  }
-
-  return hash;
-}
-
-function getRelatedProjects(projects: Project[], currentSlug: string) {
-  const currentOutputs = getProjectCaseStudy(currentSlug)?.services || [];
-  return projects
-    .filter((project) => project.slug !== currentSlug && project.logo)
-    .map((project) => ({ project, relevance: (getProjectCaseStudy(project.slug)?.services || []).filter((output) => currentOutputs.includes(output)).length, score: seededProjectScore(currentSlug, project.slug) }))
-    .sort((projectA, projectB) => projectB.relevance - projectA.relevance || projectA.score - projectB.score)
-    .slice(0, 4)
-    .map(({ project }) => project);
+// A fresh selection per visit, stable during lightbox and language interactions.
+function recommendationScore(value: string) {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index++) hash = Math.imul(hash ^ value.charCodeAt(index), 16777619);
+  hash = Math.imul(hash ^ (hash >>> 16), 2246822507);
+  hash = Math.imul(hash ^ (hash >>> 13), 3266489909);
+  return (hash ^ (hash >>> 16)) >>> 0;
 }

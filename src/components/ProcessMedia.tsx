@@ -3,13 +3,15 @@ import { useEffect, useRef } from "react";
 const LOOP_FADE_SECONDS = 0.8;
 
 export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const firstRef = useRef<HTMLVideoElement>(null);
   const secondRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const first = firstRef.current;
     const second = secondRef.current;
-    if (!first || !second) return;
+    const container = containerRef.current;
+    if (!first || !second || !container) return;
     let current = first;
     let next = second;
     let frame = 0;
@@ -17,6 +19,9 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
     let starting = false;
     let blending = false;
     let fallback = false;
+    let visible = false;
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const canPlay = () => visible && !document.hidden && !motion.matches;
     let fadeDuration = LOOP_FADE_SECONDS;
 
     first.style.opacity = "1";
@@ -34,11 +39,12 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
       current.style.opacity = "1";
       current.loop = true;
       if (current.ended) current.currentTime = 0;
-      void current.play().catch(() => {});
+      if (canPlay()) void current.play().catch(() => {});
     };
 
     const tick = () => {
-      if (disposed) return;
+      frame = 0;
+      if (disposed || !canPlay()) return;
       if (blending) {
         // Follow decoded playback time: buffering must never fade to a blank frame.
         const progress = Math.min(1, next.currentTime / fadeDuration);
@@ -60,6 +66,7 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
           void next.play().then(() => {
             if (disposed) return;
             starting = false;
+            if (!canPlay()) { next.pause(); return; }
             blending = true;
           }).catch(useNativeLoop);
         } else if (current.ended && next.readyState < 2) {
@@ -69,10 +76,26 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
       if (!fallback) frame = window.requestAnimationFrame(tick);
     };
 
-    void first.play().catch(() => {});
-    frame = window.requestAnimationFrame(tick);
+    const syncPlayback = () => {
+      window.cancelAnimationFrame(frame);
+      frame = 0;
+      if (!canPlay()) { first.pause(); second.pause(); return; }
+      void current.play().catch(() => {});
+      if (blending) void next.play().catch(() => {});
+      if (!fallback) frame = window.requestAnimationFrame(tick);
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      syncPlayback();
+    });
+    observer.observe(container);
+    document.addEventListener("visibilitychange", syncPlayback);
+    motion.addEventListener("change", syncPlayback);
     return () => {
       disposed = true;
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", syncPlayback);
+      motion.removeEventListener("change", syncPlayback);
       window.cancelAnimationFrame(frame);
       first.pause();
       second.pause();
@@ -82,8 +105,8 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
   }, [videoSrc]);
 
   return (
-    <div className="home-landing__media" aria-hidden="true">
-      <video ref={firstRef} src={videoSrc} autoPlay muted playsInline preload="auto" />
+    <div ref={containerRef} className="home-landing__media" aria-hidden="true">
+      <video ref={firstRef} src={videoSrc} muted playsInline preload="auto" />
       <video ref={secondRef} src={videoSrc} muted playsInline preload="auto" style={{ opacity: 0 }} />
     </div>
   );
