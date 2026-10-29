@@ -21,6 +21,13 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
 
   useEffect(() => {
     if (!open) return;
+    if (!document.getElementById("kaai-adobe-fonts")) {
+      const stylesheet = document.createElement("link");
+      stylesheet.id = "kaai-adobe-fonts";
+      stylesheet.rel = "stylesheet";
+      stylesheet.href = "https://use.typekit.net/osd5aaf.css";
+      document.head.appendChild(stylesheet);
+    }
     const previousFocus = document.activeElement as HTMLElement | null;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -49,6 +56,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
     <div className="kaai-modal" role="dialog" aria-modal="true" aria-labelledby={titleId} lang={language} data-lenis-prevent>
       <div className="kaai-popup" ref={panelRef}>
         <button ref={closeRef} type="button" className="kaai-popup__close" data-cursor="soft" onClick={onClose}>{text.close}</button>
+        <div className="kaai-popup__layout">
         <div className="kaai-popup__visual">
           <img className="kaai-popup__logo" src={assetPath("assets/kaai/logo-outline.svg")} alt="Kaai." width="621" height="261" />
           <img className="kaai-popup__team" src={assetPath("assets/kaai/team.png")} alt={text.team} width="1339" height="1088" />
@@ -60,6 +68,7 @@ export function KaaiModal({ open, onClose }: KaaiModalProps) {
             <p>{text.body}</p>
             <a className="kaai-popup__cta" data-cursor="soft" href="https://www.instagram.com/kaaipunt/" target="_blank" rel="noopener noreferrer">{text.cta}</a>
           </div>
+        </div>
         </div>
       </div>
     </div>, document.body

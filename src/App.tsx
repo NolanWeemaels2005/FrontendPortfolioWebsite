@@ -1,5 +1,5 @@
-import { Link, Route, Routes, useLocation } from "react-router-dom";
-import { lazy, Suspense, useLayoutEffect, useMemo } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { lazy, Suspense, useLayoutEffect } from "react";
 import { PageContactCta } from "./components/PageContactCta";
 import { Footer } from "./components/Footer";
 import { Navigation } from "./components/Navigation";
@@ -7,12 +7,10 @@ import { CustomCursor } from "./components/CustomCursor";
 import { Seo } from "./components/Seo";
 import { WhatsAppPopup } from "./components/WhatsAppPopup";
 import { InitialLoader } from "./components/InitialLoader";
-import { ButtonTextStagger } from "./components/ButtonTextStagger";
 import { loadPageWithRecovery } from "./utils/assetRecovery";
 import { pageModuleLoaders } from "./utils/pageModules";
-import { featuredProjects } from "./data/projects";
-import { useLanguage } from "./i18n/LanguageContext";
 
+const NotFoundPage = lazy(() => loadPageWithRecovery(() => import("./pages/NotFoundPage")).then(module => ({ default: module.NotFoundPage })));
 const HomePage = lazy(() => loadPageWithRecovery(pageModuleLoaders.home).then((module) => ({ default: module.HomePage })));
 const PortfolioPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.portfolio).then((module) => ({ default: module.PortfolioPage })));
 const ProjectDetailPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.projectDetail).then((module) => ({ default: module.ProjectDetailPage })));
@@ -22,7 +20,6 @@ const LegalPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.legal).then(
 const BlogPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.blog).then(module => ({ default: module.BlogPage })));
 const BlogPostPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.blogPost).then(module => ({ default: module.BlogPostPage })));
 const BlogAdminPage = lazy(() => loadPageWithRecovery(pageModuleLoaders.blogAdmin).then(module => ({ default: module.BlogAdminPage })));
-const notFoundProjectPool = featuredProjects.filter((project) => project.logo);
 const routeBodyClasses = [
   "home-route",
   "portfolio-route",
@@ -64,61 +61,6 @@ function ScrollToTop() {
   }, [pathname]);
 
   return null;
-}
-
-function NotFoundPage() {
-  const { t } = useLanguage();
-  const notFoundProjects = useMemo(() => {
-    return [...notFoundProjectPool]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 4);
-  }, []);
-
-  useLayoutEffect(() => {
-    document.body.classList.add("not-found-route");
-    return () => document.body.classList.remove("not-found-route");
-  }, []);
-
-  return (
-    <section className="not-found-page" aria-labelledby="not-found-title">
-      <div className="not-found-page__inner">
-        <div className="not-found-page__copy">
-          <h1 id="not-found-title">
-            <span>{t("notFound.titleLineOne")}</span>
-            <strong>{t("notFound.titleLineTwo")}</strong>
-          </h1>
-          <p>{t("notFound.body")}</p>
-
-          <div className="not-found-page__actions">
-            <Link to="/contact/" className="home-landing__action home-landing__action--primary" data-cursor="merge">
-              <ButtonTextStagger text={t("notFound.talk")} />
-            </Link>
-            <Link to="/portfolio/" className="home-landing__action home-landing__action--secondary" data-cursor="merge">
-              <ButtonTextStagger text={t("notFound.portfolio")} />
-            </Link>
-          </div>
-        </div>
-
-        <div className="not-found-page__suggestions">
-          <h2>{t("notFound.projects")}</h2>
-          <div className="not-found-page__projects" aria-label={t("notFound.projectsLabel")}>
-            {notFoundProjects.map((project) => (
-              <Link
-                to={`/portfolio/${project.slug}/`}
-                className="not-found-project"
-                data-cursor="merge"
-                key={project.slug}
-                aria-label={`${t("notFound.viewProject")} ${project.title}`}
-              >
-                {project.logo ? <img className="not-found-project__logo" src={project.logo} alt="" width="512" height="512" loading="lazy" decoding="async" /> : null}
-                <span className="not-found-project__title">{project.title}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
 }
 
 export function App() {

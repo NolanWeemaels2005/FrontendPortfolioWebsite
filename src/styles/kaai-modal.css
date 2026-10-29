@@ -1,40 +1,48 @@
-/* Grtsk requires the owner's Adobe Fonts web-project URL. */
+/* Adobe Grtsk Variable: the named Tera Bold instance uses width 125, weight 700. */
 .kaai-modal {
   --kaai-yellow: #ffcb00;
   position: fixed;
   inset: 0;
   z-index: 5000;
-  overflow-y: auto;
+  display: grid;
+  place-items: center;
+  padding: max(1rem, 4svh) max(1rem, 4vw);
+  overflow: hidden;
   overscroll-behavior: contain;
-  background: #000;
+  background: rgb(0 0 0 / 72%);
   color: #000;
-  font-family: "Grtsk Tera", "Arial Black", var(--font-main);
-  font-weight: 900;
+  font-family: "grtsk-vf", "Arial Black", var(--font-main);
+  font-weight: 700;
+  font-variation-settings: "slnt" 0, "wght" 700, "wdth" 125;
 }
-.kaai-popup { position: relative; min-height: 100svh; display: grid; grid-template-columns: 58.4% 41.6%; }
-.kaai-popup__visual { position: relative; min-width: 0; min-height: 100svh; overflow: hidden; background: #000; }
+.kaai-popup { position: relative; width: min(100%, 80rem); max-height: 84svh; container-type: inline-size; box-shadow: 0 1.5rem 5rem rgb(0 0 0 / 40%); }
+.kaai-popup__layout { height: min(78svh, 48rem); max-height: 84svh; overflow-y: auto; overscroll-behavior: contain; display: grid; grid-template-columns: 58.4% 41.6%; background: #fff; }
+.kaai-popup__visual { position: relative; min-width: 0; min-height: 100%; overflow: hidden; background: #000; }
 .kaai-popup__logo { position: absolute; top: 22%; left: 30.5%; width: 39%; height: auto; }
 .kaai-popup__team { position: absolute; bottom: 0; left: 9%; width: 82%; height: 73%; object-fit: contain; object-position: bottom; }
 .kaai-popup__visual::after { content: ""; position: absolute; inset: 70% 0 0; background: linear-gradient(transparent, #000 90%); pointer-events: none; }
-.kaai-popup__content { min-width: 0; min-height: 100svh; padding: 6rem 4% 11vh; background: #fff; display: grid; grid-template-rows: 1fr auto; gap: 4rem; }
-.kaai-popup__title { align-self: center; margin: 0; padding-top: 12vh; font: inherit; font-size: clamp(1.5rem, 2.45vw, 3.8rem); line-height: 1; letter-spacing: -.035em; text-transform: uppercase; }
+.kaai-popup__content { min-width: 0; min-height: 100%; padding: 5rem 4% 3rem; background: #fff; display: grid; grid-template-rows: 1fr auto; gap: 2.5rem; }
+.kaai-popup__title { align-self: center; margin: 0; padding-top: 3vh; font: inherit; font-size: clamp(1.25rem, 2.45cqw, 2rem); line-height: 1; letter-spacing: -.035em; text-transform: uppercase; }
 .kaai-popup__title span { display: block; }
 .kaai-popup__title span:last-child { text-align: right; }
 .kaai-popup__title em { color: var(--kaai-yellow); font-style: normal; }
 .kaai-popup__intro { text-align: center; }
-.kaai-popup__intro h3 { margin: 0 0 .65rem; color: #808184; font: inherit; font-size: clamp(1rem, 1.4vw, 2rem); line-height: 1.2; text-transform: uppercase; }
-.kaai-popup__intro p { max-width: 45ch; margin: 0 auto 1rem; color: #909194; font-size: clamp(.9rem, .95vw, 1.35rem); line-height: 1.45; }
+.kaai-popup__intro h3 { margin: 0 0 .65rem; color: #808184; font: inherit; font-size: clamp(.95rem, 1.4cqw, 1.25rem); line-height: 1.2; text-transform: uppercase; }
+.kaai-popup__intro p { max-width: 45ch; margin: 0 auto 1rem; color: #909194; font-size: clamp(.8rem, .95cqw, 1rem); line-height: 1.45; }
 .kaai-popup__close, .kaai-popup__cta { display: inline-flex; justify-content: center; align-items: center; min-height: 44px; padding: .65rem 1.65rem; border: 0; border-radius: 0; background: var(--kaai-yellow); color: #000; font: inherit; font-size: clamp(.8rem, .9vw, 1.1rem); line-height: 1; text-decoration: none; text-transform: uppercase; cursor: pointer; }
-.kaai-popup__close { position: absolute; top: max(1.5rem, env(safe-area-inset-top)); right: 2%; z-index: 2; min-width: 10rem; }
+.kaai-popup__close { position: absolute; top: 1rem; right: 1rem; z-index: 2; min-width: 10rem; }
 .kaai-popup :is(button, a):focus-visible { outline: 3px solid #000; outline-offset: 5px; }
 @media (max-width: 53.75rem) {
-  .kaai-popup { grid-template-columns: 1fr; }
-  .kaai-popup__visual { min-height: 0; height: 65svh; }
+  .kaai-popup { width: min(100%, 34rem); }
+  .kaai-popup__layout { height: auto; grid-template-columns: 1fr; }
+  .kaai-popup__visual { min-height: 0; height: clamp(15rem, 36svh, 22rem); }
   .kaai-popup__logo { top: 16%; }
   .kaai-popup__team { height: 77%; }
-  .kaai-popup__content { min-height: 0; padding: 2.5rem 1.5rem max(3rem, env(safe-area-inset-bottom)); gap: 3rem; }
-  .kaai-popup__title { padding: 0; font-size: clamp(1.7rem, 5.7vw, 3rem); }
-  .kaai-popup__close { position: fixed; right: 1rem; min-width: 8rem; }
+  .kaai-popup__content { min-height: 0; padding: 2rem 1.25rem 2.5rem; gap: 2rem; }
+  .kaai-popup__title { padding: 0; font-size: clamp(1.25rem, 5.7cqw, 2rem); }
+  .kaai-popup__close { position: absolute; right: 1rem; min-width: 8rem; }
   .kaai-popup__intro h3 { font-size: 1.1rem; }
   .kaai-popup__close:focus-visible { outline-color: #fff; }
 }
+
+.kaai-popup :is(h2, h3, p, a, button) { font-variation-settings: "slnt" 0, "wght" 700, "wdth" 125; }
