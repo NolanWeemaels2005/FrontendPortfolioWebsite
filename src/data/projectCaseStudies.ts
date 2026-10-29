@@ -14,7 +14,7 @@ export const projectCaseStudies: Record<string, CaseStudy> = {
   'n-wah': { heroImage: 'n-wah', context: 'commission', role: 'identity', outputs: ['identity'], year: '2026', services: ['branding'] },
   'brussel-noord-basket': { heroImage: 'brussel-noord-basket', context: 'commission', role: 'identity', outputs: ['logo', 'identity'], year: '2026', services: ['branding', 'socialMedia', 'merchandise'] },
   'shift-festival-2026': { heroImage: 'shift-festival-2026', context: 'education', role: 'graphicTeam', outputs: ['identity', 'guidelines', 'stickers'], collaborators: ['Amber Denblinden', 'Razvan Tanase'], year: '2026', services: ['branding', 'promo', 'merchandise'] },
-  'city-to-ocean': { heroImage: 'city-to-ocean', context: 'education', role: 'appCampaign', outputs: ['app', 'campaign'], collaborators: ['Cas Wuyts', 'Noah Goossens', 'Elouan Van Cappellen', 'Raiko Moons'], year: '2026', services: ['webdesign', 'promo', 'merchandise'] },
+  'city-to-ocean': { heroImage: 'city-to-ocean', context: 'education', role: 'appCampaign', outputs: ['app', 'campaign'], collaborators: ['Cas Wuyts', 'Noah Goossens', 'Elouan Van Cappellen', 'Raiko Moons'], year: '2026', services: ['webdesign', 'promo', 'socialMedia', 'merchandise'] },
   'videjo': { heroImage: 'videjo', context: 'commission', role: 'identity', outputs: ['rebrand', 'identity'], year: '2026', services: ['branding', 'merchandise'] },
   'ferraaawri': { heroImage: 'ferraaawri', context: 'concept', role: 'brandConcept', outputs: ['brandConcept', 'guidelines'], year: '2025', services: ['branding', 'promo', 'webdesign'] },
   'erasmus-hogeschool': { heroImage: 'erasmus-hogeschool', context: 'commission', role: 'graphic', outputs: ['poster'], year: '2026', services: ['promo'] },

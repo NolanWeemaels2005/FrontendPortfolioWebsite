@@ -48,7 +48,7 @@ export const featuredProjects: Project[] = [
     featured: true,
     hallOfFame: {
       key: "cto",
-      services: ["Webdesign", "Campagne"],
+      services: ["Webdesign", "Campagne", "Social Media"],
       slides: [
         "cto-beach.webp",
         "cto-poster-portrait.webp",

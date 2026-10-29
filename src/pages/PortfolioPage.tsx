@@ -8,8 +8,8 @@ import { useCombinedProjectsQuery } from "../data/projectQueries";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../i18n/LanguageContext";
 import { assetPath } from "../utils/asset";
+import "../styles/portfolio-all.css";
 
-// The landing keeps its original photos independently of the curated Hall of Fame.
 const landingProjects = [
   { slug: "brussel-noord-basket", cover: "BNB", title: "Brussel Noord Basket" },
   { slug: "erasmus-hogeschool", cover: "EHB", title: "Erasmushogeschool Brussel" },

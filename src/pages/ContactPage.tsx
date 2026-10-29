@@ -133,15 +133,15 @@ export function ContactPage() {
       </section>
 
       <aside className="contact-studio-strip" aria-label={t("contact.detailsLabel")}>
-        <a href="tel:+32472085890" data-cursor="merge">
+        <a href="tel:+32472085890">
           <Phone aria-hidden="true" />
           <span>+32 472 08 58 90</span>
         </a>
-        <a href="https://www.instagram.com/nolanweemaelsdesign/" target="_blank" rel="noopener noreferrer" data-cursor="merge">
+        <a href="https://www.instagram.com/nolanweemaelsdesign/" target="_blank" rel="noopener noreferrer">
           <Instagram aria-hidden="true" />
           <span>@nolanweemaelsdesign</span>
         </a>
-        <a href="mailto:info@nolandesign.be" data-cursor="merge">
+        <a href="mailto:info@nolandesign.be">
           <Mail aria-hidden="true" />
           <span>info@nolandesign.be</span>
         </a>
