@@ -2580,17 +2580,17 @@ body.home-route .site-footer {
   }
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .nav {
   min-height: 4.5rem;
   padding: 1rem;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav::before {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .nav::before {
   opacity: 0;
   background: rgba(8, 8, 8, 0.58);
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav.scrolled::before {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .nav.scrolled::before {
   opacity: 1;
 }
 
@@ -2599,7 +2599,7 @@ body:is(.legal-route, .not-found-route) .nav::before {
   background: rgba(8, 8, 8, 0.94);
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-btn {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .menu-btn {
   top: 50%;
   left: 2rem;
   translate: 0 -50%;
@@ -2612,25 +2612,25 @@ body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-ro
   border-radius: .625rem;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-btn__label,
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-lucide {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .menu-btn__label,
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .menu-lucide {
   display: none;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-icon {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .menu-icon {
   width: 1.125rem;
   height: 12px;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-icon span {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .menu-icon span {
   height: 2px;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .menu-icon span:last-child {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .menu-icon span:last-child {
   width: 100%;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav-talk {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .nav-talk {
   top: 50%;
   right: auto;
   left: 5.55rem;
@@ -2646,27 +2646,27 @@ body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-ro
   letter-spacing: 0;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav.scrolled .nav-talk {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .nav.scrolled .nav-talk {
   background: #ee9d59;
   color: #fff;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav-logo {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .nav-logo {
   top: 1.22rem;
   left: auto;
   right: 2.25rem;
   transform: none;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .nav-logo img {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .nav-logo img {
   width: 8.75rem;
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .overlay {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .overlay {
   clip-path: circle(0 at 5.4rem 5rem);
 }
 
-body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route) .overlay.open {
+body:is(.home-route, .portfolio-route, .about-route, .contact-route, .project-route, .legal-route, .not-found-route, .blog-route, .admin-route) .overlay.open {
   clip-path: circle(170% at 5.4rem 5rem);
 }
 
