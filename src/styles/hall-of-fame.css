@@ -1,3 +1,10 @@
+/* Shared with the project-case logo animations. */
+:root {
+  --logo-motion-bnb-background: #7bce00;
+  --logo-motion-eisbar-background: radial-gradient(ellipse at 42% 105%, #28136e, #09031e 48%, #000 76%);
+  --logo-motion-videjo-background: #29215e;
+}
+
 .hall-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -56,13 +63,13 @@
 .hall-tile__video { opacity: 0; }
 .hall-tile__video.is-ready { opacity: 1; }
 
-.hall-tile--bnb { background: #7bce00; }
-.hall-tile--eisbar { background: radial-gradient(ellipse at 42% 105%, #28136e, #09031e 48%, #000 76%); }
+.hall-tile--bnb { background: var(--logo-motion-bnb-background); }
+.hall-tile--eisbar { background: var(--logo-motion-eisbar-background); }
 /* Blend each frame against the media background, including opaque Safari video frames. */
 .hall-tile--bnb .hall-tile__link,
 .hall-tile--eisbar .hall-tile__link { background: inherit; }
-.hall-tile--bnb .hall-tile__media { background: #7bce00; }
-.hall-tile--eisbar .hall-tile__media { background: radial-gradient(ellipse at 42% 105%, #28136e, #09031e 48%, #000 76%); }
+.hall-tile--bnb .hall-tile__media { background: var(--logo-motion-bnb-background); }
+.hall-tile--eisbar .hall-tile__media { background: var(--logo-motion-eisbar-background); }
 .hall-tile--bnb :is(.hall-tile__image, .hall-tile__video),
 .hall-tile--eisbar :is(.hall-tile__image, .hall-tile__video) { mix-blend-mode: screen; }
 .hall-tile--bnb :is(.hall-tile__image, .hall-tile__video) { object-fit: contain; padding: 12%; }
@@ -78,7 +85,7 @@
 }
 .hall-tile--maison { background: #fbf6e4; }
 .hall-tile--maison .hall-tile__link { color: #171717; }
-.hall-tile--videjo { background: #29215e; }
+.hall-tile--videjo { background: var(--logo-motion-videjo-background); }
 .hall-tile--videjo .hall-tile__image { visibility: hidden; }
 .hall-tile__wordmark {
   position: absolute;
@@ -205,7 +212,7 @@
   transition: transform .45s var(--ease);
 }
 .hall-tile--home.hall-tile--eisbar .hall-tile__media {
-  background: radial-gradient(ellipse at 42% 105%, #28136e, #09031e 48%, #000 76%);
+  background: var(--logo-motion-eisbar-background);
 }
 .hall-tile--home.hall-tile--eisbar :is(.hall-tile__image, .hall-tile__video) {
   padding: 20%;

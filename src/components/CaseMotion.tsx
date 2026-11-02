@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export function CaseMotion({ src, poster, title }: { src: string; poster: string; title: string }) {
+export function CaseMotion({ src, poster, title, projectKey }: { src: string; poster: string; title: string; projectKey?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const video = ref.current;
@@ -22,7 +22,7 @@ export function CaseMotion({ src, poster, title }: { src: string; poster: string
       video.pause();
     };
   }, [src]);
-  return <figure className="case-motion">
+  return <figure className="case-motion" data-project={projectKey}>
     <video ref={ref} src={src} poster={poster} aria-label={title} muted loop playsInline controls preload="metadata" />
   </figure>;
 }

@@ -1,3 +1,4 @@
+import "../styles/blog.css";
 import { ArrowLeft } from "lucide-react";
 import { ButtonTextStagger } from "../components/ButtonTextStagger";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -49,7 +50,7 @@ export function BlogPostPage() {
     return media.length ? <BlogMediaGallery media={media} /> : null;
   };
   return <article className="blog-page blog-post" lang={language}>
-    <BlogMeta title={post.title} description={post.summary} />
+    <BlogMeta title={post.title} description={post.summary} post={post} />
     <header className="blog-post-header blog-container">
       <Link className="back-link" to="/blog/" data-cursor="soft">
         <ArrowLeft size={22} aria-hidden="true" /><ButtonTextStagger text={t("blog.all")} />

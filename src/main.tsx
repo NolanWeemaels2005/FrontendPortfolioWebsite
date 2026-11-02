@@ -6,7 +6,6 @@ import { RouteErrorPage } from "./components/RouteErrorPage";
 import { LanguageProvider } from "./i18n/LanguageContext";
 import { preloadProjectData } from "./data/projectQueries";
 import "./styles/global.css";
-import "./styles/blog.css";
 import "./styles/hall-of-fame.css";
 import "./styles/layout-alignment.css";
 import "./styles/hero-shared.css";

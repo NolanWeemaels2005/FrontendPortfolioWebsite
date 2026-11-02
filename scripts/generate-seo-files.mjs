@@ -15,7 +15,8 @@ const pageSourceByType = {
   about: "src/pages/AboutPage.tsx",
   contact: "src/pages/ContactPage.tsx",
   legal: "src/pages/LegalPage.tsx",
-  admin: "src/pages/AdminPage.tsx",
+  admin: "src/pages/BlogAdminPage.tsx",
+  blog: "src/pages/BlogPage.tsx",
 };
 
 function escapeHtml(value = "") {
@@ -203,7 +204,7 @@ function replaceScript(html, id, content) {
 function fallbackMarkup(route) {
   const projects = routes.filter((item) => item.type === "project" && item.index);
   const crawlLinks = routes
-    .filter((item) => item.index && (["home", "portfolio", "about", "contact", "legal"].includes(item.type) || route.type === "portfolio"))
+    .filter((item) => item.index && (["home", "portfolio", "about", "contact", "legal", "blog"].includes(item.type) || route.type === "portfolio"))
     .map((item) => `<a href="${item.path}">${escapeHtml(item.heading)}</a>`)
     .join("");
   const projectLinks = projects
@@ -235,6 +236,7 @@ function renderRouteHtml(template, route) {
     ? html.replace(/<meta[^>]+name="keywords"[^>]*>/i, `<meta name="keywords" content="${escapeHtml(keywordsFor(route).join(", "))}" />`)
     : html.replace("</head>", `<meta name="keywords" content="${escapeHtml(keywordsFor(route).join(", "))}" /></head>`);
   html = replaceTag(html, "meta-robots", `<meta id="meta-robots" name="robots" content="${robots}" />`);
+  html = html.replace(/<meta[^>]+name="googlebot"[^>]*>/i, `<meta name="googlebot" content="${robots}" />`);
   html = replaceTag(html, "canonical-url", `<link id="canonical-url" rel="canonical" href="${canonical}" />`);
   html = replaceTag(html, "og-type", `<meta id="og-type" property="og:type" content="${route.type === "project" ? "article" : "website"}" />`);
   html = replaceTag(html, "og-title", `<meta id="og-title" property="og:title" content="${escapeHtml(route.title)}" />`);
@@ -263,6 +265,7 @@ function renderAliasHtml(template, route) {
   const canonical = routeUrl(route);
   let html = renderRouteHtml(template, route);
   html = replaceTag(html, "meta-robots", '<meta id="meta-robots" name="robots" content="noindex, follow" />');
+  html = html.replace(/<meta[^>]+name="googlebot"[^>]*>/i, '<meta name="googlebot" content="noindex, follow" />');
   return html.replace(
     "</head>",
     `<meta http-equiv="refresh" content="0; url=${canonical}" /><script>window.location.replace(${JSON.stringify(canonical)})</script></head>`,
@@ -272,7 +275,7 @@ function renderAliasHtml(template, route) {
 function sitemapXml() {
   const urls = routes
     .filter((route) => route.index)
-    .map((route) => `  <url>\n    <loc>${routeUrl(route)}</loc>\n    <lastmod>${site.lastModified}</lastmod>\n  </url>`)
+    .map((route) => `  <url>\n    <loc>${routeUrl(route)}</loc>\n  </url>`)
     .join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }

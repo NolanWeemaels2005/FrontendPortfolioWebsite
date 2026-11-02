@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -38,9 +38,20 @@ for (const route of routes) {
   const title = decodeHtml(match(html, /<title>([^<]+)<\/title>/i, "title", route));
   const description = decodeHtml(match(html, /<meta[^>]+name="description"[^>]+content="([^"]+)"/i, "description", route));
   const robotsValue = match(html, /<meta[^>]+name="robots"[^>]+content="([^"]+)"/i, "robots", route);
+  const googlebotValue = match(html, /<meta[^>]+name="googlebot"[^>]+content="([^"]+)"/i, "googlebot", route);
+  if (googlebotValue !== robotsValue) errors.push(`${route.path}: googlebot en robots spreken elkaar tegen`);
   const canonicalValue = match(html, /<link[^>]+rel="canonical"[^>]+href="([^"]+)"/i, "canonical", route);
   const schemaText = match(html, /<script[^>]+id="seo-schema"[^>]*>([\s\S]*?)<\/script>/i, "JSON-LD", route);
 
+  for (const [property, expected] of [["og:title", route.title], ["og:description", route.description], ["og:url", canonical]]) {
+    const value = decodeHtml(match(html, new RegExp(`<meta[^>]+property="${property}"[^>]+content="([^"]+)"`, "i"), property, route));
+    if (value !== expected) errors.push(`${route.path}: ${property} wijkt af`);
+  }
+  for (const asset of html.matchAll(/(?:src|href)="(\/assets\/[^"?#]+)"/g)) {
+    try { await access(join(dist, asset[1])); }
+    catch { errors.push(`${route.path}: ontbrekend bestand ${asset[1]}`); }
+  }
+  if (route.index && !html.includes('href="/blog/"')) errors.push(`${route.path}: crawl-link naar blog ontbreekt`);
   if (title !== route.title) errors.push(`${route.path}: title wijkt af van seoRoutes.json`);
   if (description !== route.description) errors.push(`${route.path}: description wijkt af van seoRoutes.json`);
   if (canonicalValue !== canonical) errors.push(`${route.path}: canonical is ${canonicalValue || "leeg"}`);
@@ -71,6 +82,9 @@ for (const route of routes) {
   for (const alias of route.aliases || []) {
     const aliasHtml = await readFile(routeFile(alias), "utf8");
     if (!aliasHtml.includes('content="noindex, follow"')) errors.push(`${alias}: alias mist noindex, follow`);
+    const aliasRobots = aliasHtml.match(/<meta[^>]+name="robots"[^>]+content="([^"]+)"/i)?.[1];
+    const aliasGooglebot = aliasHtml.match(/<meta[^>]+name="googlebot"[^>]+content="([^"]+)"/i)?.[1];
+    if (aliasRobots !== aliasGooglebot) errors.push(`${alias}: googlebot en robots spreken elkaar tegen`);
     if (!aliasHtml.includes(`href="${canonical}"`)) errors.push(`${alias}: alias mist canonical naar ${route.path}`);
   }
 }

@@ -74,7 +74,7 @@ export function App() {
 
   return (
     <>
-      <InitialLoader pathname={location.pathname} />
+      <InitialLoader />
       <Seo />
       <ScrollToTop />
       <Navigation />

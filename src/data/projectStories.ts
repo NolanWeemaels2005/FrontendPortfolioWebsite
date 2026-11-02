@@ -6,12 +6,19 @@ export type ProjectSpread = { layout: "full" | "pair" | "asymmetric" | "inset"; 
 export type ProjectStory = { recommendationImage: ProjectStoryImage; images: ProjectStoryImage[]; spreads: ProjectSpread[]; video?: string; poster: string };
 type Asset = { width: number; height: number; variants: { src: string; width: number }[] };
 const inventory = assets as unknown as Record<string, Record<string, Asset>>;
+const cityToOceanSocialPhoto: Asset = {
+  width: 1800, height: 549,
+  variants: [
+    { src: "assets/services/social-media-800.jpg", width: 800 },
+    { src: "assets/services/social-media-1800.jpg", width: 1800 },
+  ],
+};
 
-// Numbers refer to the supplied archive, never the shared project thumbnails.
+// Numbers refer to the supplied archive; explicit assets reuse approved service photos.
 // The first image is the hero. Spreads index into the resulting curated image list.
-function story(slug: string, selection: [number, string][], spreads: ProjectSpread[], video?: string): ProjectStory {
+function story(slug: string, selection: [number | Asset, string][], spreads: ProjectSpread[], video?: string): ProjectStory {
   const images = selection.map(([number, alt]) => {
-    const asset = inventory[slug][number];
+    const asset = typeof number === "number" ? inventory[slug][number] : number;
     return { src: assetPath(asset.variants.at(-1)!.src),
       srcSet: asset.variants.map(v => `${assetPath(v.src)} ${v.width}w`).join(", "),
       width: asset.width, height: asset.height, alt };
@@ -34,7 +41,7 @@ export const projectStories: Record<string, ProjectStory> = {
   "fc-eisbar": story("fc-eisbar", [[2,"FC Eisbär — football kit"],[1,"FC Eisbär — club identity"],[5,"FC Eisbär — crest detail"],[3,"FC Eisbär — drawstring bag"],[4,"FC Eisbär — embroidered cap"]], [asymmetric(1,2),pair(3,4)], "assets/hall-of-fame/fc-eisbar-logo.webm"),
   "la-maison-des-trois-garcons": story("la-maison-des-trois-garcons", [[3,"La Maison des Trois Garçons — desktop website"],[1,"La Maison des Trois Garçons — wordmark"],[2,"La Maison des Trois Garçons — mobile website"],[4,"La Maison des Trois Garçons — house signage"],[5,"La Maison des Trois Garçons — textile detail"]], [asymmetric(2,1),full(3),inset(4)]),
   "shift-festival-2026": story("shift-festival-2026", [[2,"Shift Festival — street banner"],[1,"Shift Festival — identity"],[5,"Shift Festival — poster"],[4,"Shift Festival — pavement application"],[7,"Shift Festival — tote bag"],[6,"Shift Festival — symbol"],[3,"Shift Festival — team photograph"]], [asymmetric(1,2),full(3),pair(4,5),full(6)]),
-  "city-to-ocean": story("city-to-ocean", [[2,"City To Ocean — flag on the beach"],[1,"City To Ocean — identity"],[8,"City To Ocean — mobile application"],[7,"City To Ocean — station poster"],[5,"City To Ocean — tram campaign"],[3,"City To Ocean — tote bag"],[4,"City To Ocean — T-shirt"],[9,"City To Ocean — bottle label"]], [pair(1,2),asymmetric(4,3),pair(5,6),inset(7)]),
+  "city-to-ocean": story("city-to-ocean", [[2,"City To Ocean — flag on the beach"],[1,"City To Ocean — identity"],[8,"City To Ocean — mobile application"],[7,"City To Ocean — station poster"],[5,"City To Ocean — tram campaign"],[3,"City To Ocean — tote bag"],[4,"City To Ocean — T-shirt"],[9,"City To Ocean — bottle label"],[cityToOceanSocialPhoto,"City To Ocean — social media profile"]], [pair(1,2),full(8),asymmetric(4,3),pair(5,6,7)]),
   "ferraaawri": story("ferraaawri", [[2,"Ferraaawri — brand campaign"],[1,"Ferraaawri — identity"],[4,"Ferraaawri — packaging"],[5,"Ferraaawri — product display"],[3,"Ferraaawri — street poster"],[6,"Ferraaawri — tennis campaign"],[7,"Ferraaawri — mobile website"],[8,"Ferraaawri — desktop website"]], [asymmetric(2,1),pair(3,4),full(5),pair(6,7)]),
   "find-your-light": story("find-your-light", [[2,"Find Your Light — app interfaces"],[1,"Find Your Light — identity"],[3,"Find Your Light — laptop sticker"],[5,"Find Your Light — street sticker"],[4,"Find Your Light — tram poster"]], [pair(1,2),asymmetric(4,3)]),
   "kaai": story("kaai", [[3,"Kaai — desktop website"],[1,"Kaai — collective identity"],[5,"Kaai — mobile icon"],[4,"Kaai — website layouts"],[2,"Kaai — street campaign"]], [pair(1,2),full(3),full(4)]),

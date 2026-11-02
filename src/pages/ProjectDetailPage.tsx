@@ -199,7 +199,7 @@ export function ProjectDetailPage() {
           style={{ "--case-columns": spread.images.map(index => `${storyImages[index].width / storyImages[index].height}fr`).join(" ") } as CSSProperties}>
           {spread.images.map(index => renderStoryArtwork(storyImages[index], index, spread.layout))}
         </div>)}
-        {story.video && <CaseMotion src={story.video} poster={story.poster} title={`${projectTitle} — ${t("case.identity")}`} />}
+        {story.video && <CaseMotion projectKey={facts?.heroImage} src={story.video} poster={story.poster} title={`${projectTitle} — ${t("case.identity")}`} />}
       </section>}
 
       {relatedProjects.length > 0 && <section className="section-container case-related" aria-labelledby="case-related-title">

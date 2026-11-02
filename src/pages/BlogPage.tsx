@@ -1,3 +1,4 @@
+import "../styles/blog.css";
 import { ArrowUpRight } from "lucide-react";
 import { useLanguage } from "../i18n/LanguageContext";
 import { Hero } from "../components/Hero";

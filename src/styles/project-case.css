@@ -63,3 +63,17 @@
   .project-case .case-related__label svg { transition: none; transform: none; }
   .project-case .project-detail__gallery-button:hover img { transform: none; }
 }
+
+
+.project-case .case-motion:is([data-project="brussel-noord-basket"], [data-project="fc-eisbar"], [data-project="videjo"]) {
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--case-corner) 0;
+}
+.project-case .case-motion[data-project="brussel-noord-basket"] { background: var(--logo-motion-bnb-background); }
+.project-case .case-motion[data-project="fc-eisbar"] { background: var(--logo-motion-eisbar-background); }
+.project-case .case-motion[data-project="videjo"] { background: var(--logo-motion-videjo-background); }
+/* Match the Hall of Fame treatment, also for opaque black video frames. */
+.project-case .case-motion:is([data-project="brussel-noord-basket"], [data-project="fc-eisbar"], [data-project="videjo"]) video {
+  mix-blend-mode: screen;
+}

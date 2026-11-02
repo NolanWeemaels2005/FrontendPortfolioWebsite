@@ -4,7 +4,6 @@ export const pageModuleLoaders = {
   projectDetail: () => import("../pages/ProjectDetailPage"),
   about: () => import("../pages/AboutPage"),
   contact: () => import("../pages/ContactPage"),
-  admin: () => import("../pages/AdminPage"),
   blog: () => import("../pages/BlogPage"),
   blogPost: () => import("../pages/BlogPostPage"),
   blogAdmin: () => import("../pages/BlogAdminPage"),
@@ -12,17 +11,6 @@ export const pageModuleLoaders = {
 } as const;
 
 export type PageModuleKey = keyof typeof pageModuleLoaders;
-
-export const publicPageModuleKeys: PageModuleKey[] = [
-  "home",
-  "portfolio",
-  "projectDetail",
-  "about",
-  "contact",
-  "legal",
-  "blog",
-  "blogPost",
-];
 
 export function getPageModuleKey(pathname: string): PageModuleKey | null {
   const path = pathname === "/" ? "/" : pathname.replace(/\/+$/, "");
@@ -34,7 +22,7 @@ export function getPageModuleKey(pathname: string): PageModuleKey | null {
   if (path === "/blog") return "blog";
   if (path.startsWith("/blog/")) return "blogPost";
   if (path === "/beheer/blog" || path.startsWith("/beheer/blog/")) return "blogAdmin";
-  if (path === "/beheer") return "admin";
+  if (path === "/beheer") return "blogAdmin";
   if (["/cookiebeleid", "/juridische-voorwaarden", "/privacybeleid"].includes(path)) return "legal";
   return null;
 }

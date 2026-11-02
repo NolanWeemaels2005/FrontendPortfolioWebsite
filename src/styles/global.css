@@ -616,7 +616,7 @@ video {
 }
 
 .overlay-inner {
-  --menu-scale: min(1, calc((100vh - 7rem) / 790));
+  --menu-scale: 1;
   width: min(100%, 98.75rem);
   min-height: calc(100vh - clamp(6.4rem, 10vw, 10.6rem));
   display: grid;
@@ -6934,3 +6934,89 @@ body:is(.portfolio-route, .about-route, .contact-route, .blog-route) .hero-overl
 .route-error :is(button, a) { display: inline-flex; align-items: center; gap: .75rem; }
 .route-error button { padding: .85rem 1.2rem; border: 0; border-radius: .75rem 0; background: var(--orange); color: #111; font: inherit; cursor: pointer; }
 .route-error a { color: var(--orange); }
+
+
+/* Fit desktop menus to the browser viewport, including laptop display scaling. */
+@media (min-width: 61.3125rem), (min-width: 48rem) and (hover: hover) and (pointer: fine) {
+  .overlay {
+    padding: clamp(5rem, 9dvh, 6.6rem) clamp(2rem, 5.8vw, 7rem) clamp(1rem, 3dvh, 3rem);
+    justify-content: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .overlay-inner {
+    display: grid;
+    width: min(100%, 98.75rem);
+    min-height: 0;
+    height: 100%;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(1rem, 3dvh, 2.8rem) clamp(1.5rem, 5vw, 6rem);
+  }
+
+  .menu-links {
+    width: 100%;
+    margin: 0;
+    transform: none;
+    align-self: center;
+    justify-self: start;
+  }
+
+  .menu-links a .inner {
+    justify-content: flex-start;
+    padding: clamp(.35rem, 1.1dvh, 1.1rem) 0 clamp(.3rem, .85dvh, .85rem);
+  }
+
+  .menu-links .link-text {
+    font-size: min(6.4vw, 10dvh, 7rem);
+    line-height: 1.05;
+    text-align: left;
+    max-width: 100%;
+  }
+
+  .menu-preview-grid {
+    display: grid;
+    width: min(44vw, calc((100dvh - 12rem) * .96), 44rem);
+    max-width: 100%;
+    gap: clamp(.6rem, 1.35vw, 1.75rem);
+    transform: translateY(clamp(-2rem, -3dvh, -1rem));
+  }
+
+  .overlay.open .menu-preview-card:nth-child(even) {
+    transform: translateY(clamp(1rem, 4dvh, 4.2rem)) scale(1);
+  }
+
+  .overlay-footer {
+    width: 100%;
+    justify-self: start;
+    transform: none;
+  }
+
+  .overlay-footer h3 {
+    font-size: clamp(1.5rem, 4.8dvh, 3rem);
+  }
+
+  .overlay .language-switcher {
+    display: flex;
+    gap: clamp(.4rem, .75vw, .75rem);
+  }
+
+  .overlay .language-switcher button {
+    width: auto;
+    min-height: 2.375rem;
+    padding: .45rem clamp(.6rem, 1vw, 1rem);
+    font-size: clamp(.78rem, 1.1vw, 1rem);
+  }
+}
+
+/* Individual translate keeps pointer motion separate from the opening animation. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .overlay.open .menu-preview-card:nth-child(odd) {
+    translate: 0 calc(var(--menu-parallax, 0px) * -1);
+  }
+  .overlay.open .menu-preview-card:nth-child(even) {
+    translate: 0 var(--menu-parallax, 0px);
+  }
+}

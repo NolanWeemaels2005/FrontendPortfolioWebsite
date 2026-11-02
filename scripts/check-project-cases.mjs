@@ -28,7 +28,7 @@ try {
     assert.equal(new Set(indices).size, story.images.length, `${slug}: repeated or omitted image`);
     assert.equal(indices.length, story.images.length, `${slug}: repeated image`);
     assert(indices.every(index => story.images[index]), `${slug}: invalid spread index`);
-    for (const image of story.images) assert(image.src.startsWith('/assets/project-details/'), `${slug}: non-ZIP imagery`);
+    for (const image of story.images) assert(image.src.startsWith('/assets/project-details/') || (slug === 'city-to-ocean' && image.src === '/assets/services/social-media-1800.jpg'), `${slug}: unapproved imagery`);
   }
   for (const language of ['nl', 'fr', 'en']) {
     globalThis.window = { localStorage: { getItem: () => language } };
@@ -53,7 +53,7 @@ try {
         assert(markup.indexOf(`src="${story.images[0].src}"`) < markup.indexOf('class="case-meta"'), `${project.slug}: opening image must precede metadata`);
       }
       for (const match of markup.matchAll(/<img[^>]+src="([^"]+)"/g)) {
-        assert(match[1].startsWith('/assets/project-details/'), `${project.slug}: unauthorized image ${match[1]}`);
+        assert(match[1].startsWith('/assets/project-details/') || (project.slug === 'city-to-ocean' && match[1] === '/assets/services/social-media-1800.jpg'), `${project.slug}: unauthorized image ${match[1]}`);
       }
       const recommendations = [...markup.matchAll(/<a\b[^>]*class="case-related__card"[^>]*>/g)].map(match => match[0].match(/href="([^"]+)"/)[1]);
       assert.equal(recommendations.length, 4, `${project.slug}: expected four recommendations`);

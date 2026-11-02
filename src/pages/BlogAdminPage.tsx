@@ -1,3 +1,4 @@
+import "../styles/blog.css";
 import { useEffect, useState } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { getAdminToken } from "../utils/adminAuth";

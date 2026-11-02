@@ -61,7 +61,7 @@ async function waitForPageAssets() {
   })));
 }
 
-export function InitialLoader({ pathname: _pathname }: { pathname: string }) {
+export function InitialLoader() {
   const { t } = useLanguage();
   const [phase, setPhase] = useState<LoaderPhase>("loading");
 

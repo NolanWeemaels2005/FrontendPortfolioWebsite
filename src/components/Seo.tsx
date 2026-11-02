@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 import seoData from "../data/seoRoutes.json";
 import { getCombinedProjects } from "../data/projectQueries";
@@ -251,7 +251,7 @@ export function Seo() {
   const { pathname } = useLocation();
   const { language } = useLanguage();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const seo = routeSeo(pathname);
     const canonicalUrl = seo.path === "/" ? `${site.url}/` : `${site.url}${seo.path}`;
     const image = absoluteUrl(seo.image || site.defaultImage);
