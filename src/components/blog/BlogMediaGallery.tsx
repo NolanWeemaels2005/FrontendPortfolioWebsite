@@ -1,7 +1,8 @@
+import type { ReactNode } from "react";
 import { useLanguage } from "../../i18n/LanguageContext";
 import { httpLink, mediaRoles, type BlogMedia } from "../../utils/blog";
 
-export function BlogMediaGallery({ media, onRemove, disabled = false }: { media: BlogMedia[]; onRemove?: (item: BlogMedia) => void; disabled?: boolean }) {
+export function BlogMediaGallery({ media, onRemove, disabled = false, renderControls }: { media: BlogMedia[]; onRemove?: (item: BlogMedia) => void; disabled?: boolean; renderControls?: (item: BlogMedia) => ReactNode }) {
   const { t } = useLanguage();
   const roleLabel = (role: string) => t(`blog.${role === "process" ? "mediaProcess" : role}`);
   return <div className="blog-gallery">{media.map(item => {
@@ -14,6 +15,7 @@ export function BlogMediaGallery({ media, onRemove, disabled = false }: { media:
       <figcaption>{item.caption && <p>{item.caption}</p>}{item.credit && <p className="blog-muted">Credit: {item.credit}</p>}
         {url && item.type === "video" && <a href={url} target="_blank" rel="noopener noreferrer">{t("blog.openVideo")}</a>}
       </figcaption>
+      {renderControls?.(item)}
       {onRemove && <button type="button" className="blog-button blog-button--quiet" disabled={disabled} onClick={() => onRemove(item)}>Verwijder {mediaRoles[item.role].toLowerCase()}-{item.type === "video" ? "video" : "afbeelding"}</button>}
     </figure>;
   })}</div>;

@@ -4,7 +4,10 @@ export type BlogStatus = "draft" | "published";
 export const mediaRoles = { before: "Voor", after: "Na", process: "Proces", failed: "Mislukte poging", reference: "Referentie" } as const;
 export type MediaRole = keyof typeof mediaRoles;
 export type BlogMedia = { _id: string; url: string; publicId: string; type: "image" | "video"; role: MediaRole; caption: string; credit: string };
-export type BlogFields = Record<BlogTextField, string> & { aiUsed: boolean; status: BlogStatus };
+export const mediaSections = ["summary", "context", "process", "learning", "reflection", "aiContribution", "humanContribution", "planning", "sources"] as const;
+export type MediaSection = typeof mediaSections[number];
+export type MediaPlacement = { mediaId: string; section: MediaSection };
+export type BlogFields = Record<BlogTextField, string> & { aiUsed: boolean; status: BlogStatus; mediaLayout: MediaPlacement[] };
 export type BlogPost = BlogFields & { _id: string; slug: string; publishedAt: string | null; updatedAt: string; media: BlogMedia[] };
 export type BlogSummary = Pick<BlogPost, "_id" | "title" | "slug" | "summary" | "publishedAt">;
 export type BlogAdminSummary = Pick<BlogPost, "_id" | "title" | "slug" | "status" | "updatedAt">;
@@ -22,7 +25,7 @@ export const fieldHelp: Record<BlogTextField, { label: string; help: string }> =
   sources: { label: "Bronnen en credits", help: "Vermeld links, referenties, tools en gebruikte AI-modellen. HTTP(S)-links worden klikbaar." },
 };
 export function blogFields(post: Partial<BlogFields>): BlogFields {
-  return { ...Object.fromEntries(blogTextFields.map(key => [key, post[key] || ""])), aiUsed: post.aiUsed === true, status: post.status === "published" ? "published" : "draft" } as BlogFields;
+  return { ...Object.fromEntries(blogTextFields.map(key => [key, post[key] || ""])), mediaLayout: post.mediaLayout || [], aiUsed: post.aiUsed === true, status: post.status === "published" ? "published" : "draft" } as BlogFields;
 }
 export function publicationIssues(fields: BlogFields, media: BlogMedia[]): string[] {
   const errors: string[] = [];
@@ -53,4 +56,20 @@ export function httpLink(value: string): string | null {
 export function blogDate(value: string | null, language: string = "nl") {
   if (!value || Number.isNaN(Date.parse(value))) return "";
   return new Intl.DateTimeFormat(language === "fr" ? "fr-BE" : language === "en" ? "en-GB" : "nl-BE", { day: "numeric", month: "long", year: "numeric" }).format(new Date(value));
+}
+
+// Older posts and newly uploaded media retain their original process-gallery position.
+export function arrangedMedia(fields: BlogFields, media: BlogMedia[]): MediaPlacement[] {
+  const placements = fields.mediaLayout.filter(item => media.some(file => file._id === item.mediaId));
+  return [...placements, ...media.filter(item => !placements.some(place => place.mediaId === item._id)).map(item => ({ mediaId: item._id, section: "process" as const }))];
+}
+export function mediaForSection(fields: BlogFields, media: BlogMedia[], section: MediaSection): BlogMedia[] {
+  return arrangedMedia(fields, media).filter(item => {
+    const hidden = (!fields.aiUsed && ["aiContribution", "humanContribution"].includes(item.section)) || (item.section === "planning" && !fields.planning.trim());
+    return (hidden ? "process" : item.section) === section;
+  }).map(item => media.find(file => file._id === item.mediaId)!);
+}
+
+export function sameMediaLayout(expected: MediaPlacement[], actual: MediaPlacement[] | undefined): boolean {
+  return Array.isArray(actual) && expected.length === actual.length && expected.every((item, index) => item.mediaId === actual[index]?.mediaId && item.section === actual[index]?.section);
 }

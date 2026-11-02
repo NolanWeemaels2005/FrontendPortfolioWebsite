@@ -397,7 +397,7 @@ export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
         <div className="admin-heading">
           <p className="eyebrow">Beheer</p>
           <h1>{!token && loginTitle ? loginTitle : editingProject ? "Project bewerken" : "Projecten toevoegen"}</h1>
-          
+          <p>{!token ? "Log in om je projecten en blogberichten te beheren." : "Vul de projectgegevens in, kies je beelden en sla onderaan op."}</p>
         </div>
 
         {status ? <p className="admin-message admin-message--success">{status}</p> : null}
@@ -451,7 +451,7 @@ export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
 
 
             <label>
-              Naam
+              Projectnaam
               <input
                 type="text"
                 value={project.title}
@@ -461,7 +461,7 @@ export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
             </label>
 
             <label>
-              Tekst
+              Korte introductie
               <textarea
                 value={project.text}
                 onChange={(event) => {
@@ -473,7 +473,7 @@ export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
             </label>
 
             <label>
-              Beschrijving NL
+              Beschrijving Nederlands
               <textarea
                 value={project.textNl}
                 onChange={(event) => setProject((current) => ({ ...current, textNl: event.target.value }))}
@@ -482,7 +482,7 @@ export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
             </label>
 
             <label>
-              Beschrijving FR
+              Beschrijving Frans (optioneel)
               <textarea
                 value={project.textFr}
                 onChange={(event) => setProject((current) => ({ ...current, textFr: event.target.value }))}
@@ -491,7 +491,7 @@ export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
             </label>
 
             <label>
-              Beschrijving EN
+              Beschrijving Engels (optioneel)
               <textarea
                 value={project.textEn}
                 onChange={(event) => setProject((current) => ({ ...current, textEn: event.target.value }))}
@@ -534,7 +534,7 @@ export function AdminPage({ loginTitle }: { loginTitle?: string } = {}) {
               {editingProject ? (
                 <>
                   <button type="button" className="admin-action admin-action--ghost" onClick={handleCloseEdit} disabled={submitting}>
-                    <ButtonTextStagger text="Close" />
+                    <ButtonTextStagger text="Bewerken sluiten" />
                   </button>
                   <button type="button" className="admin-action admin-action--danger" onClick={handleDeleteProject} disabled={submitting || !editingProject._id}>
                     <ButtonTextStagger text="Verwijder project" />

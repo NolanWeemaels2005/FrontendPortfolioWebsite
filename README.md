@@ -14,3 +14,5 @@ Portfolio Website
 - De blogindex staat in de bestaande SEO-generatie/sitemap. Individuele berichten worden dynamisch via de API geladen; er is geen extra backend of statische kopie van blogdata.
 
 Controles: `npm run check:blog`, `npm run build` (inclusief TypeScript en SEO-audit). Er is momenteel geen lintscript geconfigureerd.
+
+Fotoposities: kies bij opgeslagen media het tekstonderdeel en gebruik Eerder/Later voor de volgorde. Sla vervolgens het bericht op. `mediaLayout` bevat geordende `{ mediaId, section }`-items; de bijbehorende backendwijziging moet mee worden uitgerold. Oude berichten en nieuwe uploads vallen terug op de procesgalerij. Beelden in verborgen AI-/planningonderdelen verschijnen daar ook totdat het onderdeel zichtbaar is.

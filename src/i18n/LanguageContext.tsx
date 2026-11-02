@@ -32,7 +32,7 @@ const dictionaries: Record<Language, Dictionary> = {
     "case.work": "Het werk in beeld",
     "case.swipe": "Swipe door alle afbeeldingen",
     "case.outputs": "Uitgewerkt",
-    "case.related": "Meer werk ontdekken",
+    "case.related": "Ontdek meer werk",
     "case.viewWork": "Bekijk het werk",
     "case.image": "Projectbeeld",
     "case.openImage": "Bekijk beeld",

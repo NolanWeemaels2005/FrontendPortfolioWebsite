@@ -178,3 +178,22 @@ body.blog-route .page-shell > .about-story-cta {
 
 .blog-read { align-items: center; gap: 1rem; }
 .blog-read > svg { flex-shrink: 0; }
+
+/* Administration shares the portfolio's type, palette and corner treatment. */
+.admin-workspace .admin-shell { max-width: 76rem; }
+.admin-workspace :is(.admin-heading, .blog-admin-heading) { text-align: left; padding-bottom: 2rem; border-bottom: 1px solid #383838; }
+.admin-workspace :is(.admin-heading h1, .blog-admin-heading h1) { font-family: var(--font-display); color: var(--orange); font-size: clamp(2.8rem, 6vw, 6rem); line-height: .98; letter-spacing: -.035em; text-transform: uppercase; }
+.admin-workspace :is(.admin-panel, .blog-panel) { background: #171717; border: 1px solid #383838; border-radius: var(--section-corner) 0 var(--section-corner) 0; }
+.admin-workspace :is(.admin-form input, .admin-form textarea, .blog-form input:not([type="checkbox"]), .blog-form textarea, .blog-form select) { background: #080808; color: #f7f5f0; border: 1px solid #646464; border-radius: .5rem; font: inherit; }
+.admin-workspace :is(.admin-form label, .blog-form label) { font-size: 1rem; text-transform: none; }
+.admin-workspace :is(.blog-panel h2, .blog-form legend) { letter-spacing: -.025em; }
+.admin-workspace .blog-field { padding-block: .75rem; }
+.admin-workspace .blog-auth-notice { padding-top: 1rem; max-width: 76rem; margin-inline: auto; }
+.blog-media-placement { display: grid; gap: .75rem; border-top: 1px solid #555; padding-top: 1rem; }
+.admin-workspace input[type="file"]::file-selector-button { background: var(--orange); color: #111; border: 0; border-radius: .4rem; padding: .65rem 1rem; margin-right: 1rem; font: inherit; cursor: pointer; }
+.blog-post .blog-chapter--learning :is(.blog-badge, .blog-media figcaption, .blog-muted, .blog-media a) { color: #111; }
+@media (max-width: 40rem) {
+  .admin-content-switch { gap: .75rem; }
+  .admin-content-switch .blog-button { min-width: 0; flex: 1; }
+  .admin-workspace .admin-toolbar { align-items: flex-start; flex-direction: column; }
+}

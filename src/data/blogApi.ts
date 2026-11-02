@@ -1,6 +1,6 @@
 import { apiUrl } from "../utils/api";
 import { clearAdminToken, getAdminToken } from "../utils/adminAuth";
-import { blogApiBase, fieldHelp, uploadFileType, type BlogPost, type BlogList, type BlogAdminSummary, type BlogFields, type MediaRole } from "../utils/blog";
+import { blogApiBase, sameMediaLayout, fieldHelp, uploadFileType, type BlogPost, type BlogList, type BlogAdminSummary, type BlogFields, type MediaRole } from "../utils/blog";
 
 export class BlogApiError extends Error {
   constructor(message: string, public status: number, public issues: string[] = []) { super(message); }
@@ -46,7 +46,15 @@ export const blogApi = {
   adminList: (signal?: AbortSignal) => request<BlogAdminSummary[]>("/admin", { signal }, true),
   adminPost: (id: string, signal?: AbortSignal) => request<BlogPost>(`/admin/${encodeURIComponent(id)}`, { signal }, true),
   create: (title: string) => request<BlogPost>("", { method: "POST", body: JSON.stringify({ title }) }, true),
-  save: (id: string, fields: BlogFields) => request<BlogPost>(`/${encodeURIComponent(id)}`, { method: "PUT", body: JSON.stringify(fields) }, true),
+  save: async (id: string, fields: BlogFields) => {
+    await request<BlogPost>(`/${encodeURIComponent(id)}`, { method: "PUT", body: JSON.stringify(fields) }, true);
+    // Read back persisted data: older API versions silently ignore mediaLayout.
+    const persisted = await request<BlogPost>(`/admin/${encodeURIComponent(id)}`, { cache: "no-store" }, true);
+    if (!sameMediaLayout(fields.mediaLayout, persisted.mediaLayout)) {
+      throw new BlogApiError("De server heeft je fotoposities niet bewaard. Je keuzes staan nog in dit formulier. De backend moet worden bijgewerkt; probeer daarna opnieuw op te slaan. Je tekst en publicatiestatus kunnen wel al opgeslagen zijn.", 409);
+    }
+    return persisted;
+  },
   remove: (id: string) => request<{ message: string }>(`/${encodeURIComponent(id)}`, { method: "DELETE" }, true),
   removeMedia: (id: string, mediaId: string) => request<BlogPost>(`/${encodeURIComponent(id)}/media/${encodeURIComponent(mediaId)}`, { method: "DELETE" }, true),
 };

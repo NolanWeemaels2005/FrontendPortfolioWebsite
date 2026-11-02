@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import ts from "typescript";
 const source = await readFile(new URL("../src/utils/blog.ts", import.meta.url), "utf8");
 const { outputText } = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2020 } });
-const { blogFields, publicationIssues, blogFileIssue, blogMaxUploadBytes, blogApiBase, httpLink } = await import(`data:text/javascript;base64,${Buffer.from(outputText).toString("base64")}`);
+const { blogFields, publicationIssues, blogFileIssue, blogMaxUploadBytes, blogApiBase, httpLink, arrangedMedia, mediaForSection } = await import(`data:text/javascript;base64,${Buffer.from(outputText).toString("base64")}`);
 let checks = 0;
 function check(name, run) { run(); checks++; console.log(`PASS ${name}`); }
 const complete = blogFields({ title: "Titel", summary: "Samenvatting", context: "Context", process: "Proces", learning: "Inzicht", reflection: "Feedback", sources: "https://example.com", status: "published" });
@@ -49,5 +49,21 @@ check("all supported types accepted, SVG and disguised executables rejected", ()
 check("only absolute HTTP(S) source links are enabled", () => {
   assert.equal(httpLink("https://example.com/path?q=1"), "https://example.com/path?q=1");
   for (const value of ["javascript:alert(1)", "data:text/html,test", "//evil.test", "/relative", "<script>"]) assert.equal(httpLink(value), null);
+});
+check("media placement survives save payload and retains requested order", () => {
+  const fields = blogFields({ ...complete, mediaLayout: [{ mediaId: "2", section: "context" }, { mediaId: "1", section: "context" }] });
+  assert.deepEqual(mediaForSection(fields, media, "context").map(item => item._id), ["2", "1"]);
+  assert.equal(blogFields(JSON.parse(JSON.stringify(fields))).mediaLayout.length, 2);
+});
+check("old posts and new uploads default to process; deleted media are ignored", () => {
+  assert.deepEqual(mediaForSection(complete, media, "process").map(item => item._id), ["1", "2"]);
+  const fields = { ...complete, mediaLayout: [{ mediaId: "gone", section: "context" }, { mediaId: "2", section: "summary" }] };
+  assert.deepEqual(arrangedMedia(fields, media), [{ mediaId: "2", section: "summary" }, { mediaId: "1", section: "process" }]);
+});
+check("hidden optional chapters never hide their photos", () => {
+  const fields = { ...complete, mediaLayout: [{ mediaId: "1", section: "planning" }, { mediaId: "2", section: "aiContribution" }] };
+  assert.equal(mediaForSection(fields, media, "process").length, 2);
+  assert.equal(mediaForSection({ ...fields, aiUsed: true }, media, "aiContribution").length, 1);
+  assert.equal(mediaForSection({ ...fields, planning: "Volgende stap" }, media, "planning").length, 1);
 });
 console.log(`${checks} blog checks passed.`);

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BlogApiError, blogApi, uploadBlogMedia } from "../../data/blogApi";
-import { blogFields, blogTextFields, fieldHelp, mediaRoles, publicationIssues, blogFileIssue, blogFileAccept, type BlogFields, type BlogPost, type BlogMedia, type BlogStatus, type MediaRole } from "../../utils/blog";
+import { arrangedMedia, mediaSections, type MediaSection, blogFields, blogTextFields, fieldHelp, mediaRoles, publicationIssues, blogFileIssue, blogFileAccept, type BlogFields, type BlogPost, type BlogMedia, type BlogStatus, type MediaRole } from "../../utils/blog";
 import { BlogMediaGallery } from "./BlogMediaGallery";
 import { useUnsavedBlog } from "../../hooks/useUnsavedBlog";
 
@@ -54,7 +54,7 @@ export function BlogEditor({ id, token }: { id: string; token: string }) {
   function finish() { locked.current = false; if (alive.current) setBusy(""); }
   async function save(status: BlogStatus) {
     if (!post || !fields.title.trim()) { setErrors(["Een concept heeft altijd een titel nodig."]); return; }
-    const next = { ...fields, status };
+    const next = { ...fields, mediaLayout: arrangedMedia(fields, post.media), status };
     const issues = status === "published" ? publicationIssues(next, post.media) : [];
     if (issues.length) { setErrors(issues); return; }
     if (!begin("save")) return;
@@ -76,7 +76,7 @@ export function BlogEditor({ id, token }: { id: string; token: string }) {
     if (!begin(required ? "save" : "media")) return;
     try {
       if (required) {
-        const draft = await blogApi.save(id, { ...fields, status: "draft" });
+        const draft = await blogApi.save(id, { ...fields, mediaLayout: arrangedMedia(fields, post.media), status: "draft" });
         if (!alive.current) return;
         const snapshot = blogFields(draft);
         setPost(draft); setFields(snapshot); setSaved(JSON.stringify(snapshot));
@@ -136,6 +136,22 @@ export function BlogEditor({ id, token }: { id: string; token: string }) {
       }
     } catch (error) { showError(error); } finally { finish(); }
   }
+  function placeMedia(mediaId: string, section: MediaSection) {
+    if (!post) return;
+    setFields(current => ({ ...current, mediaLayout: arrangedMedia(current, post.media).map(item => item.mediaId === mediaId ? { ...item, section } : item) }));
+  }
+  function moveMedia(mediaId: string, direction: number) {
+    if (!post) return;
+    setFields(current => {
+      const layout = arrangedMedia(current, post.media);
+      const index = layout.findIndex(item => item.mediaId === mediaId);
+      const sameSection = layout.map((item, i) => item.section === layout[index].section ? i : -1).filter(i => i >= 0);
+      const target = sameSection[sameSection.indexOf(index) + direction];
+      if (target === undefined) return current;
+      [layout[index], layout[target]] = [layout[target], layout[index]];
+      return { ...current, mediaLayout: layout };
+    });
+  }
   const submit = (event: FormEvent) => { event.preventDefault(); void save(fields.status); };
   const pendingCount = queue.filter(item => ["pending", "failed"].includes(item.state) && !blogFileIssue(item.file)).length;
 
@@ -144,9 +160,9 @@ export function BlogEditor({ id, token }: { id: string; token: string }) {
     {errors.length > 0 && <div className="blog-notice blog-notice--error" role="alert" tabIndex={-1} ref={errorRef}><h2>{notFound ? "Bericht niet gevonden" : "Controleer je bericht"}</h2><ul>{errors.map((error, index) => <li key={index}>{error}</li>)}</ul>{!post && !notFound && <button className="blog-button" onClick={() => setRetry(value => value + 1)}>Opnieuw laden</button>}</div>}
     {message && <p className="blog-notice" role="status">{message}</p>}
     {!post ? !errors.length && <p role="status">Concept laden…</p> : <>
-      <div className="blog-editor-status"><span className="blog-badge">Op server: {post.status === "published" ? "Gepubliceerd" : "Concept"}</span><span role="status">{dirty ? "Niet-opgeslagen tekstwijzigingen" : "Tekst opgeslagen"}</span></div>
+      <div className="blog-editor-status"><span className="blog-badge">Op server: {post.status === "published" ? "Gepubliceerd" : "Concept"}</span><span role="status">{dirty ? "Niet-opgeslagen wijzigingen" : "Alle wijzigingen opgeslagen"}</span></div>
       <form className="blog-panel blog-form" onSubmit={submit}>
-        <fieldset disabled={busy === "save" || busy === "delete"}><legend>Inhoud van je bericht</legend>
+        <fieldset disabled={busy === "save" || busy === "delete"}><legend>1. Schrijf je bericht</legend>
           {blogTextFields.filter(key => fields.aiUsed || !["aiContribution", "humanContribution"].includes(key)).map(key => <div className="blog-field" key={key}>
             <label htmlFor={`blog-${key}`}>{fieldHelp[key].label}{key === "planning" ? " (optioneel)" : ""}</label>
             <p id={`blog-${key}-help`} className="blog-muted">{fieldHelp[key].help}</p>
@@ -158,7 +174,7 @@ export function BlogEditor({ id, token }: { id: string; token: string }) {
         <p className="blog-muted">Publicatie vereist alle onderdelen behalve planning, een voor- én na-afbeelding en bij AI-gebruik beide bijdragen. Video’s tellen niet als verplichte afbeeldingen.</p>
         <div className="blog-actions"><button className="blog-button" disabled={Boolean(busy)}>{busy === "save" ? "Opslaan…" : "Wijzigingen opslaan"}</button><button type="button" className="blog-button blog-button--quiet" disabled={Boolean(busy)} onClick={() => void save("draft")}>Als concept opslaan</button><button type="button" className="blog-button" disabled={Boolean(busy)} onClick={() => void save("published")}>{post.status === "published" ? "Publicatie bijwerken" : "Publiceren"}</button></div>
       </form>
-      <section className="blog-panel blog-form" aria-labelledby="blog-upload-title"><h2 id="blog-upload-title">Foto’s en video’s toevoegen</h2>
+      <section className="blog-panel blog-form" aria-labelledby="blog-upload-title"><h2 id="blog-upload-title">2. Upload foto’s en video’s</h2>
         <p>Meerdere bestanden, één voor één geüpload. Maximaal 100 MB per bestand. JPG, PNG, WebP, GIF, AVIF, MP4, WebM en MOV.</p>
         <p className="blog-muted">Stel per bestand eerst de rol, het bijschrift en de credit in. Die metadata kun je na uploaden niet aanpassen; daarvoor moet je het bestand verwijderen en opnieuw uploaden.</p>
         <label htmlFor="blog-files">Bestanden kiezen</label><input id="blog-files" type="file" multiple accept={blogFileAccept} disabled={Boolean(busy)} onChange={addFiles} />
@@ -176,7 +192,14 @@ export function BlogEditor({ id, token }: { id: string; token: string }) {
         </li>)}</ul>
         <button className="blog-button" disabled={Boolean(busy) || !pendingCount} onClick={() => void upload()}>{busy === "upload" ? "Bestanden uploaden…" : `Upload ${pendingCount} bestand${pendingCount === 1 ? "" : "en"}`}</button>
       </section>
-      <section className="blog-panel" aria-labelledby="blog-media-title"><h2 id="blog-media-title">Opgeslagen media ({post.media.length})</h2>{post.media.length ? <BlogMediaGallery media={post.media} onRemove={item => void removeMedia(item)} disabled={Boolean(busy)} /> : <p>Nog geen media. Voeg voor publicatie minstens één voor- en één na-afbeelding toe.</p>}</section>
+      <section className="blog-panel blog-form" aria-labelledby="blog-media-title"><h2 id="blog-media-title">3. Kies de fotoposities ({post.media.length})</h2><p className="blog-muted">Kies onder welk tekstonderdeel elk beeld verschijnt. Met Eerder en Later verander je de volgorde binnen dat onderdeel. Bewaar je keuzes met “Wijzigingen opslaan”. De beeldrol (Voor, Na…) staat los van de positie.</p>{post.media.length ? <BlogMediaGallery media={arrangedMedia(fields, post.media).map(place => post.media.find(item => item._id === place.mediaId)!)} renderControls={item => {
+        const layout = arrangedMedia(fields, post.media);
+        const section = layout.find(place => place.mediaId === item._id)!.section;
+        const group = layout.filter(place => place.section === section);
+        const index = group.findIndex(place => place.mediaId === item._id);
+        return <div className="blog-media-placement"><label htmlFor={`position-${item._id}`}>Plaats na</label><select id={`position-${item._id}`} disabled={Boolean(busy)} value={section} onChange={event => placeMedia(item._id, event.target.value as MediaSection)}>{mediaSections.map(key => <option key={key} value={key}>{fieldHelp[key].label}</option>)}</select><p className="blog-muted">Positie {index + 1} van {group.length} in dit onderdeel.</p>{((!fields.aiUsed && ["aiContribution", "humanContribution"].includes(section)) || (section === "planning" && !fields.planning.trim())) && <p className="blog-muted">Dit onderdeel is verborgen. Het beeld verschijnt voorlopig bij “Wat heb ik gedaan?”.</p>}<div className="blog-actions"><button type="button" className="blog-button blog-button--quiet" disabled={Boolean(busy) || index === 0} onClick={() => moveMedia(item._id, -1)}>↑ Eerder</button><button type="button" className="blog-button blog-button--quiet" disabled={Boolean(busy) || index === group.length - 1} onClick={() => moveMedia(item._id, 1)}>↓ Later</button></div></div>;
+      }} onRemove={item => void removeMedia(item)} disabled={Boolean(busy)} /> : <p>Nog geen media. Voeg voor publicatie minstens één voor- en één na-afbeelding toe.</p>}</section>
+      <div className="blog-actions"><button type="button" className="blog-button" disabled={Boolean(busy)} onClick={() => void save(fields.status)}>{busy === "save" ? "Opslaan…" : "Wijzigingen opslaan"}</button><span className="blog-muted">Bewaart tekst, status en fotoposities samen.</span></div>
       <section className="blog-panel"><h2>Bericht verwijderen</h2><p>Dit verwijdert ook alle bijbehorende media uit de opslag.</p><button className="blog-button blog-button--danger" disabled={Boolean(busy)} onClick={() => void removePost()}>Bericht definitief verwijderen</button></section>
     </>}
   </>;

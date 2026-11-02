@@ -4,7 +4,7 @@ import { useLanguage } from "../i18n/LanguageContext";
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { blogApi, BlogApiError } from "../data/blogApi";
-import { blogDate, httpLink, type BlogPost } from "../utils/blog";
+import { blogDate, httpLink, blogFields, mediaForSection, type MediaSection, type BlogPost } from "../utils/blog";
 import { BlogMediaGallery } from "../components/blog/BlogMediaGallery";
 import { BlogMeta } from "../components/blog/BlogMeta";
 
@@ -43,6 +43,11 @@ export function BlogPostPage() {
     {error && !notFound && <button className="blog-button" onClick={() => setRetry(value => value + 1)}>{t("blog.retry")}</button>}
     <Link className="back-link" to="/blog/" data-cursor="soft"><ArrowLeft size={22} aria-hidden="true" /><ButtonTextStagger text={t("blog.all")} /></Link>
   </section>;
+  const fields = blogFields(post);
+  const gallery = (section: MediaSection) => {
+    const media = mediaForSection(fields, post.media, section);
+    return media.length ? <BlogMediaGallery media={media} /> : null;
+  };
   return <article className="blog-page blog-post" lang={language}>
     <BlogMeta title={post.title} description={post.summary} />
     <header className="blog-post-header blog-container">
@@ -54,16 +59,16 @@ export function BlogPostPage() {
         {post.publishedAt && <time dateTime={post.publishedAt}>{blogDate(post.publishedAt, language)}</time>}
       </div>
       <h1>{post.title}</h1>
-      <p className="blog-prose blog-post-summary">{post.summary}</p>
+      <p className="blog-prose blog-post-summary">{post.summary}</p>{gallery("summary")}
     </header>
     <div className="blog-container blog-article">
-      <Chapter title={t("blog.context")}><p className="blog-prose">{post.context}</p></Chapter>
-      <Chapter title={t("blog.process")}><p className="blog-prose">{post.process}</p>{post.media.length > 0 && <BlogMediaGallery media={post.media} />}</Chapter>
-      <Chapter title={t("blog.learning")} highlight><p className="blog-prose">{post.learning}</p></Chapter>
-      <Chapter title={t("blog.reflection")}><p className="blog-prose">{post.reflection}</p></Chapter>
-      {post.aiUsed && <Chapter title={t("blog.ai")}><h3>{t("blog.aiContribution")}</h3><p className="blog-prose">{post.aiContribution}</p><h3>{t("blog.humanContribution")}</h3><p className="blog-prose">{post.humanContribution}</p></Chapter>}
-      {post.planning.trim() && <Chapter title={t("blog.planning")}><p className="blog-prose">{post.planning}</p></Chapter>}
-      <Chapter title={t("blog.sources")}><Sources text={post.sources} /></Chapter>
+      <Chapter title={t("blog.context")}><p className="blog-prose">{post.context}</p>{gallery("context")}</Chapter>
+      <Chapter title={t("blog.process")}><p className="blog-prose">{post.process}</p>{gallery("process")}</Chapter>
+      <Chapter title={t("blog.learning")} highlight><p className="blog-prose">{post.learning}</p>{gallery("learning")}</Chapter>
+      <Chapter title={t("blog.reflection")}><p className="blog-prose">{post.reflection}</p>{gallery("reflection")}</Chapter>
+      {post.aiUsed && <Chapter title={t("blog.ai")}><h3>{t("blog.aiContribution")}</h3><p className="blog-prose">{post.aiContribution}</p>{gallery("aiContribution")}<h3>{t("blog.humanContribution")}</h3><p className="blog-prose">{post.humanContribution}</p>{gallery("humanContribution")}</Chapter>}
+      {post.planning.trim() && <Chapter title={t("blog.planning")}><p className="blog-prose">{post.planning}</p>{gallery("planning")}</Chapter>}
+      <Chapter title={t("blog.sources")}><Sources text={post.sources} />{gallery("sources")}</Chapter>
       <Link className="btn btn--primary" to="/blog/" data-cursor="merge"><ArrowLeft size={20} aria-hidden="true" /><ButtonTextStagger text={t("blog.all")} /></Link>
     </div>
   </article>;

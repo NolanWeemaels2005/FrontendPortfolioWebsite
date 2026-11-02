@@ -9,6 +9,7 @@ import { HomeServices } from "../components/HomeServices";
 import { ProjectHallOfFame } from "../components/ProjectHallOfFame";
 import { useCombinedProjectsQuery, useLatestProjectQuery } from "../data/projectQueries";
 import { featuredProjects } from "../data/projects";
+import { getProjectCaseStudy } from "../data/projectCaseStudies";
 import { useLanguage } from "../i18n/LanguageContext";
 import { assetPath, previewImageUrl } from "../utils/asset";
 
@@ -93,7 +94,9 @@ export function HomePage() {
 
     return orderedProjects
       .map((project) => ({
-        src: previewImageUrl(project.images?.[1] || project.images?.[0] || project.cover || project.heroImage || project.logo || "", 320),
+        src: getProjectCaseStudy(project.slug)?.heroImage
+          ? assetPath(`assets/portfolio-heroes/${getProjectCaseStudy(project.slug)!.heroImage}-640.jpg`)
+          : previewImageUrl(project.images?.[1] || project.images?.[0] || project.cover || project.heroImage || project.logo || "", 320),
         alt: project.titleKey ? t(project.titleKey) : project.title,
         href: `/portfolio/${project.slug}/`,
         background: project.slug.startsWith("brussel-noord-basket") ? "#292929" : undefined,
