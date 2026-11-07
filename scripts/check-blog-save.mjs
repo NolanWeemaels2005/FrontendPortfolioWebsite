@@ -28,5 +28,16 @@ try {
   assert.deepEqual(await blogApi.save("post", fields), persisted);
   assert.deepEqual(JSON.parse(calls[0].options.body).mediaLayout, fields.mediaLayout);
   assert.deepEqual(fields.mediaLayout.map(item => item.mediaId), ["b", "a"]);
+  for (const heroMediaId of [undefined, "", "other"]) {
+    persisted = { ...fields, heroMediaId }; calls = [];
+    await assert.rejects(blogApi.save("post", { ...fields, heroMediaId: "hero" }), /hero-afbeelding niet bewaard/);
+  }
+  persisted = { ...fields, heroMediaId: "hero" }; calls = [];
+  assert.equal((await blogApi.save("post", persisted)).heroMediaId, "hero");
+  assert.equal(JSON.parse(calls[0].options.body).heroMediaId, "hero");
+  persisted = { ...fields, heroMediaId: "" }; calls = [];
+  assert.equal((await blogApi.save("post", fields)).heroMediaId, "");
+  assert.equal(blogFields({}).heroMediaId, "");
+  console.log("PASS hero selection, removal, legacy defaults and silently ignored saves.");
   console.log("PASS save verifies persisted photo order and section; ignored, reordered and missing layouts reject without changing editor input.");
 } finally { globalThis.fetch = originalFetch; }

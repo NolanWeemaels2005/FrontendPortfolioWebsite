@@ -197,3 +197,20 @@ body.blog-route .page-shell > .about-story-cta {
   .admin-content-switch .blog-button { min-width: 0; flex: 1; }
   .admin-workspace .admin-toolbar { align-items: flex-start; flex-direction: column; }
 }
+
+/* Full-width opening image with a readable title overlay. */
+.blog-post-header:not(.blog-post-header--immersive) .back-link { margin-bottom: clamp(3rem, 6vw, 6rem); }
+.blog-post-header--immersive { position: relative; isolation: isolate; width: 100%; min-height: 100svh; padding: 0; display: flex; background: #111; }
+.blog-post-cover { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
+.blog-post-cover img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.blog-post-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 0 0 / 45%) 0%, rgb(0 0 0 / 12%) 30%, rgb(0 0 0 / 72%) 100%); }
+.blog-post-header__content { display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: clamp(4rem, 12vh, 10rem); padding-block: clamp(9rem, 18vh, 12rem) clamp(3rem, 7vh, 6rem); }
+.blog-post-header--immersive h1 { max-width: 20ch; font-size: clamp(3rem, 7.5vw, 7.5rem); color: #fff; text-shadow: 0 2px 24px rgb(0 0 0 / 25%); }
+.blog-post-header--immersive :is(.back-link, .blog-post-header__meta time, .eyebrow) { color: #fff; }
+.blog-post-intro { display: grid; gap: 1.5rem; padding-block: clamp(3rem, 6vw, 6rem); }
+.blog-post .blog-post-intro .blog-post-summary { max-width: 50ch; font-size: clamp(1.35rem, 2.2vw, 2.2rem); line-height: 1.45; }
+.blog-admin button[aria-pressed="true"] { background: var(--orange); color: #111; }
+@media (max-width: 40rem) {
+  .blog-post-header__content { padding-top: 8rem; padding-bottom: 2.5rem; }
+  .blog-post-header--immersive h1 { font-size: clamp(2.8rem, 11vw, 4.5rem); }
+}

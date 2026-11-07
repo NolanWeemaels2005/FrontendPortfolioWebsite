@@ -18,7 +18,9 @@ function apiError(status: number, data: unknown): BlogApiError {
   }
   const body = data && typeof data === "object" ? data as Record<string, unknown> : {};
   const issues = Array.isArray(body.errors) ? body.errors.filter((item): item is string => typeof item === "string").map(readable) : [];
-  const message = typeof body.message === "string" ? body.message : typeof body.error === "string" ? body.error : "De blogaanvraag is mislukt. Probeer opnieuw.";
+  const summary = typeof body.message === "string" ? body.message.trim() : "";
+  const detail = typeof body.error === "string" ? body.error.trim() : "";
+  const message = [summary, detail !== summary ? detail : ""].filter(Boolean).join(" ") || "De blogaanvraag is mislukt. Probeer opnieuw.";
   return new BlogApiError(readable(message), status, issues);
 }
 async function request<T>(path: string, options: RequestInit = {}, secured = false): Promise<T> {
@@ -53,12 +55,15 @@ export const blogApi = {
     if (!sameMediaLayout(fields.mediaLayout, persisted.mediaLayout)) {
       throw new BlogApiError("De server heeft je fotoposities niet bewaard. Je keuzes staan nog in dit formulier. De backend moet worden bijgewerkt; probeer daarna opnieuw op te slaan. Je tekst en publicatiestatus kunnen wel al opgeslagen zijn.", 409);
     }
+    if (fields.heroMediaId !== (persisted.heroMediaId || "")) {
+      throw new BlogApiError("De server heeft je hero-afbeelding niet bewaard. Je keuze staat nog in dit formulier. Werk de backend bij en sla opnieuw op.", 409);
+    }
     return persisted;
   },
   remove: (id: string) => request<{ message: string }>(`/${encodeURIComponent(id)}`, { method: "DELETE" }, true),
   removeMedia: (id: string, mediaId: string) => request<BlogPost>(`/${encodeURIComponent(id)}/media/${encodeURIComponent(mediaId)}`, { method: "DELETE" }, true),
 };
-export function uploadBlogMedia(id: string, file: File, metadata: { role: MediaRole; caption: string; credit: string }, onProgress: (percent: number) => void, signal: AbortSignal): Promise<BlogPost> {
+export function uploadBlogMedia(id: string, file: File, metadata: { role: MediaRole; caption: string; credit: string; heroOnly?: boolean }, onProgress: (percent: number) => void, signal: AbortSignal): Promise<BlogPost> {
   return new Promise((resolve, reject) => {
     const token = getAdminToken();
     if (!token) { reject(apiError(401, null)); return; }
@@ -84,6 +89,7 @@ export function uploadBlogMedia(id: string, file: File, metadata: { role: MediaR
     body.append("role", metadata.role);
     body.append("caption", metadata.caption);
     body.append("credit", metadata.credit);
+    if (metadata.heroOnly) body.append("heroOnly", "true");
     if (signal.aborted) { reject(new DOMException("Upload afgebroken", "AbortError")); return; }
     xhr.send(body);
   });

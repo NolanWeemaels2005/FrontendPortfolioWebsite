@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BlogApiError, blogApi, uploadBlogMedia } from "../../data/blogApi";
-import { arrangedMedia, mediaSections, type MediaSection, blogFields, blogTextFields, fieldHelp, mediaRoles, publicationIssues, blogFileIssue, blogFileAccept, type BlogFields, type BlogPost, type BlogMedia, type BlogStatus, type MediaRole } from "../../utils/blog";
+import { arrangedMedia, mediaSections, type MediaSection, blogFields, blogTextFields, fieldHelp, mediaRoles, publicationIssues, blogFileIssue, blogFileAccept, uploadFileType, type BlogFields, type BlogPost, type BlogMedia, type BlogStatus, type MediaRole } from "../../utils/blog";
 import { BlogMediaGallery } from "./BlogMediaGallery";
 import { useUnsavedBlog } from "../../hooks/useUnsavedBlog";
 
@@ -16,6 +16,9 @@ export function BlogEditor({ id, token }: { id: string; token: string }) {
   const [notFound, setNotFound] = useState(false);
   const [retry, setRetry] = useState(0);
   const [queue, setQueue] = useState<QueueItem[]>([]);
+  const [heroProgress, setHeroProgress] = useState(0);
+  const [heroCaption, setHeroCaption] = useState("");
+  const [heroCredit, setHeroCredit] = useState("");
   const [deleted, setDeleted] = useState(false);
   const loaded = useRef(false);
   const locked = useRef(false);
@@ -82,7 +85,12 @@ export function BlogEditor({ id, token }: { id: string; token: string }) {
         setPost(draft); setFields(snapshot); setSaved(JSON.stringify(snapshot));
       }
       const updated = await blogApi.removeMedia(id, item._id);
-      if (alive.current) { setPost(updated); setMessage("Media verwijderd. Je formuliertekst is behouden."); }
+      if (alive.current) {
+        setPost(updated);
+        setFields(current => ({ ...current, heroMediaId: current.heroMediaId === item._id ? "" : current.heroMediaId }));
+        setSaved(current => { const snapshot = JSON.parse(current) as BlogFields; return JSON.stringify({ ...snapshot, heroMediaId: snapshot.heroMediaId === item._id ? "" : snapshot.heroMediaId }); });
+        setMessage("Media verwijderd. Je formuliertekst is behouden.");
+      }
     } catch (error) { showError(error); } finally { finish(); }
   }
   async function removePost() {
@@ -90,6 +98,27 @@ export function BlogEditor({ id, token }: { id: string; token: string }) {
     if (!begin("delete")) return;
     try { await blogApi.remove(id); if (alive.current) { setDeleted(true); setQueue([]); } }
     catch (error) { showError(error); } finally { finish(); }
+  }
+  async function uploadHero(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !post) return;
+    const issue = blogFileIssue(file) || (!uploadFileType(file).startsWith("image/") ? "Kies een afbeelding voor de hero, geen video." : "");
+    if (issue) { setErrors([issue]); return; }
+    if (!begin("hero-upload")) return;
+    const controller = new AbortController(); uploadController.current = controller; setHeroProgress(0);
+    try {
+      const updated = await uploadBlogMedia(id, file, { role: "process", caption: heroCaption, credit: heroCredit, heroOnly: true }, setHeroProgress, controller.signal);
+      if (!alive.current) return;
+      setPost(updated);
+      const added = updated.media.find(item => !post.media.some(previous => previous._id === item._id) && item.heroOnly && item.type === "image");
+      if (!added) throw new Error("De server heeft de aparte hero-upload niet bevestigd. Controleer de medialijst voordat je opnieuw uploadt.");
+      setFields(current => ({ ...current, heroMediaId: added._id }));
+      setMessage("Hero-afbeelding geüpload en geselecteerd. Klik op Wijzigingen opslaan om deze bovenaan je bericht te tonen. Deze foto verschijnt nooit tussen de artikelfoto’s.");
+    } catch (error) {
+      showError(error);
+      try { const updated = await blogApi.adminPost(id); if (alive.current) setPost(updated); } catch { /* Keep the original upload error visible. */ }
+    } finally { finish(); }
   }
   function addFiles(event: ChangeEvent<HTMLInputElement>) {
     const items = Array.from(event.target.files || []).map(file => {
@@ -192,14 +221,33 @@ export function BlogEditor({ id, token }: { id: string; token: string }) {
         </li>)}</ul>
         <button className="blog-button" disabled={Boolean(busy) || !pendingCount} onClick={() => void upload()}>{busy === "upload" ? "Bestanden uploaden…" : `Upload ${pendingCount} bestand${pendingCount === 1 ? "" : "en"}`}</button>
       </section>
-      <section className="blog-panel blog-form" aria-labelledby="blog-media-title"><h2 id="blog-media-title">3. Kies de fotoposities ({post.media.length})</h2><p className="blog-muted">Kies onder welk tekstonderdeel elk beeld verschijnt. Met Eerder en Later verander je de volgorde binnen dat onderdeel. Bewaar je keuzes met “Wijzigingen opslaan”. De beeldrol (Voor, Na…) staat los van de positie.</p>{post.media.length ? <BlogMediaGallery media={arrangedMedia(fields, post.media).map(place => post.media.find(item => item._id === place.mediaId)!)} renderControls={item => {
+      <section className="blog-panel blog-form" aria-labelledby="blog-hero-title">
+        <h2 id="blog-hero-title">3. Kies je hero-afbeelding</h2>
+        <p className="blog-muted" id="blog-hero-help">Upload hier een aparte hero of kies een bestaande foto. De hero vult het eerste scherm, met de titel over het beeld. Een breed beeld werkt het best; op smallere schermen wordt het bijgesneden. Bewaar je keuze met “Wijzigingen opslaan”.</p>
+        <label htmlFor="blog-hero-caption">Beschrijving van de nieuwe hero (optioneel)</label>
+        <input id="blog-hero-caption" disabled={Boolean(busy)} value={heroCaption} onChange={event => setHeroCaption(event.target.value)} />
+        <label htmlFor="blog-hero-credit">Maker / credit (optioneel)</label>
+        <input id="blog-hero-credit" disabled={Boolean(busy)} value={heroCredit} onChange={event => setHeroCredit(event.target.value)} />
+        <label htmlFor="blog-hero-file">Aparte hero-afbeelding uploaden</label>
+        <input id="blog-hero-file" type="file" accept=".jpg,.jpeg,.png,.webp,.gif,.avif" disabled={Boolean(busy)} onChange={event => void uploadHero(event)} />
+        <p className="blog-muted">De upload start zodra je een foto kiest. Maximaal 100 MB. Aparte hero-uploads blijven buiten het artikel, ook als je later een andere hero kiest.</p>
+        {busy === "hero-upload" && <div role="status"><progress max="100" value={heroProgress} aria-label="Hero-afbeelding uploaden" /><span>{heroProgress === 100 ? "Server verwerkt de afbeelding…" : `Hero uploaden: ${heroProgress}%`}</span></div>}
+        <label htmlFor="blog-hero">Hero-afbeelding (optioneel)</label>
+        <select id="blog-hero" aria-describedby="blog-hero-help" disabled={Boolean(busy)} value={fields.heroMediaId} onChange={event => setFields(current => ({ ...current, heroMediaId: event.target.value }))}>
+          <option value="">Geen hero-afbeelding</option>
+          {post.media.filter(item => item.type === "image").map((item, index) => <option key={item._id} value={item._id}>{item.caption || `Afbeelding ${index + 1} · ${mediaRoles[item.role]}`}</option>)}
+        </select>
+        {!post.media.some(item => item.type === "image") && <p className="blog-muted">Upload een aparte hero-afbeelding of voeg een foto bij je artikel toe.</p>}
+        <BlogMediaGallery media={post.media.filter(item => item.type === "image")} onRemove={item => void removeMedia(item)} disabled={Boolean(busy)} renderControls={item => <button type="button" className="blog-button blog-button--quiet" disabled={Boolean(busy)} aria-pressed={fields.heroMediaId === item._id} onClick={() => setFields(current => ({ ...current, heroMediaId: current.heroMediaId === item._id ? "" : item._id }))}>{fields.heroMediaId === item._id ? "✓ Gekozen als hero · keuze wissen" : "Gebruik als hero-afbeelding"}</button>} />
+      </section>
+      <section className="blog-panel blog-form" aria-labelledby="blog-media-title"><h2 id="blog-media-title">4. Kies de fotoposities ({post.media.filter(item => !item.heroOnly).length})</h2><p className="blog-muted">Kies onder welk tekstonderdeel elk beeld verschijnt. Met Eerder en Later verander je de volgorde binnen dat onderdeel. Bewaar je keuzes met “Wijzigingen opslaan”. De beeldrol (Voor, Na…) staat los van de positie. De gekozen hero verschijnt alleen bovenaan het bericht.</p>{post.media.length ? <BlogMediaGallery media={arrangedMedia(fields, post.media).map(place => post.media.find(item => item._id === place.mediaId)!)} renderControls={item => {
         const layout = arrangedMedia(fields, post.media);
         const section = layout.find(place => place.mediaId === item._id)!.section;
         const group = layout.filter(place => place.section === section);
         const index = group.findIndex(place => place.mediaId === item._id);
         return <div className="blog-media-placement"><label htmlFor={`position-${item._id}`}>Plaats na</label><select id={`position-${item._id}`} disabled={Boolean(busy)} value={section} onChange={event => placeMedia(item._id, event.target.value as MediaSection)}>{mediaSections.map(key => <option key={key} value={key}>{fieldHelp[key].label}</option>)}</select><p className="blog-muted">Positie {index + 1} van {group.length} in dit onderdeel.</p>{((!fields.aiUsed && ["aiContribution", "humanContribution"].includes(section)) || (section === "planning" && !fields.planning.trim())) && <p className="blog-muted">Dit onderdeel is verborgen. Het beeld verschijnt voorlopig bij “Wat heb ik gedaan?”.</p>}<div className="blog-actions"><button type="button" className="blog-button blog-button--quiet" disabled={Boolean(busy) || index === 0} onClick={() => moveMedia(item._id, -1)}>↑ Eerder</button><button type="button" className="blog-button blog-button--quiet" disabled={Boolean(busy) || index === group.length - 1} onClick={() => moveMedia(item._id, 1)}>↓ Later</button></div></div>;
       }} onRemove={item => void removeMedia(item)} disabled={Boolean(busy)} /> : <p>Nog geen media. Voeg voor publicatie minstens één voor- en één na-afbeelding toe.</p>}</section>
-      <div className="blog-actions"><button type="button" className="blog-button" disabled={Boolean(busy)} onClick={() => void save(fields.status)}>{busy === "save" ? "Opslaan…" : "Wijzigingen opslaan"}</button><span className="blog-muted">Bewaart tekst, status en fotoposities samen.</span></div>
+      <div className="blog-actions"><button type="button" className="blog-button" disabled={Boolean(busy)} onClick={() => void save(fields.status)}>{busy === "save" ? "Opslaan…" : "Wijzigingen opslaan"}</button><span className="blog-muted">Bewaart tekst, status, hero-afbeelding en fotoposities samen.</span></div>
       <section className="blog-panel"><h2>Bericht verwijderen</h2><p>Dit verwijdert ook alle bijbehorende media uit de opslag.</p><button className="blog-button blog-button--danger" disabled={Boolean(busy)} onClick={() => void removePost()}>Bericht definitief verwijderen</button></section>
     </>}
   </>;

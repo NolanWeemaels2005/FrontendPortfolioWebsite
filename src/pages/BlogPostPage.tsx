@@ -45,24 +45,28 @@ export function BlogPostPage() {
     <Link className="back-link" to="/blog/" data-cursor="soft"><ArrowLeft size={22} aria-hidden="true" /><ButtonTextStagger text={t("blog.all")} /></Link>
   </section>;
   const fields = blogFields(post);
+  const hero = post.media.find(item => item._id === fields.heroMediaId && item.type === "image");
+  const heroUrl = hero ? httpLink(hero.url) : null;
   const gallery = (section: MediaSection) => {
-    const media = mediaForSection(fields, post.media, section);
+    const media = mediaForSection(fields, post.media, section).filter(item => !heroUrl || item._id !== hero?._id);
     return media.length ? <BlogMediaGallery media={media} /> : null;
   };
   return <article className="blog-page blog-post" lang={language}>
     <BlogMeta title={post.title} description={post.summary} post={post} />
-    <header className="blog-post-header blog-container">
-      <Link className="back-link" to="/blog/" data-cursor="soft">
-        <ArrowLeft size={22} aria-hidden="true" /><ButtonTextStagger text={t("blog.all")} />
-      </Link>
-      <div className="blog-post-header__meta">
-        <p className="eyebrow">Blog</p>
-        {post.publishedAt && <time dateTime={post.publishedAt}>{blogDate(post.publishedAt, language)}</time>}
+    <header className={`blog-post-header${heroUrl ? " blog-post-header--immersive" : " blog-container"}`}>
+      {hero && heroUrl && <div className="blog-post-cover"><img src={heroUrl} alt={hero.caption || post.title} fetchPriority="high" decoding="async" /></div>}
+      <div className={heroUrl ? "blog-post-header__content blog-container" : undefined}>
+        <Link className="back-link" to="/blog/" data-cursor="soft"><ArrowLeft size={22} aria-hidden="true" /><ButtonTextStagger text={t("blog.all")} /></Link>
+        <div className="blog-post-header__heading">
+          <div className="blog-post-header__meta"><p className="eyebrow">Blog</p>{post.publishedAt && <time dateTime={post.publishedAt}>{blogDate(post.publishedAt, language)}</time>}</div>
+          <h1>{post.title}</h1>
+        </div>
+        {!heroUrl && <p className="blog-prose blog-post-summary">{post.summary}</p>}
       </div>
-      <h1>{post.title}</h1>
-      <p className="blog-prose blog-post-summary">{post.summary}</p>{gallery("summary")}
     </header>
     <div className="blog-container blog-article">
+      {heroUrl && <div className="blog-post-intro"><p className="blog-prose blog-post-summary">{post.summary}</p>{hero?.credit && <p className="blog-muted">Credit: {hero.credit}</p>}</div>}
+      {gallery("summary")}
       <Chapter title={t("blog.context")}><p className="blog-prose">{post.context}</p>{gallery("context")}</Chapter>
       <Chapter title={t("blog.process")}><p className="blog-prose">{post.process}</p>{gallery("process")}</Chapter>
       <Chapter title={t("blog.learning")} highlight><p className="blog-prose">{post.learning}</p>{gallery("learning")}</Chapter>

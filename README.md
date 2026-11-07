@@ -121,6 +121,8 @@ Project- en blogbeheer delen dezelfde login. Het Bearer-token wordt alleen in he
 
 Voor opgeslagen media kun je een tekstonderdeel kiezen en de volgorde wijzigen met **Eerder/Later**. Sla daarna het bericht op. De API moet `mediaLayout` ondersteunen als geordende lijst van `{ mediaId, section }`-items; de bijbehorende backendwijziging moet samen met deze functionaliteit worden uitgerold. Oude berichten, nieuwe uploads en beelden uit verborgen AI- of planningonderdelen vallen terug op de procesgalerij.
 
+Voor een schermvullende bloghero kun je in het beheer onder **Kies je hero-afbeelding** een aparte foto uploaden of een bestaande foto kiezen. Klik daarna op **Wijzigingen opslaan**. Aparte uploads krijgen `heroOnly: true` en verschijnen nooit tussen de artikelfoto’s, ook niet nadat je een andere hero kiest. De titel staat over de hero; de samenvatting volgt eronder. De backend moet zowel `heroMediaId` als `media[].heroOnly` ondersteunen.
+
 ## Deployment
 
 [De GitHub Actions-workflow](.github/workflows/deploy.yml) bouwt en publiceert de website bij een push naar `main`. De workflow kan ook handmatig worden gestart via `workflow_dispatch`.

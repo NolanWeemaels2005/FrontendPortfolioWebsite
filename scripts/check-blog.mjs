@@ -66,4 +66,13 @@ check("hidden optional chapters never hide their photos", () => {
   assert.equal(mediaForSection({ ...fields, aiUsed: true }, media, "aiContribution").length, 1);
   assert.equal(mediaForSection({ ...fields, planning: "Volgende stap" }, media, "planning").length, 1);
 });
+check("dedicated hero uploads never enter article sections, even after replacement or clearing", () => {
+  const all = [...media, { _id: "hero", type: "image", role: "before", heroOnly: true }];
+  for (const heroMediaId of ["hero", "1", ""]) {
+    const fields = { ...complete, heroMediaId, mediaLayout: [{ mediaId: "hero", section: "summary" }] };
+    assert.deepEqual(arrangedMedia(fields, all).map(item => item.mediaId), ["1", "2"]);
+    assert.deepEqual(mediaForSection(fields, all, "summary"), []);
+  }
+  assert(publicationIssues(complete, all.filter(item => item._id !== "1")).some(issue => issue.includes("voor-afbeelding")));
+});
 console.log(`${checks} blog checks passed.`);
