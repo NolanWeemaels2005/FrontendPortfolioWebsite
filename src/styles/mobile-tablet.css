@@ -1,12 +1,16 @@
-/* Compact-screen improvements only. Desktop rules above 1024px remain untouched. */
+/* The logo spacing is shared; the other improvements only affect compact screens. */
+body .logo-strip .logo-rail {
+  --logo-gap: clamp(8rem, 10vw, 10rem);
+  animation-duration: 65s;
+}
+
 @media (max-width: 64rem) {
   body.portfolio-route .three-d-marquee__scene {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   /* Reserve the SVG sizes, with generous, equal space between the actual logos. */
   body .logo-strip .logo-rail {
-    --logo-gap: clamp(4rem, 9vw, 6rem);
-    animation-duration: 50s;
+    --logo-gap: 7.5rem;
   }
   body .logo-strip p { font-size: 1.125rem; line-height: 1.4; }
 
@@ -128,7 +132,7 @@
 
 @media (max-width: 40rem) {
   body .portfolio--showcase .project-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
-  body .logo-strip .logo-rail { --logo-gap: 4rem; --logo-max-width: 8.5rem; --logo-max-height: 3.5rem; }
+  body .logo-strip .logo-rail { --logo-gap: 6rem; --logo-max-width: 8.5rem; --logo-max-height: 3.5rem; }
   body .contact-service-picker__options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   body .home-overview__stat dt span { font-size: .875rem; line-height: 1.4; }
 }

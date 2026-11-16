@@ -21,7 +21,7 @@ export function LogoStrip() {
     const rail = railRef.current;
     if (!rail) return;
     let visible = false;
-    const sync = () => { rail.style.animationPlayState = visible && !document.hidden ? "running" : "paused"; };
+    const sync = () => { rail.style.setProperty("--logo-play-state", visible && !document.hidden ? "running" : "paused"); };
     const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
     observer.observe(rail);
     document.addEventListener("visibilitychange", sync);
@@ -34,7 +34,7 @@ export function LogoStrip() {
     <section className="logo-strip" aria-label={t("portfolio.clients")}>
       <div className="logo-strip__inner">
         <p>{t("portfolio.clients")}</p>
-        <div ref={railRef} className="logo-rail" style={{ animationPlayState: "paused" }}>
+        <div ref={railRef} className="logo-rail">
           {[...featuredProjects, ...featuredProjects].filter((project) => project.logo).map((project, index) => (
             <Link
               to={`/portfolio/${project.slug}/`}

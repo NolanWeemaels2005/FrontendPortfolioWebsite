@@ -1092,9 +1092,11 @@ video {
   padding-inline-end: var(--logo-gap);
   width: max-content;
   animation: logoRail 30s linear infinite;
+  animation-play-state: var(--logo-play-state, paused);
 }
 
-.logo-rail:hover {
+.logo-rail:hover,
+.logo-rail:focus-within {
   animation-play-state: paused;
 }
 
