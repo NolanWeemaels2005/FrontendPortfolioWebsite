@@ -53,7 +53,7 @@ type BackendProject = {
   images: string[];
 };
 
-const projectDataVersion = "v15";
+const projectDataVersion = "v16";
 const fallbackLatestProjectSlug = "shift-festival-2026";
 const projectOrder = [
   "find your light",
@@ -239,7 +239,7 @@ function preserveFeaturedPresentation(backendProject: Project, localProject: Pro
 }
 
 // Build from the curated list, rather than filtering the API list: aliases and
-// old revisions must never add a ninth card or duplicate a client in the rail.
+// old revisions must never add an extra card or duplicate a client in the rail.
 export function selectFeaturedProjects(backendProjects: Project[]) {
   return featuredProjects.map((localProject) => {
     const backendProject = backendProjects

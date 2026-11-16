@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const { site, routes } = JSON.parse(await readFile(join(root, "src/data/seoRoutes.json"), "utf8"));
+routes.push(...JSON.parse(await readFile(join(root, "src/data/seoBlogRoutes.json"), "utf8")));
 const dist = join(root, "dist");
 const sitemap = await readFile(join(dist, "sitemap.xml"), "utf8");
 const robots = await readFile(join(dist, "robots.txt"), "utf8");
@@ -12,6 +13,12 @@ const errors = [];
 const indexableRoutes = routes.filter((route) => route.index);
 const titles = new Set();
 const descriptions = new Set();
+const projectAssets = JSON.parse(await readFile(join(root, "src/data/projectCaseAssets.json"), "utf8"));
+for (const slug of Object.keys(projectAssets)) {
+  if (!routes.some(route => route.index && route.path === `/portfolio/${slug}/`)) {
+    errors.push(`${slug}: projectcase mist een statische, indexeerbare route`);
+  }
+}
 
 function routeFile(path) {
   return path === "/" ? join(dist, "index.html") : join(dist, path, "index.html");

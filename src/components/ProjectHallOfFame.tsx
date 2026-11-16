@@ -69,11 +69,11 @@ export function ProjectHallOfFame() {
                 const title = project.titleKey ? t(project.titleKey) : project.title;
 
                 return (
-                  <div className="project-hall-card" key={project.slug}>
+                  <div className="project-hall-card" key={project.slug} style={{ order: projects.indexOf(project) }}>
                     <HallOfFameCard project={project} variant="home" />
                     <Link className="project-hall-card__label" to={`/portfolio/${project.slug}/`}>
                       <ButtonTextStagger text={title} wrap />
-                      <ArrowRight aria-hidden="true" size={24} strokeWidth={3} />
+                      <ArrowRight aria-hidden="true" size={24} strokeWidth={2} />
                     </Link>
                   </div>
                 );

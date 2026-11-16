@@ -7,7 +7,7 @@ const { outputText } = ts.transpileModule(source, { compilerOptions: { module: t
 const { projectRevealLayout } = await import(`data:text/javascript;base64,${Buffer.from(outputText).toString("base64")}`);
 const viewports = [[280, 568], [361, 852], [736, 390], [768, 1024], [1280, 720], [1920, 1080], [2560, 1440]];
 for (const [width, height] of viewports) {
-  for (const count of [6, 17, 18, 25]) {
+  for (const count of [6, 9, 17, 18, 25]) {
     const positions = projectRevealLayout(count, width, height);
     assert.equal(positions.length, count);
     // Every row must use the same column centres, including incomplete rows.
@@ -40,4 +40,4 @@ for (const [width, height] of viewports) {
 }
 assert.deepEqual(projectRevealLayout(0, 393, 852), []);
 assert.deepEqual(projectRevealLayout(17, 0, 0), []);
-console.log("PASS: 28 layouts; all projects have separate spaces, stay within bounds and cover the full section.");
+console.log("PASS: 35 layouts; all projects have separate spaces, stay within bounds and cover the full section.");

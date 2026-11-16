@@ -9,6 +9,7 @@ import "./styles/global.css";
 import "./styles/hall-of-fame.css";
 import "./styles/layout-alignment.css";
 import "./styles/hero-shared.css";
+import "./styles/mobile-tablet.css";
 
 // Disable browser restoration before the router or lazy pages mount.
 window.history.scrollRestoration = "manual";

@@ -37,7 +37,7 @@ export function BlogPostPage() {
     return () => controller.abort();
   }, [slug, retry]);
   if (!post) return <section className="blog-page blog-post blog-container blog-state" lang={language}>
-    <BlogMeta title={notFound ? t("blog.notFound") : "Blog"} description={t("blog.description")} index={false} />
+    {notFound && <BlogMeta title={t("blog.notFound")} description={t("blog.description")} index={false} />}
     <h1>{notFound ? t("blog.notFound") : error ? t("blog.unavailable") : t("blog.loadingPost")}</h1>
     {error && <p role="alert">{notFound ? t("blog.missing") : t("blog.error")}</p>}
     {!error && <p role="status">{t("blog.wait")}</p>}

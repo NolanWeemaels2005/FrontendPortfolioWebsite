@@ -4,7 +4,7 @@
   box-shadow: 0 0 0 100vmax #000;
   color: #f5f5f5;
 }
-.portfolio--showcase .portfolio-showcase-all-section :is(.portfolio-showcase-all-title span, .project-card, .project-card__label, .project-card__label svg, .project-filters) {
+.portfolio--showcase .portfolio-showcase-all-section :is(.portfolio-showcase-all-title span, .project-card, .project-card__label, .project-filters) {
   color: #f5f5f5;
 }
 .portfolio--showcase .portfolio-showcase-all-section .project-filters {

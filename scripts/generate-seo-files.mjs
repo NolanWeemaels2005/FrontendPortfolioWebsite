@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const data = JSON.parse(await readFile(join(root, "src/data/seoRoutes.json"), "utf8"));
 const { site, routes } = data;
+routes.push(...JSON.parse(await readFile(join(root, "src/data/seoBlogRoutes.json"), "utf8")));
 const mode = process.argv[2];
 let buildManifest = {};
 
@@ -17,6 +18,7 @@ const pageSourceByType = {
   legal: "src/pages/LegalPage.tsx",
   admin: "src/pages/BlogAdminPage.tsx",
   blog: "src/pages/BlogPage.tsx",
+  "blog-post": "src/pages/BlogPostPage.tsx",
 };
 
 function escapeHtml(value = "") {
@@ -204,7 +206,7 @@ function replaceScript(html, id, content) {
 function fallbackMarkup(route) {
   const projects = routes.filter((item) => item.type === "project" && item.index);
   const crawlLinks = routes
-    .filter((item) => item.index && (["home", "portfolio", "about", "contact", "legal", "blog"].includes(item.type) || route.type === "portfolio"))
+    .filter((item) => item.index && (["home", "portfolio", "about", "contact", "legal", "blog"].includes(item.type) || route.type === "portfolio" || (route.type === "blog" && item.type === "blog-post")))
     .map((item) => `<a href="${item.path}">${escapeHtml(item.heading)}</a>`)
     .join("");
   const projectLinks = projects

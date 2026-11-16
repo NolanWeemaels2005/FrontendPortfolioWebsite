@@ -1,8 +1,9 @@
 // Years and services supplied by Nolan; context and credits from reviewed descriptions.
 // Missing facts stay absent rather than being inferred from mockups.
 export type CaseStudy = {
-  context: 'commission' | 'education' | 'concept' | 'collective';
+  context: 'commission' | 'education' | 'concept' | 'collective' | 'passion';
   role: string;
+  status?: "inProgress";
   outputs: string[];
   collaborators?: string[];
   year?: string;
@@ -11,6 +12,7 @@ export type CaseStudy = {
 };
 
 export const projectCaseStudies: Record<string, CaseStudy> = {
+  'bite-back': { heroImage: 'bite-back', context: 'passion', status: 'inProgress', role: 'brandConcept', outputs: ['rebrand', 'identity', 'packaging', 'campaign', 'interior', 'ordering'], services: ['branding', 'campaign', 'webdesign'] },
   'n-wah': { heroImage: 'n-wah', context: 'commission', role: 'identity', outputs: ['identity'], year: '2026', services: ['branding'] },
   'brussel-noord-basket': { heroImage: 'brussel-noord-basket', context: 'commission', role: 'identity', outputs: ['logo', 'identity'], year: '2026', services: ['branding', 'socialMedia', 'merchandise'] },
   'shift-festival-2026': { heroImage: 'shift-festival-2026', context: 'education', role: 'graphicTeam', outputs: ['identity', 'guidelines', 'stickers'], collaborators: ['Amber Denblinden', 'Razvan Tanase'], year: '2026', services: ['branding', 'promo', 'merchandise'] },

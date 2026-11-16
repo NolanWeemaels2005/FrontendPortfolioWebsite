@@ -36,8 +36,9 @@ const asymmetric = (...images: number[]): ProjectSpread => ({ layout: "asymmetri
 const inset = (...images: number[]): ProjectSpread => ({ layout: "inset", images });
 
 export const projectStories: Record<string, ProjectStory> = {
+  "bite-back": story("bite-back", [[2,"BITE BACK — campaign photograph with branded takeaway bag"],[1,"BITE BACK — wordmark, mascot and illustrated brand pattern"],[3,"BITE BACK — burger and fries packaging"],[4,"BITE BACK — advertising posters"],[5,"BITE BACK — restaurant interior with mascot mural"],[6,"BITE BACK — digital ordering kiosks"]], [pair(1,2),full(3),pair(4,5)]),
   "n-wah": story("n-wah", [[5,"N/WAH — translucent identity card"],[1,"N/WAH — identity on green"],[2,"N/WAH — website design system"],[3,"N/WAH — mobile app icon"],[4,"N/WAH — browser identity"]], [asymmetric(1,3),full(2),inset(4)]),
-  "brussel-noord-basket": story("brussel-noord-basket", [[2,"Brussel Noord Basket — club uniform on court"],[1,"Brussel Noord Basket — club mark"],[6,"Brussel Noord Basket — embroidered crest"],[3,"Brussel Noord Basket — T-shirt on court"],[4,"Brussel Noord Basket — social profile"],[5,"Brussel Noord Basket — digital and merchandise applications"]], [pair(1,2),full(3),asymmetric(5,4)], "assets/hall-of-fame/bnb-logo.webm"),
+  "brussel-noord-basket": story("brussel-noord-basket", [[2,"Brussel Noord Basket — team showing the backs of their club jerseys"],[1,"Brussel Noord Basket — club mark"],[6,"Brussel Noord Basket — embroidered crest"],[3,"Brussel Noord Basket — T-shirt on court"],[4,"Brussel Noord Basket — social profile"],[5,"Brussel Noord Basket — digital and merchandise applications"],[66,"Brussel Noord Basket — team portrait on the basketball court"],[67,"Brussel Noord Basket — club logo and jersey number detail"]], [pair(1,2),full(6),asymmetric(3,7),asymmetric(5,4)], "assets/hall-of-fame/bnb-logo.webm"),
   "fc-eisbar": story("fc-eisbar", [[2,"FC Eisbär — football kit"],[1,"FC Eisbär — club identity"],[5,"FC Eisbär — crest detail"],[3,"FC Eisbär — drawstring bag"],[4,"FC Eisbär — embroidered cap"]], [asymmetric(1,2),pair(3,4)], "assets/hall-of-fame/fc-eisbar-logo.webm"),
   "la-maison-des-trois-garcons": story("la-maison-des-trois-garcons", [[3,"La Maison des Trois Garçons — desktop website"],[1,"La Maison des Trois Garçons — wordmark"],[2,"La Maison des Trois Garçons — mobile website"],[4,"La Maison des Trois Garçons — house signage"],[5,"La Maison des Trois Garçons — textile detail"]], [asymmetric(2,1),full(3),inset(4)]),
   "shift-festival-2026": story("shift-festival-2026", [[2,"Shift Festival — street banner"],[1,"Shift Festival — identity"],[5,"Shift Festival — poster"],[4,"Shift Festival — pavement application"],[7,"Shift Festival — tote bag"],[6,"Shift Festival — symbol"],[3,"Shift Festival — team photograph"]], [asymmetric(1,2),full(3),pair(4,5),full(6)]),
@@ -53,5 +54,13 @@ export const projectStories: Record<string, ProjectStory> = {
   "poutrel": story("poutrel", [[3,"Poutrel — desktop website"],[1,"Poutrel — visual identity"],[2,"Poutrel — mobile website"]], [asymmetric(2,1)]),
   "boit-bobby": story("boit-bobby", [[2,"Boit Bobby — event poster on a door"],[1,"Boit Bobby — event identity"],[3,"Boit Bobby — poster in the street"]], [asymmetric(2,1)]),
   "happy-dancers": story("happy-dancers", [[2,"Happy Dancers — poster application"],[1,"Happy Dancers — visual identity"],[3,"Happy Dancers — poster detail"]], [pair(1,2)]),
-  "erasmus-hogeschool": story("erasmus-hogeschool", [[2,"Erasmushogeschool Brussel — poster campaign"],[1,"Erasmushogeschool Brussel — poster design"]], [inset(1)]),
+  "erasmus-hogeschool": {
+    ...story("erasmus-hogeschool", [[2,"Erasmushogeschool Brussel — poster campaign"],[1,"Erasmushogeschool Brussel — poster design"]], [inset(1)]),
+    recommendationImage: {
+      src: assetPath("assets/project-details/erasmus-hogeschool/recommendation-1600.webp"),
+      srcSet: [800, 1600].map(width => `${assetPath(`assets/project-details/erasmus-hogeschool/recommendation-${width}.webp`)} ${width}w`).join(", "),
+      width: 2560, height: 1600,
+      alt: "Erasmushogeschool Brussel — students in front of a green screen with the school logo",
+    },
+  },
 };

@@ -1,6 +1,7 @@
 import { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 import seoData from "../data/seoRoutes.json";
+import blogRoutes from "../data/seoBlogRoutes.json";
 import { getCombinedProjects } from "../data/projectQueries";
 import { useLanguage } from "../i18n/LanguageContext";
 
@@ -77,7 +78,7 @@ function titleFromSlug(slug: string) {
 
 function routeSeo(pathname: string): SeoRoute & { known: boolean } {
   const path = normalizePath(pathname);
-  const configured = seoData.routes.find((route) => route.path === path);
+  const configured = [...seoData.routes, ...blogRoutes].find((route) => route.path === path);
   if (configured) return { ...configured, known: true };
 
   if (path.startsWith("/beheer/")) return { path, title: "Blogbeheer | Nolan Design", description: "Beveiligd blogbeheer.", heading: "Blogbeheer", intro: "", type: "admin", index: false, known: true };

@@ -123,6 +123,16 @@ export const featuredProjects: Project[] = [
     summary: "Een elegante identiteit en website voor een vakantiehuis in Zuid-Frankrijk.",
     summaryKey: "project.la-maison-des-3-garcons.summary",
   },
+  {
+    title: "BITE BACK",
+    slug: "bite-back",
+    logo: `${logoPath}bite-back.svg`,
+    cover: `${hallOfFamePath}bite-back.webp`,
+    color: "#f9a94b",
+    featured: true,
+    hallOfFame: { key: "bite-back", services: ["Branding", "Campagne", "Webdesign"] },
+    summary: "Een speelse rebranding voor een fictieve Belgische fastfoodketen. Passieproject in ontwikkeling.",
+  },
 ];
 
 export const allProjects: Project[] = [

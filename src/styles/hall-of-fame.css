@@ -29,7 +29,8 @@
 .hall-tile--ferraawri { grid-area: 5 / 3 / 11 / 4; }
 .hall-tile--maison { grid-area: 7 / 2 / 11 / 3; }
 .hall-tile--erasmus { grid-area: 9 / 1 / 15 / 2; }
-.hall-tile--eisbar { grid-area: 11 / 2 / 15 / 4; }
+.hall-tile--eisbar { grid-area: 11 / 2 / 15 / 3; }
+.hall-tile--bite-back { grid-area: 11 / 3 / 15 / 4; }
 
 .hall-tile__link {
   position: absolute;
@@ -162,27 +163,92 @@
 
 .project-hall--classic .project-hall__heading h2 { margin: 0; }
 
-/* A compact editorial mosaic, including narrow phones. */
-@media (max-width: 37.5rem) {
+/* Touch layouts use readable cards in the same order as the project list. */
+@media (max-width: 64rem) {
   .hall-grid {
     aspect-ratio: auto;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(9, clamp(5rem, 23vw, 8.5rem));
-    gap: .625rem;
+    grid-template-rows: none;
+    gap: 1.25rem;
+    align-items: start;
   }
-  .hall-grid > .hall-tile { min-height: 0; aspect-ratio: auto; }
-  .hall-tile--bnb { grid-area: 1 / 1 / 4 / 2; }
-  .hall-tile--shift { grid-area: 1 / 2 / 3 / 3; }
-  .hall-tile--videjo { grid-area: 3 / 2 / 4 / 3; }
-  .hall-tile--cto { grid-area: 4 / 1 / 6 / 3; }
-  .hall-tile--ferraawri { grid-area: 6 / 2 / 9 / 3; }
-  .hall-tile--maison { grid-area: 6 / 1 / 7 / 2; }
-  .hall-tile--erasmus { grid-area: 7 / 1 / 10 / 2; }
-  .hall-tile--eisbar { grid-area: 9 / 2 / 10 / 3; }
-  .hall-grid .hall-tile__caption { right: .5rem; gap: .25rem; font-size: .6875rem; }
-  .hall-grid .hall-tile__caption > svg { width: 18px; height: 18px; }
-  .hall-grid .hall-tile__caption > span { opacity: 1; translate: none; }
-  .hall-grid .hall-tile__services { font-size: .625rem; }
+  .hall-grid > .hall-tile {
+    grid-area: auto;
+    min-height: 0;
+    aspect-ratio: auto;
+    background: #171717;
+  }
+  .hall-grid .hall-tile__link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #171717;
+    color: #fff;
+    -webkit-tap-highlight-color: rgba(238, 157, 89, .2);
+  }
+  .hall-grid .hall-tile__media {
+    position: relative;
+    display: block;
+    flex: 0 0 auto;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--hall-accent);
+    transform: none;
+  }
+  .hall-grid .hall-tile__link:is(:hover, :focus-visible) .hall-tile__media { transform: none; }
+  .hall-grid .hall-tile__link:is(:hover, :focus-visible) .hall-tile__caption > svg { transform: none; }
+  .hall-grid .hall-tile--bnb .hall-tile__media { background: var(--logo-motion-bnb-background); }
+  .hall-grid .hall-tile--eisbar .hall-tile__media { background: var(--logo-motion-eisbar-background); }
+  .hall-grid .hall-tile__caption {
+    position: static;
+    order: 1;
+    min-height: 3.5rem;
+    padding: 1rem 1rem .5rem;
+    gap: .75rem;
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  .hall-grid .hall-tile__caption > span {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    background: none;
+    opacity: 1;
+    translate: none;
+    overflow-wrap: anywhere;
+  }
+  .hall-grid .hall-tile__caption > svg {
+    order: 1;
+    width: 24px;
+    height: 24px;
+    color: var(--orange);
+    stroke-width: 2;
+    rotate: 45deg;
+    transform: none;
+  }
+  .hall-grid .hall-tile__services {
+    position: static;
+    order: 2;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .35rem .5rem;
+    padding: 0 1rem 1rem;
+    opacity: 1;
+    translate: none;
+    color: #d0d0d0;
+    font-size: .75rem;
+    line-height: 1.4;
+  }
+  .hall-grid .hall-tile__services > span {
+    background: #292929;
+    padding: .25rem .5rem;
+    border-radius: .25rem;
+  }
+}
+@media (max-width: 37.5rem) {
+  .hall-grid { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -240,4 +306,9 @@
 @media (prefers-reduced-motion: reduce) {
   .project-hall--classic .project-hall__column { transform: none; }
   .hall-tile--home .hall-tile__media { transition: none; }
+}
+
+/* Read the projects in their curated order when the three columns collapse. */
+@media (max-width: 61.25rem) {
+  .project-hall--classic .project-hall__column { display: contents; }
 }

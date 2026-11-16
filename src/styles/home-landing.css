@@ -7,6 +7,21 @@ body.home-route {
   background: #292923;
 }
 
+.home-video-play {
+  position: absolute;
+  z-index: 4;
+  top: calc(6rem + env(safe-area-inset-top));
+  left: var(--content-edge, 1rem);
+  min-height: 44px;
+  padding: .75rem 1rem;
+  border: 1px solid #fff;
+  border-radius: .5rem;
+  background: #111;
+  color: #fff;
+  font-size: 1rem;
+}
+.home-video-play:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
+
 .home-landing__media,
 .home-landing__media::after,
 .home-landing__media > img,

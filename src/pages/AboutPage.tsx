@@ -227,7 +227,7 @@ export function AboutPage() {
                 </article>
               ))}
               <Link to="/contact/" className="btn about-approach__contact" data-cursor="merge">
-                <ButtonTextStagger text={t("cta.letsTalk")} /><ArrowRight size={22} aria-hidden="true" />
+                <ButtonTextStagger text={t("cta.letsTalk")} />
               </Link>
             </div>
           </div>

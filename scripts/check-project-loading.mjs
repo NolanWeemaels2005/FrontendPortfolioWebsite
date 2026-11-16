@@ -8,6 +8,11 @@ const server = await createServer({ server: { middlewareMode: true, hmr: false, 
 try {
   const { useProjectQuery, invalidateProjectQueries, selectFeaturedProjects, getCombinedProjects } = await server.ssrLoadModule("/src/data/projectQueries.ts");
   const { featuredProjects } = await server.ssrLoadModule("/src/data/projects.ts");
+  const { getProjectCaseStudy } = await server.ssrLoadModule("/src/data/projectCaseStudies.ts");
+  for (const project of getCombinedProjects()) {
+    const hero = getProjectCaseStudy(project.slug)?.heroImage;
+    if (hero) assert.ok(existsSync(`public/assets/portfolio-heroes/${hero}-640.jpg`), `Missing homepage thumbnail: ${project.slug}`);
+  }
   function readInitialQuery(slug) {
     let result;
     function Probe() {
@@ -37,11 +42,11 @@ try {
   assert.equal(maison.isLoading, false, "La Maison is now available offline too");
 
   assert.deepEqual(featuredProjects.map((project) => project.hallOfFame.key), [
-    "bnb", "shift", "cto", "videjo", "ferraawri", "erasmus", "eisbar", "maison",
+    "bnb", "shift", "cto", "videjo", "ferraawri", "erasmus", "eisbar", "maison", "bite-back",
   ]);
   const alternateSlugs = [
     "b-n-b", "shift-festival", "city-2-ocean", "videjo", "ferraawri",
-    "erasmushogeschool-brussel", "fc-eisbär", "la-maison-des-3-garcons",
+    "erasmushogeschool-brussel", "fc-eisbär", "la-maison-des-3-garcons", "bite-back",
   ];
   const backendProjects = featuredProjects.map((project, index) => ({
     ...project,
@@ -55,8 +60,8 @@ try {
   backendProjects.unshift({ ...backendProjects[1], id: "shift-old", slug: "shift-festival-2025", title: "Shift Festival 2025" });
   backendProjects.push({ ...backendProjects[0], slug: "another-featured-project", title: "Another featured project" });
   const featured = selectFeaturedProjects(backendProjects);
-  assert.equal(featured.length, 8, "Aliases and API feature flags cannot add cards");
-  assert.equal(new Set(featured.map((project) => project.hallOfFame.key)).size, 8);
+  assert.equal(featured.length, 9, "Aliases and API feature flags cannot add cards");
+  assert.equal(new Set(featured.map((project) => project.hallOfFame.key)).size, 9);
   for (const [index, project] of featured.entries()) {
     assert.equal(project.id, `backend-${index}`, "A known alias resolves to the correct API project");
     assert.equal(project.slug, alternateSlugs[index], "API detail routes stay intact");
@@ -74,7 +79,7 @@ try {
   const disabled = readInitialQuery(undefined);
   assert.equal(disabled.isLoading, false);
   assert.equal(disabled.isFetching, false);
-  console.log("Project checks passed: loading, local fallback, eight unique featured projects, aliases, metadata and local assets.");
+  console.log("Project checks passed: loading, local fallback, nine unique featured projects, aliases, metadata and local assets.");
 } finally {
   await server.close();
 }

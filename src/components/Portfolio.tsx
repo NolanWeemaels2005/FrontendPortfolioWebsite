@@ -27,6 +27,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
   const { data: allProjects = [] } = useAllProjectsQuery();
   const [service, setService] = useState("");
   const [year, setYear] = useState("");
+  const [previewProject, setPreviewProject] = useState<string | null>(null);
   const services = [...new Set(allProjects.flatMap((project) => getProjectCaseStudy(project.slug)?.services || []))].sort();
   const years = [...new Set(allProjects.map((project) => getProjectCaseStudy(project.slug)?.year).filter((value): value is string => Boolean(value)))].sort().reverse();
   const filteredProjects = allProjects.filter((project) => {
@@ -76,9 +77,18 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                 return (
               <Link
                 to={`/portfolio/${project.slug}/`}
-                className={`project-card project-card--${classSlug}${hoverImage ? " project-card--image-hover" : ""} ${project.source === "backend" ? "project-card--backend" : ""}`}
+                className={`project-card project-card--${classSlug}${hoverImage ? " project-card--image-hover" : ""}${previewProject === project.slug ? " is-touch-preview" : ""} ${project.source === "backend" ? "project-card--backend" : ""}`}
                 data-cursor="project"
                 key={project.slug}
+                onBlur={() => setPreviewProject(null)}
+                onClick={(event) => {
+                  if (hoverImage && window.matchMedia("(max-width: 64rem) and (hover: none)").matches
+                    && event.detail !== 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey
+                    && previewProject !== project.slug) {
+                    event.preventDefault();
+                    setPreviewProject(project.slug);
+                  }
+                }}
 
                 {...(isShowcase ? {} : projectTilt)}
               >
@@ -99,8 +109,11 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                 </span>
                 <span className="project-card__label">
                   <ButtonTextStagger text={project.titleKey ? t(project.titleKey) : project.title} />
-                  <ArrowRight aria-hidden="true" size={24} strokeWidth={3} />
+                  <ArrowRight aria-hidden="true" size={24} strokeWidth={2} />
                 </span>
+                {isShowcase && <span className="project-card__mobile-services">
+                  {facts?.services.map((service) => <span key={service}>{t(`portfolio.service.${service}`)}</span>)}
+                </span>}
               </Link>
                 );
               })()

@@ -1341,22 +1341,22 @@
       ]
     },
     "2": {
-      "source": "images for projects/BNB/image2.png",
-      "sha256": "5d7e101f79e23ce95f9d1c7e1859a515b7e8e499710385750aa74eba41586812",
-      "width": 5000,
-      "height": 4000,
+      "source": "Nieuwe foto's BNB/image65.png",
+      "sha256": "5f15a8372a0fd3904ff60709067aaefb8689fe1056ae2fa1c0e62a902442102f",
+      "width": 2000,
+      "height": 1500,
       "variants": [
         {
-          "src": "assets/project-details/brussel-noord-basket/image2-800.webp",
+          "src": "assets/project-details/brussel-noord-basket/image65-800.webp",
           "width": 800
         },
         {
-          "src": "assets/project-details/brussel-noord-basket/image2-1600.webp",
+          "src": "assets/project-details/brussel-noord-basket/image65-1600.webp",
           "width": 1600
         },
         {
-          "src": "assets/project-details/brussel-noord-basket/image2-2400.webp",
-          "width": 2400
+          "src": "assets/project-details/brussel-noord-basket/image65-2000.webp",
+          "width": 2000
         }
       ]
     },
@@ -1377,6 +1377,42 @@
         {
           "src": "assets/project-details/brussel-noord-basket/image3-2400.webp",
           "width": 2400
+        }
+      ]
+    },
+    "66": {
+      "source": "Nieuwe foto's BNB/image66.png",
+      "sha256": "8b513129f9f378b94db8337c53cd33b4e80b0aa365a572d5046d659f8e45cca5",
+      "width": 2000,
+      "height": 1500,
+      "variants": [
+        {
+          "src": "assets/project-details/brussel-noord-basket/image66-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image66-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image66-2000.webp",
+          "width": 2000
+        }
+      ]
+    },
+    "67": {
+      "source": "Nieuwe foto's BNB/image67.png",
+      "sha256": "c43ac74e99468c78d3c0ec90d492df79002304a6b79c356011909145e2936a97",
+      "width": 1500,
+      "height": 2000,
+      "variants": [
+        {
+          "src": "assets/project-details/brussel-noord-basket/image67-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/brussel-noord-basket/image67-1500.webp",
+          "width": 1500
         }
       ]
     }
@@ -1684,6 +1720,128 @@
         },
         {
           "src": "assets/project-details/kaai/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    }
+  },
+  "bite-back": {
+    "1": {
+      "source": "Foto'sBiteBack/image1.png",
+      "sha256": "b6df9e8c3c10fcd9a59c70da9c3d42b00d610caf347c2b84f144029937deadb6",
+      "width": 2560,
+      "height": 1600,
+      "variants": [
+        {
+          "src": "assets/project-details/bite-back/image1-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/bite-back/image1-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/bite-back/image1-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "2": {
+      "source": "Foto'sBiteBack/image2.png",
+      "sha256": "35a1e230dd3723973e25e0b8df2599df1c191df9bf502acd224df07039823ba9",
+      "width": 4800,
+      "height": 3584,
+      "variants": [
+        {
+          "src": "assets/project-details/bite-back/image2-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/bite-back/image2-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/bite-back/image2-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "3": {
+      "source": "Foto'sBiteBack/image3.png",
+      "sha256": "98f70752ac3f1fdcc1876a8707c11159426b492fa64cadd37e78dea85c0df84f",
+      "width": 4000,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/bite-back/image3-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/bite-back/image3-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/bite-back/image3-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "4": {
+      "source": "Foto'sBiteBack/image4.png",
+      "sha256": "7ac57bbb2a2c1854afebbd2973f94ce069586f220aba9e078135c68d6e789e8e",
+      "width": 3000,
+      "height": 2200,
+      "variants": [
+        {
+          "src": "assets/project-details/bite-back/image4-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/bite-back/image4-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/bite-back/image4-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "5": {
+      "source": "Foto'sBiteBack/image5.png",
+      "sha256": "7cd89b42fd011a7b682691c7b801dca79e87106f243745674b824aeb0941487a",
+      "width": 4000,
+      "height": 3000,
+      "variants": [
+        {
+          "src": "assets/project-details/bite-back/image5-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/bite-back/image5-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/bite-back/image5-2400.webp",
+          "width": 2400
+        }
+      ]
+    },
+    "6": {
+      "source": "Foto'sBiteBack/image6.png",
+      "sha256": "60dc54103288eabd012aae8a39d5e8765073be0683b76f424922485089cd723c",
+      "width": 7146,
+      "height": 4627,
+      "variants": [
+        {
+          "src": "assets/project-details/bite-back/image6-800.webp",
+          "width": 800
+        },
+        {
+          "src": "assets/project-details/bite-back/image6-1600.webp",
+          "width": 1600
+        },
+        {
+          "src": "assets/project-details/bite-back/image6-2400.webp",
           "width": 2400
         }
       ]

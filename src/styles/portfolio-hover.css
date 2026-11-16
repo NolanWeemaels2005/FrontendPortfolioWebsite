@@ -83,3 +83,6 @@
 @media (prefers-reduced-motion: reduce) {
   .portfolio--showcase .project-card__services { transition: none; }
 }
+
+/* The in-flow labels are only shown by the mobile/tablet layout. */
+.project-card__mobile-services { display: none; }

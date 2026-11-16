@@ -1,0 +1,134 @@
+/* Compact-screen improvements only. Desktop rules above 1024px remain untouched. */
+@media (max-width: 64rem) {
+  body.portfolio-route .three-d-marquee__scene {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  /* Reserve the SVG sizes, with generous, equal space between the actual logos. */
+  body .logo-strip .logo-rail {
+    --logo-gap: clamp(4rem, 9vw, 6rem);
+    animation-duration: 50s;
+  }
+  body .logo-strip p { font-size: 1.125rem; line-height: 1.4; }
+
+  /* Information lives below the image, readable without hovering or covering artwork. */
+  body .portfolio--showcase .project-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.25rem;
+  }
+  body .portfolio--showcase .project-card__services { display: none; }
+  body .portfolio--showcase .project-card__mobile-services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-top: .75rem;
+    color: #fff;
+    font-size: .9375rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  body .portfolio--showcase .project-card__mobile-services > span,
+  body .hall-grid .hall-tile__services > span,
+  body .project-hall .hall-tile__services > span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding: .4rem .7rem;
+    border-radius: .375rem;
+    background: #292929;
+    color: #fff;
+    overflow-wrap: anywhere;
+  }
+  body .hall-grid .hall-tile__services,
+  body .project-hall .hall-tile__services {
+    font-size: .9375rem;
+    line-height: 1.4;
+    gap: .5rem;
+    opacity: 1;
+    translate: none;
+  }
+  body .project-hall .hall-tile__services {
+    top: .75rem;
+    right: .75rem;
+    left: .75rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  body .project-hall .hall-tile__services > span { background: rgb(20 20 20 / 95%); }
+  body .portfolio--showcase .project-card__label {
+    justify-content: space-between;
+    align-items: center;
+    gap: .75rem;
+    font-size: 1.125rem;
+    line-height: 1.35;
+  }
+  body .portfolio--showcase .project-card__label .button-text-stagger { flex: 1; }
+  body .portfolio--showcase .project-card__logo-wrap { aspect-ratio: 4 / 3; }
+  body .portfolio--showcase .project-card--image-hover.is-touch-preview .project-card__hover-frame.is-ready,
+  body .portfolio--showcase .project-card--image-hover.is-touch-preview .project-card__hover-frame.is-ready .project-card__hover-image {
+    transform: translate3d(0, 0, 0);
+  }
+  body .portfolio-showcase-show-more { color: #111; font-size: 1rem; }
+
+  /* Mouse-only effects must not obscure a small screen or require a second tap. */
+  body .custom-cursor { display: none; }
+  html.custom-cursor-active, html.custom-cursor-active * { cursor: auto !important; }
+  body .project-card__logo-wrap,
+  body .project-case .project-detail__gallery-button:hover img { transform: none; }
+
+  /* Navigation, language choices, forms and footer controls: at least 44px to tap. */
+  body #nav :is(.menu-btn, .nav-talk),
+  body :is(.language-switcher, .footer-language-switcher) button,
+  body .btn,
+  body .portfolio :is(.project-filter-options button, .project-filter-reset),
+  body .blog-page :is(.blog-pagination a, .blog-read),
+  body .footer-socials a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  body :is(.language-switcher, .footer-language-switcher) button {
+    height: auto;
+    padding: .625rem .5rem;
+    font-size: .9375rem;
+    line-height: 1.3;
+  }
+  body .btn, body .portfolio .project-filter-options button { font-size: 1rem; line-height: 1.35; }
+  body .portfolio .project-filters__heading { font-size: 1rem; flex-wrap: wrap; }
+  body .portfolio :is(.project-filters__count, .project-filters legend, .project-filter-reset) { font-size: .875rem; }
+  body .contact-studio-form :is(input, textarea),
+  body .blog-form :is(input, textarea, select) { font-size: 1rem; }
+  body .contact-service-option span { font-size: .9375rem; line-height: 1.4; }
+  body .contact-studio-strip a { min-height: 44px; overflow-wrap: anywhere; }
+  body :is(.footer-columns, .legal-links) a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  body .legal-links { flex-wrap: wrap; gap: .5rem 1.25rem; }
+  body .footer-columns a { display: flex; width: fit-content; }
+  body .legal-links a { font-size: .9375rem; }
+
+  /* Detail pages and longer content need comfortable labels and line lengths. */
+  body .project-case .case-meta span { font-size: .875rem; letter-spacing: .06em; }
+  body .project-case .case-meta strong { font-size: 1rem; overflow-wrap: anywhere; }
+  body .project-case .case-jump a { font-size: 1rem; }
+  body :is(.blog-prose, .legal-page, .contact-studio-intro, .about-story-content) p {
+    overflow-wrap: break-word;
+  }
+  body .blog-page .blog-pagination a { display: inline-flex; align-items: center; justify-content: center; }
+  body .project-lightbox :is(.project-lightbox__close, .project-lightbox__nav) { min-width: 44px; min-height: 44px; }
+  body .overlay.open { overflow-y: auto; overscroll-behavior: contain; }
+}
+
+@media (min-width: 40.0625rem) and (max-width: 64rem) {
+  body.portfolio-route .three-d-marquee__scene { inset-inline: -40%; }
+}
+
+@media (max-width: 40rem) {
+  body .portfolio--showcase .project-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  body .logo-strip .logo-rail { --logo-gap: 4rem; --logo-max-width: 8.5rem; --logo-max-height: 3.5rem; }
+  body .contact-service-picker__options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body .home-overview__stat dt span { font-size: .875rem; line-height: 1.4; }
+}

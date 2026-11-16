@@ -133,7 +133,7 @@ Voor een schermvullende bloghero kun je in het beheer onder **Kies je hero-afbee
 
 Configureer GitHub Pages met **GitHub Actions** als bron. Het aangepaste domein staat in `CNAME`. De Vite-basis is `/`, passend bij hosting op het hoofddomein; pas deze configuratie aan wanneer je op een subpad host.
 
-De blogindex maakt deel uit van de gegenereerde sitemap. Individuele blogberichten worden via de API opgehaald en hebben geen afzonderlijke statische kopie in deze repository.
+De blogindex en gepubliceerde artikelen krijgen een statische HTML-route en staan in de sitemap. `node scripts/sync-blog-seo.mjs` ververst hiervoor de publieke artikelmetadata in `src/data/seoBlogRoutes.json`. De deployworkflow doet dit vóór elke build en draait ook elk uur, zodat nieuwe artikelen een echte HTTP 200-route krijgen op GitHub Pages. Een API-fout breekt de deployment af; de bestaande website blijft dan online. Voor een onmiddellijke update na publiceren of verwijderen kan de workflow handmatig worden gestart. Een gewone lokale build gebruikt de laatst opgeslagen metadata.
 
 ## Gebruik van broncode en beeldmateriaal
 

@@ -13,7 +13,7 @@ export function CustomCursor() {
   useEffect(() => {
     const cursor = cursorRef.current;
     if (!cursor) return;
-    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const finePointer = window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine)");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
     let x = 0;

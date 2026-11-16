@@ -1,8 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useFeaturedProjectsQuery } from "../data/projectQueries";
 import { useLanguage } from "../i18n/LanguageContext";
 import { previewImageUrl } from "../utils/asset";
+
+// Reserve each SVG's viewBox ratio before lazy loading; SVGs have no intrinsic pixel size.
+const logoRatios: Record<string, number> = {
+  bnb: 1, shift: 957.64 / 648.67, cto: 1142.88 / 385.74,
+  videjo: 1, ferraawri: 1016.83 / 574.68, erasmus: 785.78 / 579.29,
+  eisbar: 1, maison: 1094.54 / 456.5, "bite-back": 1868.18 / 867.71,
+};
 
 function projectClassSlug(slug: string) {
   return slug.replace(/[^a-z0-9-]/gi, "");
@@ -32,6 +39,7 @@ export function LogoStrip() {
             <Link
               to={`/portfolio/${project.slug}/`}
               className={`logo-rail__item logo-rail__item--${projectClassSlug(project.slug)} logo-rail__item--layout-${projectClassSlug(project.layoutSlug || project.slug)}`}
+              style={{ "--logo-ratio": logoRatios[project.hallOfFame?.key || ""] || 1 } as CSSProperties}
               data-cursor="soft"
               key={`${project.slug}-${index}`}
             >

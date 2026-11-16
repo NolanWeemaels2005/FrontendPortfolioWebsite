@@ -15,7 +15,7 @@ type ThreeDMarqueeProps = {
   onImageClick?: (image: MarqueeImage, index: number) => void;
 };
 
-const compactMarqueeQuery = "(max-width: 61.25rem)";
+const compactMarqueeQuery = "(max-width: 64rem)";
 
 function useCompactMarquee() {
   const [isCompact, setIsCompact] = useState(() => (

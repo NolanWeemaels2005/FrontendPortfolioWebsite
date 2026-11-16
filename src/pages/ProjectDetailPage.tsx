@@ -174,6 +174,7 @@ export function ProjectDetailPage() {
           {facts ? <>
             <div><span>{t("case.role")}</span><strong>{facts.services.map((service) => t(`portfolio.service.${service}`)).join(", ")}</strong></div>
             <div><span>{t("case.context")}</span><strong>{t(`case.${facts.context}`)}</strong></div>
+            {facts.status ? <div><span>{t("case.status")}</span><strong>{t(`case.${facts.status}`)}</strong></div> : null}
             {facts.year ? <div><span>{t("case.year")}</span><strong>{facts.year}</strong></div> : null}
             {facts.collaborators ? <div><span>{t("case.with")}</span><strong>{facts.collaborators.join(", ")}</strong></div> : null}
           </> : null}

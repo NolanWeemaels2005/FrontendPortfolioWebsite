@@ -13,22 +13,25 @@ export function PortfolioHoverImage(image: Props) {
     const frame = frameRef.current;
     if (!frame) return;
     const pointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const compact = window.matchMedia("(max-width: 64rem)");
     const link = frame.closest("a");
     const request = () => setRequested(true);
     let nearby = false;
-    const pointerChanged = () => { if (nearby && pointer.matches) request(); };
+    const pointerChanged = () => { if (nearby && (pointer.matches || compact.matches)) request(); };
     link?.addEventListener("focus", request);
     pointer.addEventListener("change", pointerChanged);
+    compact.addEventListener("change", pointerChanged);
     const observer = new IntersectionObserver(([entry]) => {
       nearby = entry.isIntersecting;
       setNear(nearby);
-      if (entry.isIntersecting && pointer.matches) setRequested(true);
+      if (entry.isIntersecting && (pointer.matches || compact.matches)) setRequested(true);
     }, { rootMargin: "250px" });
     observer.observe(frame.parentElement || frame);
     return () => {
       observer.disconnect();
       link?.removeEventListener("focus", request);
       pointer.removeEventListener("change", pointerChanged);
+      compact.removeEventListener("change", pointerChanged);
     };
   }, []);
 

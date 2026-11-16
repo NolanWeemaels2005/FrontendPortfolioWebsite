@@ -1,4 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "../i18n/LanguageContext";
+import { assetPath } from "../utils/asset";
 
 const LOOP_FADE_SECONDS = 0.8;
 
@@ -6,6 +8,9 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const firstRef = useRef<HTMLVideoElement>(null);
   const secondRef = useRef<HTMLVideoElement>(null);
+  const retryRef = useRef<() => void>(() => {});
+  const [blocked, setBlocked] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const first = firstRef.current;
@@ -18,10 +23,32 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
     let disposed = false;
     let starting = false;
     let blending = false;
-    let fallback = false;
+    let fallback = window.matchMedia("(max-width: 64rem)").matches;
     let visible = false;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const canPlay = () => visible && !document.hidden && !motion.matches;
+    const reportBlocked = () => {
+      if (!disposed && canPlay()) {
+        window.cancelAnimationFrame(frame);
+        setBlocked(true);
+      }
+    };
+    const playCurrent = () => current.play().then(() => {
+      if (disposed || document.hidden || !visible) { current.pause(); return; }
+      setBlocked(false);
+    }).catch(reportBlocked);
+    current.loop = fallback;
+    // Compact screens use one decoder and the browser's native loop.
+    if (!fallback) second.src = videoSrc;
+    retryRef.current = () => {
+      fallback = true;
+      window.cancelAnimationFrame(frame);
+      next.pause();
+      next.style.opacity = "0";
+      current.style.opacity = "1";
+      current.loop = true;
+      void playCurrent();
+    };
     let fadeDuration = LOOP_FADE_SECONDS;
 
     first.style.opacity = "1";
@@ -39,7 +66,7 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
       current.style.opacity = "1";
       current.loop = true;
       if (current.ended) current.currentTime = 0;
-      if (canPlay()) void current.play().catch(() => {});
+      if (canPlay()) void playCurrent();
     };
 
     const tick = () => {
@@ -80,7 +107,7 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
       window.cancelAnimationFrame(frame);
       frame = 0;
       if (!canPlay()) { first.pause(); second.pause(); return; }
-      void current.play().catch(() => {});
+      void playCurrent();
       if (blending) void next.play().catch(() => {});
       if (!fallback) frame = window.requestAnimationFrame(tick);
     };
@@ -101,13 +128,18 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
       second.pause();
       first.loop = false;
       second.loop = false;
+      second.removeAttribute("src");
+      retryRef.current = () => {};
     };
   }, [videoSrc]);
 
   return (
-    <div ref={containerRef} className="home-landing__media" aria-hidden="true">
-      <video ref={firstRef} src={videoSrc} muted playsInline preload="auto" />
-      <video ref={secondRef} src={videoSrc} muted playsInline preload="auto" style={{ opacity: 0 }} />
-    </div>
+    <>
+      <div ref={containerRef} className="home-landing__media" aria-hidden="true">
+        <video ref={firstRef} src={videoSrc} poster={assetPath("assets/home/nolan-home-hero-poster.jpg")} muted playsInline preload="metadata" />
+        <video ref={secondRef} muted playsInline preload="metadata" style={{ opacity: 0 }} />
+      </div>
+      {blocked && <button type="button" className="home-video-play" onClick={() => retryRef.current()}>{t("video.play")}</button>}
+    </>
   );
 }
