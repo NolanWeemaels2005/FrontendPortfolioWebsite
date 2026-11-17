@@ -20,3 +20,31 @@
     background: rgb(255 255 255 / 10%);
   }
 }
+
+/* Balance compact marks against the wide wordmarks, including SVG whitespace. */
+.portfolio--showcase .project-card__logo:is(
+  [data-project-logo="brussel-noord-basket"],
+  [data-project-logo="fc-eisbar"],
+  [data-project-logo="happy-dancers"]
+) {
+  max-height: 8rem;
+}
+
+.portfolio--showcase .project-card__logo:is(
+  [data-project-logo="find-your-light"],
+  [data-project-logo="videjo"]
+) {
+  max-height: 10rem;
+}
+
+.portfolio--showcase .project-card__logo:is(
+  [data-project-logo="erasmus-hogeschool"],
+  [data-project-logo="shift-festival-2026"],
+  [data-project-logo="ferraaawri"]
+) {
+  max-height: 6.5rem;
+}
+
+.portfolio--showcase .project-card__logo[data-project-logo="happy-dancers"] {
+  width: 100%;
+}

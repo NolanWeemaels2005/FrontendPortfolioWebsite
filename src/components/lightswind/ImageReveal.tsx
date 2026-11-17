@@ -167,6 +167,10 @@ export default function ImageReveal({ images = [], children }: ImageRevealProps)
               }}>
                 <img
                   src={image.src}
+                  srcSet={image.src.includes("/assets/portfolio-heroes/") && image.src.endsWith("-640.jpg")
+                    ? `${image.src.replace("-640.jpg", "-160.webp")} 160w, ${image.src.replace("-640.jpg", "-320.webp")} 320w, ${image.src} 640w`
+                    : undefined}
+                  sizes={`${Math.ceil(position.width)}px`}
                   alt=""
                   width="320"
                   height="400"

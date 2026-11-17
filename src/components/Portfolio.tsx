@@ -95,6 +95,7 @@ export function Portfolio({ variant = "default" }: PortfolioProps) {
                 <span className="project-card__logo-wrap" data-cursor-surface>
                   <img
                     className="project-card__logo"
+                    data-project-logo={facts?.heroImage || project.slug}
                     src={previewImageUrl(project.logo, 800)}
                     alt={project.titleKey ? t(project.titleKey) : project.title}
                     width="512"

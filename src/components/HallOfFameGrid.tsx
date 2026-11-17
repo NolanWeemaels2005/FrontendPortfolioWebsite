@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../i18n/LanguageContext";
 import type { Project } from "../types/project";
+import hallImageVariants from "../data/hallImageVariants.json";
 
 const serviceKeys: Record<string, string> = {
   Branding: "branding",
@@ -129,6 +130,8 @@ export function HallOfFameCard({ project, variant = "mosaic" }: { project: Proje
             className={`hall-tile__image${containedMedia ? " hall-tile__image--contained" : ""}`}
             style={media?.video && videoReady && !reducedMotion && !videoFailed ? { opacity: 0 } : undefined}
             src={imageSrc}
+            srcSet={(hallImageVariants as Record<string, string>)[imageSrc || ""]}
+            sizes="(max-width: 600px) calc(100vw - 2rem), (max-width: 1024px) 46vw, 50vw"
             alt=""
             loading="lazy"
             decoding="async"

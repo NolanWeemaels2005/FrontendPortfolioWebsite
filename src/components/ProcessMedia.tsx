@@ -11,6 +11,8 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
   const retryRef = useRef<() => void>(() => {});
   const [blocked, setBlocked] = useState(false);
   const { t } = useLanguage();
+  const [compact] = useState(() => typeof window !== "undefined" && window.matchMedia("(max-width: 64rem)").matches);
+  const playbackSrc = compact ? assetPath("assets/home/nolan-home-hero-mobile.mp4") : videoSrc;
 
   useEffect(() => {
     const first = firstRef.current;
@@ -23,7 +25,7 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
     let disposed = false;
     let starting = false;
     let blending = false;
-    let fallback = window.matchMedia("(max-width: 64rem)").matches;
+    let fallback = compact;
     let visible = false;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const canPlay = () => visible && !document.hidden && !motion.matches;
@@ -39,7 +41,7 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
     }).catch(reportBlocked);
     current.loop = fallback;
     // Compact screens use one decoder and the browser's native loop.
-    if (!fallback) second.src = videoSrc;
+    if (!fallback) second.src = playbackSrc;
     retryRef.current = () => {
       fallback = true;
       window.cancelAnimationFrame(frame);
@@ -131,12 +133,12 @@ export function ProcessMedia({ videoSrc }: { videoSrc: string }) {
       second.removeAttribute("src");
       retryRef.current = () => {};
     };
-  }, [videoSrc]);
+  }, [playbackSrc, compact]);
 
   return (
     <>
       <div ref={containerRef} className="home-landing__media" aria-hidden="true">
-        <video ref={firstRef} src={videoSrc} poster={assetPath("assets/home/nolan-home-hero-poster.jpg")} muted playsInline preload="metadata" />
+        <video ref={firstRef} src={playbackSrc} poster={assetPath("assets/home/nolan-home-hero-poster.jpg")} muted playsInline preload="metadata" />
         <video ref={secondRef} muted playsInline preload="metadata" style={{ opacity: 0 }} />
       </div>
       {blocked && <button type="button" className="home-video-play" onClick={() => retryRef.current()}>{t("video.play")}</button>}

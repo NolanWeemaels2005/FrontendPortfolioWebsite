@@ -130,7 +130,7 @@ export const featuredProjects: Project[] = [
     cover: `${hallOfFamePath}bite-back.webp`,
     color: "#f9a94b",
     featured: true,
-    hallOfFame: { key: "bite-back", services: ["Branding", "Campagne", "Webdesign"] },
+    hallOfFame: { key: "bite-back", services: ["Branding", "Promo"] },
     summary: "Een speelse rebranding voor een fictieve Belgische fastfoodketen. Passieproject in ontwikkeling.",
   },
 ];
